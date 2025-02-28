@@ -564,6 +564,10 @@
                     <div class="legend-color" style="background-color: rgba(220, 53, 69, 0.5);"></div>
                     <div class="legend-text">Not Cleared: Bids below clearing price not settled</div>
                 </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgb(0, 128, 0);"></div>
+                    <div class="legend-text">Current Price: $1.75</div>
+                </div>
             </div>
         </div>
         
@@ -590,6 +594,10 @@
                     <div class="legend-color" style="background-color: rgba(220, 53, 69, 0.5);"></div>
                     <div class="legend-text">Not Cleared: Bids below clearing price not settled</div>
                 </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgb(0, 128, 0);"></div>
+                    <div class="legend-text">Clearing Price: $1.45</div>
+                </div>
             </div>
         </div>
         
@@ -615,6 +623,10 @@
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgba(220, 53, 69, 0.5);"></div>
                     <div class="legend-text">Not Cleared: Bids below clearing price not settled</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgb(0, 128, 0);"></div>
+                    <div class="legend-text">Clearing Price: $1.33</div>
                 </div>
             </div>
         </div>
@@ -1236,6 +1248,27 @@
                         plugins: {
                             legend: {
                                 display: false
+                            },
+                            annotation: {
+                                annotations: {
+                                    clearingPriceLine: {
+                                        type: 'line',
+                                        yMin: 1.75,
+                                        yMax: 1.75,
+                                        borderColor: 'rgb(0, 128, 0)',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            enabled: true,
+                                            content: 'Current Price: $1.75',
+                                            position: 'end',
+                                            backgroundColor: 'rgb(0, 128, 0)',
+                                            font: {
+                                                weight: 'bold'
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -1280,6 +1313,27 @@
                         plugins: {
                             legend: {
                                 display: false
+                            },
+                            annotation: {
+                                annotations: {
+                                    clearingPriceLine: {
+                                        type: 'line',
+                                        yMin: 1.45,
+                                        yMax: 1.45,
+                                        borderColor: 'rgb(0, 128, 0)',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            enabled: true,
+                                            content: 'Clearing Price: $1.45',
+                                            position: 'end',
+                                            backgroundColor: 'rgb(0, 128, 0)',
+                                            font: {
+                                                weight: 'bold'
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -1324,6 +1378,27 @@
                         plugins: {
                             legend: {
                                 display: false
+                            },
+                            annotation: {
+                                annotations: {
+                                    clearingPriceLine: {
+                                        type: 'line',
+                                        yMin: 1.33,
+                                        yMax: 1.33,
+                                        borderColor: 'rgb(0, 128, 0)',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            enabled: true,
+                                            content: 'Clearing Price: $1.33',
+                                            position: 'end',
+                                            backgroundColor: 'rgb(0, 128, 0)',
+                                            font: {
+                                                weight: 'bold'
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
