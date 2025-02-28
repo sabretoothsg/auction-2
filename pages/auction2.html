@@ -1728,6 +1728,21 @@
                                 borderWidth: 3,
                                 tension: 0.1,
                                 fill: false
+                            },
+                            // Add key point markers for Round 3
+                            {
+                                label: 'Round 3 Key Points',
+                                data: [
+                                    { x: 90000, y: 1.75 },   // Current clearing price at 90,000 tokens
+                                    { x: 150000, y: 1.50 }   // Reserve price at 150,000 tokens 
+                                ],
+                                backgroundColor: 'rgb(75, 192, 192)',
+                                borderColor: '#ffffff',
+                                borderWidth: 2,
+                                pointRadius: 10,
+                                pointStyle: 'rectRot',
+                                showLine: false,
+                                pointHoverRadius: 12
                             }
                         ]
                     },
@@ -1740,7 +1755,10 @@
                                     display: true,
                                     text: 'Cumulative Demand (Tokens)'
                                 },
-                                stacked: true
+                                type: 'linear',
+                                position: 'bottom',
+                                min: 0,
+                                max: 290000
                             },
                             y: {
                                 title: {
@@ -1748,8 +1766,7 @@
                                     text: 'Price ($)'
                                 },
                                 min: 0,
-                                max: 3,
-                                stacked: false
+                                max: 3
                             }
                         },
                         plugins: {
@@ -1834,6 +1851,21 @@
                                 borderWidth: 3,
                                 tension: 0.1,
                                 fill: false
+                            },
+                            // Add key point markers for Round 2
+                            {
+                                label: 'Round 2 Key Points',
+                                data: [
+                                    { x: 110000, y: 1.45 },   // Clearing price at 110,000 tokens
+                                    { x: 200000, y: 1.25 }    // Reserve price at 200,000 tokens
+                                ],
+                                backgroundColor: 'rgb(153, 102, 255)',
+                                borderColor: '#ffffff',
+                                borderWidth: 2,
+                                pointRadius: 10,
+                                pointStyle: 'triangle',
+                                showLine: false,
+                                pointHoverRadius: 12
                             }
                         ]
                     },
@@ -1846,7 +1878,10 @@
                                     display: true,
                                     text: 'Cumulative Demand (Tokens)'
                                 },
-                                stacked: true
+                                type: 'linear',
+                                position: 'bottom',
+                                min: 0,
+                                max: 290000
                             },
                             y: {
                                 title: {
@@ -1854,8 +1889,7 @@
                                     text: 'Price ($)'
                                 },
                                 min: 0,
-                                max: 3,
-                                stacked: false
+                                max: 3
                             }
                         },
                         plugins: {
@@ -1940,6 +1974,21 @@
                                 borderWidth: 3,
                                 tension: 0.1,
                                 fill: false
+                            },
+                            // Add key point markers for Round 1
+                            {
+                                label: 'Round 1 Key Points',
+                                data: [
+                                    { x: 110000, y: 1.33 },  // Clearing price at 110,000 tokens
+                                    { x: 220000, y: 1.00 }   // Reserve price at 220,000 tokens
+                                ],
+                                backgroundColor: 'rgb(255, 159, 64)',
+                                borderColor: '#ffffff',
+                                borderWidth: 2,
+                                pointRadius: 10,
+                                pointStyle: 'star',
+                                showLine: false,
+                                pointHoverRadius: 12
                             }
                         ]
                     },
@@ -1952,7 +2001,10 @@
                                     display: true,
                                     text: 'Cumulative Demand (Tokens)'
                                 },
-                                stacked: true
+                                type: 'linear',
+                                position: 'bottom',
+                                min: 0,
+                                max: 290000
                             },
                             y: {
                                 title: {
@@ -1960,8 +2012,7 @@
                                     text: 'Price ($)'
                                 },
                                 min: 0,
-                                max: 3,
-                                stacked: false
+                                max: 3
                             }
                         },
                         plugins: {
@@ -2008,7 +2059,9 @@
                                 borderColor: 'rgb(75, 192, 192)',
                                 borderWidth: 3,
                                 tension: 0.1,
-                                fill: false
+                                fill: false,
+                                pointRadius: 0, // Hide regular points
+                                pointHoverRadius: 5 // Show on hover
                             },
                             {
                                 label: 'Round 2',
@@ -2017,7 +2070,9 @@
                                 borderWidth: 2,
                                 borderDash: [5, 5],
                                 tension: 0.1,
-                                fill: false
+                                fill: false,
+                                pointRadius: 0, // Hide regular points
+                                pointHoverRadius: 5 // Show on hover
                             },
                             {
                                 label: 'Round 1',
@@ -2026,7 +2081,54 @@
                                 borderWidth: 2,
                                 borderDash: [5, 5],
                                 tension: 0.1,
-                                fill: false
+                                fill: false,
+                                pointRadius: 0, // Hide regular points
+                                pointHoverRadius: 5 // Show on hover
+                            },
+                            // Add marker points for Round 3 key points
+                            {
+                                label: 'Round 3 Key Points',
+                                data: [
+                                    { x: 90000, y: 1.75 },   // Current clearing price at 90,000 tokens
+                                    { x: 150000, y: 1.50 }   // Reserve price at 150,000 tokens 
+                                ],
+                                backgroundColor: 'rgb(75, 192, 192)',
+                                borderColor: '#ffffff',
+                                borderWidth: 2,
+                                pointRadius: 10,
+                                pointStyle: 'rectRot',
+                                showLine: false,
+                                pointHoverRadius: 12
+                            },
+                            // Add marker points for Round 2 key points
+                            {
+                                label: 'Round 2 Key Points',
+                                data: [
+                                    { x: 110000, y: 1.45 },   // Clearing price at 110,000 tokens
+                                    { x: 200000, y: 1.25 }    // Reserve price at 200,000 tokens
+                                ],
+                                backgroundColor: 'rgb(153, 102, 255)',
+                                borderColor: '#ffffff',
+                                borderWidth: 2,
+                                pointRadius: 10,
+                                pointStyle: 'triangle',
+                                showLine: false,
+                                pointHoverRadius: 12
+                            },
+                            // Add marker points for Round 1 key points
+                            {
+                                label: 'Round 1 Key Points',
+                                data: [
+                                    { x: 110000, y: 1.33 },  // Clearing price at 110,000 tokens
+                                    { x: 220000, y: 1.00 }   // Reserve price at 220,000 tokens
+                                ],
+                                backgroundColor: 'rgb(255, 159, 64)',
+                                borderColor: '#ffffff',
+                                borderWidth: 2,
+                                pointRadius: 10,
+                                pointStyle: 'star',
+                                showLine: false,
+                                pointHoverRadius: 12
                             }
                         ]
                     },
@@ -2047,6 +2149,93 @@
                                 },
                                 min: 0,
                                 max: 3
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const datasetLabel = context.dataset.label;
+                                        const dataIndex = context.dataIndex;
+                                        const value = context.parsed.y;
+                                        
+                                        // Custom labels for key points
+                                        if (datasetLabel === 'Round 3 Key Points') {
+                                            if (dataIndex === 0) return 'R3 Clearing: $1.75';
+                                            if (dataIndex === 1) return 'R3 Reserve: $1.50';
+                                        }
+                                        
+                                        if (datasetLabel === 'Round 2 Key Points') {
+                                            if (dataIndex === 0) return 'R2 Clearing: $1.45';
+                                            if (dataIndex === 1) return 'R2 Reserve: $1.25';
+                                        }
+                                        
+                                        if (datasetLabel === 'Round 1 Key Points') {
+                                            if (dataIndex === 0) return 'R1 Clearing: $1.33';
+                                            if (dataIndex === 1) return 'R1 Reserve: $1.00';
+                                        }
+                                        
+                                        return `${datasetLabel}: $${value.toFixed(2)}`;
+                                    }
+                                }
+                            },
+                            annotation: {
+                                annotations: {
+                                    // Round 3 current price line
+                                    r3CurrentPriceLine: {
+                                        type: 'line',
+                                        yMin: 1.75,
+                                        yMax: 1.75,
+                                        xMin: 0,
+                                        xMax: 300000,
+                                        borderColor: 'rgb(75, 192, 192)',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            content: 'R3 Current: $1.75',
+                                            enabled: true,
+                                            position: 'end',
+                                            backgroundColor: 'rgb(75, 192, 192)',
+                                            color: 'white'
+                                        }
+                                    },
+                                    // Round 2 clearing price line
+                                    r2ClearingPriceLine: {
+                                        type: 'line',
+                                        yMin: 1.45,
+                                        yMax: 1.45,
+                                        xMin: 0,
+                                        xMax: 300000,
+                                        borderColor: 'rgb(153, 102, 255)',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            content: 'R2 Clearing: $1.45',
+                                            enabled: true,
+                                            position: 'start',
+                                            backgroundColor: 'rgb(153, 102, 255)',
+                                            color: 'white'
+                                        }
+                                    },
+                                    // Round 1 clearing price line
+                                    r1ClearingPriceLine: {
+                                        type: 'line',
+                                        yMin: 1.33,
+                                        yMax: 1.33,
+                                        xMin: 0,
+                                        xMax: 300000,
+                                        borderColor: 'rgb(255, 159, 64)',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            content: 'R1 Clearing: $1.33',
+                                            enabled: true,
+                                            position: 'end',
+                                            backgroundColor: 'rgb(255, 159, 64)',
+                                            color: 'white'
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
