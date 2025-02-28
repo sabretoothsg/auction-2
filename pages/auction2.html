@@ -547,6 +547,98 @@
             margin: 0.5rem 0;
         }
 
+        /* Early bid discount timer styles */
+        .early-bid-discount {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            border-radius: 6px;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            position: relative;
+            animation: pulse-border 2s infinite;
+        }
+        
+        .early-bid-discount h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: #856404;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        
+        .early-bid-discount h4:before {
+            content: "⏱️";
+            font-size: 1.1rem;
+        }
+        
+        .discount-timer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+        }
+        
+        .discount-timer-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #dc3545;
+        }
+        
+        .discount-timer {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #dc3545;
+            font-family: monospace;
+            background-color: #f8d7da;
+            padding: 0.3rem 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .discount-amount {
+            font-weight: 700;
+            color: #28a745;
+        }
+        
+        .discount-message {
+            font-size: 0.8rem;
+            color: #856404;
+            font-style: italic;
+            margin-top: 0.3rem;
+        }
+        
+        .savings-amount {
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        #discountSavings {
+            font-weight: 600;
+            transition: color 0.3s, font-weight 0.3s;
+        }
+        
+        .urgent-notification {
+            display: none;
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-align: center;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(255, 193, 7, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
+        }
+
         /* Transaction History styles */
         .transaction-history {
             margin-top: 1.5rem;
@@ -795,9 +887,18 @@
                             </div>
                             
                             <div class="early-bid-discount">
-                                <h4>Early Bid Discount Calculator</h4>
-                                <p>By bidding now, you save approximately <span class="discount-amount">5%</span> compared to later bids.</p>
+                                <h4>Early Bid Discount - Limited Time Offer!</h4>
+                                <p>By bidding now, you save <span class="discount-amount">5%</span> compared to later bids.</p>
+                                
+                                <div class="discount-timer-container">
+                                    <span class="discount-timer-label">Time remaining for maximum discount:</span>
+                                    <span class="discount-timer" id="discount-countdown">05:00</span>
+                                </div>
+                                
+                                <div class="discount-message">Discount decreases as time runs out. Act now!</div>
                                 <p>Estimated tokens at current price: <span id="estimatedTokens">0</span></p>
+                                <p class="savings-amount">Your savings: <span id="discountSavings">$0.00</span></p>
+                                <div class="urgent-notification" id="urgentNotification">⚠️ LAST CHANCE: Discount expiring soon! Act now to secure your savings!</div>
                             </div>
                             
                             <button type="submit" class="bid-button">Place Bid</button>
@@ -1163,6 +1264,20 @@
                     const amount = parseFloat(bidAmount.value) || 0;
                     const price = parseFloat(maxPrice.value) || 1.75;
                     estimatedTokens.textContent = formatNumber(Math.floor(amount / price));
+                    
+                    // Update the savings amount based on current discount
+                    const discountSavings = document.getElementById('discountSavings');
+                    const discountPercentage = parseFloat(document.querySelector('.discount-amount').textContent) || 5;
+                    if (discountSavings && amount) {
+                        const savings = (amount * discountPercentage / 100).toFixed(2);
+                        discountSavings.textContent = '$' + savings;
+                        
+                        // Highlight savings if significant
+                        if (savings > 10) {
+                            discountSavings.style.color = '#28a745';
+                            discountSavings.style.fontWeight = 'bold';
+                        }
+                    }
                 };
                 
                 bidAmount.addEventListener('input', updateEstimatedTokens);
@@ -1398,6 +1513,9 @@
             // Update round and auction countdowns
             updateRoundCountdown();
             updateAuctionCountdown();
+            
+            // Start the discount countdown timer
+            startDiscountCountdown();
         });
         
         // Round countdown
@@ -1866,6 +1984,88 @@
             }
             
             return data;
+        }
+
+        // Add function to start the discount countdown
+        function startDiscountCountdown() {
+            const countdownElement = document.getElementById('discount-countdown');
+            const discountElement = document.querySelector('.discount-amount');
+            
+            if (!countdownElement || !discountElement) return;
+            
+            // 5 minutes countdown
+            let minutes = 5;
+            let seconds = 0;
+            const maxDiscount = 5; // 5% discount at start
+            
+            const interval = setInterval(() => {
+                seconds--;
+                
+                if (seconds < 0) {
+                    seconds = 59;
+                    minutes--;
+                }
+                
+                // Update the countdown display
+                countdownElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                
+                // Calculate and update the discount percentage based on remaining time
+                const totalSecondsRemaining = minutes * 60 + seconds;
+                const totalInitialSeconds = 5 * 60; // 5 minutes in seconds
+                const currentDiscount = Math.max(1, Math.floor(maxDiscount * totalSecondsRemaining / totalInitialSeconds));
+                discountElement.textContent = `${currentDiscount}%`;
+                
+                // Update savings amount when discount changes
+                const bidAmount = document.getElementById('bidAmount');
+                const discountSavings = document.getElementById('discountSavings');
+                if (bidAmount && discountSavings) {
+                    const amount = parseFloat(bidAmount.value) || 0;
+                    const savings = (amount * currentDiscount / 100).toFixed(2);
+                    discountSavings.textContent = '$' + savings;
+                }
+                
+                // Add urgency through visual feedback
+                if (minutes === 0) {
+                    countdownElement.style.backgroundColor = '#dc3545';
+                    countdownElement.style.color = 'white';
+                    
+                    // Show urgent notification in last minute
+                    const urgentNotification = document.getElementById('urgentNotification');
+                    if (urgentNotification) {
+                        urgentNotification.style.display = 'block';
+                    }
+                    
+                    if (seconds <= 30) {
+                        // Flash the timer when less than 30 seconds remain
+                        countdownElement.style.animation = 'blink 1s infinite';
+                    }
+                }
+                
+                if (minutes === 0 && seconds === 0) {
+                    clearInterval(interval);
+                    countdownElement.textContent = "EXPIRED";
+                    discountElement.textContent = "1%";
+                    
+                    // Remove the animation and set a muted style
+                    const discountBox = document.querySelector('.early-bid-discount');
+                    if (discountBox) {
+                        discountBox.style.animation = 'none';
+                        discountBox.style.backgroundColor = '#e9ecef';
+                        discountBox.style.borderColor = '#dee2e6';
+                    }
+                }
+            }, 1000);
+            
+            // Add CSS for blinking animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes blink {
+                    0% { opacity: 1; }
+                    50% { opacity: 0.5; }
+                    100% { opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
         }
     </script>
 </body>
