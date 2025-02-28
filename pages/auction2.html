@@ -110,6 +110,26 @@
             display: block;
         }
         
+        /* New graph-bid layout */
+        .graph-bid-container {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .graph-section {
+            flex: 3;
+        }
+        
+        .bid-section {
+            flex: 1;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            align-self: start;
+        }
+        
         /* Chart container */
         .chart-container {
             width: 100%;
@@ -315,6 +335,28 @@
             color: #dc3545;
         }
         
+        /* Auction Summary styles */
+        .auction-summary {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .summary-label {
+            font-weight: 500;
+        }
+        
+        .summary-value {
+            font-weight: 600;
+        }
+        
         /* Chart Legend */
         .chart-legend {
             margin-top: 1rem;
@@ -359,6 +401,15 @@
         @media (max-width: 768px) {
             .auction-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .graph-bid-container {
+                flex-direction: column;
+            }
+            
+            .graph-section, .bid-section {
+                flex: auto;
+                width: 100%;
             }
         }
         
@@ -549,87 +600,259 @@
         <!-- Tab Contents for Each Round -->
         <div class="tab-content active" id="round3-content">
             <h2>Round 3 Demand Graph</h2>
-            <div class="chart-container">
-                <canvas id="round3Chart"></canvas>
-            </div>
-            <div class="chart-legend">
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(0, 123, 255, 0.5);"></div>
-                    <div class="legend-text">Normal: Round allocation</div>
+            <div class="graph-bid-container">
+                <div class="graph-section">
+                    <div class="chart-container">
+                        <canvas id="round3Chart"></canvas>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: rgba(0, 123, 255, 0.5);"></div>
+                            <div class="legend-text">Normal: Round allocation</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: rgba(255, 193, 7, 0.5);"></div>
+                            <div class="legend-text">Prior: Resold tokens</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: rgba(40, 167, 69, 0.5);"></div>
+                            <div class="legend-text">Future: Borrowed supply</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: rgba(220, 53, 69, 0.5);"></div>
+                            <div class="legend-text">Not Cleared: Below price</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: rgb(0, 128, 0);"></div>
+                            <div class="legend-text">Current: $1.75</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(255, 193, 7, 0.5);"></div>
-                    <div class="legend-text">Prior: Resold tokens</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(40, 167, 69, 0.5);"></div>
-                    <div class="legend-text">Future: Borrowed supply</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(220, 53, 69, 0.5);"></div>
-                    <div class="legend-text">Not Cleared: Below price</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgb(0, 128, 0);"></div>
-                    <div class="legend-text">Current: $1.75</div>
+                <div class="bid-section">
+                    <div class="auction-card-title">
+                        <span>Bid for Notes</span>
+                        <span class="reserve-price">Current Reserve Price: $1.25</span>
+                    </div>
+                    
+                    <p class="bid-instructions">Everyone in the same round pays the same clearing price. Early bids get discounts.</p>
+                    
+                    <!-- Bid Tabs -->
+                    <div class="bid-tabs">
+                        <div class="bid-tab active" data-bid-tab="simple">Simple Bid</div>
+                        <div class="bid-tab" data-bid-tab="advanced">Advanced Bid</div>
+                    </div>
+                    
+                    <!-- Simple Bid Content -->
+                    <div class="bid-content active" id="simple-bid">
+                        <form id="simpleBidForm">
+                            <div class="form-group">
+                                <label for="bidAmount" class="form-label">Total Bid Amount (USDC)</label>
+                                <input type="number" id="bidAmount" class="form-input" placeholder="Enter amount" min="1" step="1">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="maxPrice" class="form-label">Maximum Price Per Token ($)</label>
+                                <input type="number" id="maxPrice" class="form-input" placeholder="Enter max price" min="1.25" step="0.01" value="1.75">
+                            </div>
+                            
+                            <div class="early-bid-discount">
+                                <h4>Early Bid Discount Calculator</h4>
+                                <p>By bidding now, you save approximately <span class="discount-amount">5%</span> compared to later bids.</p>
+                                <p>Estimated tokens at current price: <span id="estimatedTokens">0</span></p>
+                            </div>
+                            
+                            <button type="submit" class="bid-button">Place Bid</button>
+                        </form>
+                        
+                        <div id="simpleBidsList" class="transactions-list">
+                            <!-- Simple bids will appear here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Advanced Bid Content -->
+                    <div class="bid-content" id="advanced-bid">
+                        <form id="advancedBidForm">
+                            <div class="form-group">
+                                <label for="bidPrice" class="form-label">Price Per Token ($)</label>
+                                <input type="number" id="bidPrice" class="form-input" placeholder="Enter price" min="1.25" step="0.01" value="1.75">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bidQuantity" class="form-label">Quantity of Tokens</label>
+                                <input type="number" id="bidQuantity" class="form-input" placeholder="Enter quantity" min="1" step="1">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bidRound" class="form-label">Round</label>
+                                <select id="bidRound" class="form-input">
+                                    <option value="3" selected>Round 3 (Current)</option>
+                                    <option value="4">Round 4</option>
+                                    <option value="5">Round 5</option>
+                                    <option value="6">Round 6</option>
+                                </select>
+                            </div>
+                            
+                            <div class="advanced-bid-info">
+                                <p>Total Bid Amount: $<span id="totalBidAmount">0.00</span></p>
+                            </div>
+                            
+                            <button type="submit" class="bid-button">Place Advanced Bid</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Transaction History -->
+                    <div class="transaction-history">
+                        <h3>Transaction History</h3>
+                        <div id="transactionsList" class="transactions-list">
+                            <!-- Dummy Transaction for Round 1 (Won) -->
+                            <div class="transaction-item" data-id="tx1">
+                                <div class="transaction-details">
+                                    <div class="transaction-round">Round 1</div>
+                                    <div class="transaction-main">1,000 tokens at $1.33</div>
+                                    <div class="transaction-total">Total: $1,330.00</div>
+                                </div>
+                                <div class="transaction-status won">WON</div>
+                            </div>
+                            
+                            <!-- Dummy Transaction for Round 2 (Won) -->
+                            <div class="transaction-item" data-id="tx2">
+                                <div class="transaction-details">
+                                    <div class="transaction-round">Round 2</div>
+                                    <div class="transaction-main">2,000 tokens at $1.45</div>
+                                    <div class="transaction-total">Total: $2,900.00</div>
+                                </div>
+                                <div class="transaction-status won">WON</div>
+                            </div>
+                            
+                            <!-- Pending Transaction for Round 3 -->
+                            <div class="transaction-item" data-id="tx3">
+                                <div class="transaction-details">
+                                    <div class="transaction-round">Round 3</div>
+                                    <div class="transaction-main">1,500 tokens at current price $1.75</div>
+                                    <div class="transaction-total">Total: $2,625.00</div>
+                                    <div class="execution-time" id="countdown-tx3">05:32:18</div>
+                                </div>
+                                <div class="transaction-status pending">PENDING</div>
+                                <div class="transaction-actions">
+                                    <button class="cancel-button">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         
         <div class="tab-content" id="round2-content">
             <h2>Round 2 Demand Graph</h2>
-            <div class="chart-container">
-                <canvas id="round2Chart"></canvas>
-            </div>
-            <div class="chart-legend">
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(0, 123, 255, 0.5);"></div>
-                    <div class="legend-text">Normal: Round allocation</div>
+            <div class="graph-bid-container">
+                <div class="graph-section">
+                    <div class="chart-container">
+                        <canvas id="round2Chart"></canvas>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: rgba(0, 123, 255, 0.5);"></div>
+                            <div class="legend-text">Normal: Round allocation</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: rgba(255, 193, 7, 0.5);"></div>
+                            <div class="legend-text">Prior: Resold tokens</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: rgba(40, 167, 69, 0.5);"></div>
+                            <div class="legend-text">Future: Borrowed supply</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: rgba(220, 53, 69, 0.5);"></div>
+                            <div class="legend-text">Not Cleared: Below price</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: rgb(0, 128, 0);"></div>
+                            <div class="legend-text">Clearing: $1.45</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(255, 193, 7, 0.5);"></div>
-                    <div class="legend-text">Prior: Resold tokens</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(40, 167, 69, 0.5);"></div>
-                    <div class="legend-text">Future: Borrowed supply</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(220, 53, 69, 0.5);"></div>
-                    <div class="legend-text">Not Cleared: Below price</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgb(0, 128, 0);"></div>
-                    <div class="legend-text">Clearing: $1.45</div>
+                <div class="bid-section">
+                    <div class="auction-card-title">
+                        <span>Bid for Notes</span>
+                        <span class="reserve-price">Clearing Price: $1.45</span>
+                    </div>
+                    
+                    <p class="bid-instructions">This round has ended. All bids cleared at $1.45 per token.</p>
+                    
+                    <!-- Transaction History -->
+                    <div class="transaction-history">
+                        <h3>Round 2 Transactions</h3>
+                        <div class="transactions-list">
+                            <!-- Dummy Transaction for Round 2 (Won) -->
+                            <div class="transaction-item" data-id="tx2">
+                                <div class="transaction-details">
+                                    <div class="transaction-round">Round 2</div>
+                                    <div class="transaction-main">2,000 tokens at $1.45</div>
+                                    <div class="transaction-total">Total: $2,900.00</div>
+                                </div>
+                                <div class="transaction-status won">WON</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         
         <div class="tab-content" id="round1-content">
             <h2>Round 1 Demand Graph</h2>
-            <div class="chart-container">
-                <canvas id="round1Chart"></canvas>
-            </div>
-            <div class="chart-legend">
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(0, 123, 255, 0.5);"></div>
-                    <div class="legend-text">Normal: Round allocation</div>
+            <div class="graph-bid-container">
+                <div class="graph-section">
+                    <div class="chart-container">
+                        <canvas id="round1Chart"></canvas>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: rgba(0, 123, 255, 0.5);"></div>
+                            <div class="legend-text">Normal: Round allocation</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: rgba(255, 193, 7, 0.5);"></div>
+                            <div class="legend-text">Prior: Resold tokens</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: rgba(40, 167, 69, 0.5);"></div>
+                            <div class="legend-text">Future: Borrowed supply</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: rgba(220, 53, 69, 0.5);"></div>
+                            <div class="legend-text">Not Cleared: Below price</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: rgb(0, 128, 0);"></div>
+                            <div class="legend-text">Clearing: $1.33</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(255, 193, 7, 0.5);"></div>
-                    <div class="legend-text">Prior: Resold tokens</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(40, 167, 69, 0.5);"></div>
-                    <div class="legend-text">Future: Borrowed supply</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(220, 53, 69, 0.5);"></div>
-                    <div class="legend-text">Not Cleared: Below price</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgb(0, 128, 0);"></div>
-                    <div class="legend-text">Clearing: $1.33</div>
+                <div class="bid-section">
+                    <div class="auction-card-title">
+                        <span>Bid for Notes</span>
+                        <span class="reserve-price">Clearing Price: $1.33</span>
+                    </div>
+                    
+                    <p class="bid-instructions">This round has ended. All bids cleared at $1.33 per token.</p>
+                    
+                    <!-- Transaction History -->
+                    <div class="transaction-history">
+                        <h3>Round 1 Transactions</h3>
+                        <div class="transactions-list">
+                            <!-- Dummy Transaction for Round 1 (Won) -->
+                            <div class="transaction-item" data-id="tx1">
+                                <div class="transaction-details">
+                                    <div class="transaction-round">Round 1</div>
+                                    <div class="transaction-main">1,000 tokens at $1.33</div>
+                                    <div class="transaction-total">Total: $1,330.00</div>
+                                </div>
+                                <div class="transaction-status won">WON</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -640,145 +863,63 @@
                 <h3 class="countdown-title">Auction Ends In:</h3>
                 <div class="countdown-timer" id="auction-countdown">47:45:32</div>
             </div>
-            <div class="chart-container">
-                <canvas id="overviewChart"></canvas>
-            </div>
-            <div class="chart-legend">
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(75, 192, 192, 1);"></div>
-                    <div class="legend-text">Round 3 (Current)</div>
+            <div class="graph-bid-container">
+                <div class="graph-section">
+                    <div class="chart-container">
+                        <canvas id="overviewChart"></canvas>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: rgba(75, 192, 192, 1);"></div>
+                            <div class="legend-text">Round 3 (Current)</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: rgba(153, 102, 255, 0.7);"></div>
+                            <div class="legend-text">Round 2</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: rgba(255, 159, 64, 0.7);"></div>
+                            <div class="legend-text">Round 1</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: rgba(54, 162, 235, 0.4);"></div>
+                            <div class="legend-text">Future Rounds</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(153, 102, 255, 0.7);"></div>
-                    <div class="legend-text">Round 2</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(255, 159, 64, 0.7);"></div>
-                    <div class="legend-text">Round 1</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(54, 162, 235, 0.4);"></div>
-                    <div class="legend-text">Future Rounds</div>
+                <div class="bid-section">
+                    <div class="auction-card-title">
+                        <span>Auction Summary</span>
+                    </div>
+                    
+                    <div class="auction-summary">
+                        <div class="summary-item">
+                            <div class="summary-label">Total Tokens:</div>
+                            <div class="summary-value">600,000</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-label">Tokens Sold:</div>
+                            <div class="summary-value">212,000</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-label">Avg. Price:</div>
+                            <div class="summary-value">$1.51</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-label">Total Raised:</div>
+                            <div class="summary-value">$906,000</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-label">Your Tokens:</div>
+                            <div class="summary-value">3,000</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         
         <!-- Bid and Portfolio Grid Layout -->
         <div class="auction-grid">
-            <!-- Bid for Notes Section -->
-            <div class="auction-card">
-                <div class="auction-card-title">
-                    <span>Bid for Notes</span>
-                    <span class="reserve-price">Current Reserve Price: $1.25</span>
-                </div>
-                
-                <p class="bid-instructions">Everyone in the same round pays the same clearing price. Early bids get discounts.</p>
-                
-                <!-- Bid Tabs -->
-                <div class="bid-tabs">
-                    <div class="bid-tab active" data-bid-tab="simple">Simple Bid</div>
-                    <div class="bid-tab" data-bid-tab="advanced">Advanced Bid</div>
-                </div>
-                
-                <!-- Simple Bid Content -->
-                <div class="bid-content active" id="simple-bid">
-                    <form id="simpleBidForm">
-                        <div class="form-group">
-                            <label for="bidAmount" class="form-label">Total Bid Amount (USDC)</label>
-                            <input type="number" id="bidAmount" class="form-input" placeholder="Enter amount" min="1" step="1">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="maxPrice" class="form-label">Maximum Price Per Token ($)</label>
-                            <input type="number" id="maxPrice" class="form-input" placeholder="Enter max price" min="1.25" step="0.01" value="1.75">
-                        </div>
-                        
-                        <div class="early-bid-discount">
-                            <h4>Early Bid Discount Calculator</h4>
-                            <p>By bidding now, you save approximately <span class="discount-amount">5%</span> compared to later bids.</p>
-                            <p>Estimated tokens at current price: <span id="estimatedTokens">0</span></p>
-                        </div>
-                        
-                        <button type="submit" class="bid-button">Place Bid</button>
-                    </form>
-                    
-                    <div id="simpleBidsList" class="transactions-list">
-                        <!-- Simple bids will appear here -->
-                    </div>
-                </div>
-                
-                <!-- Advanced Bid Content -->
-                <div class="bid-content" id="advanced-bid">
-                    <form id="advancedBidForm">
-                        <div class="form-group">
-                            <label for="bidPrice" class="form-label">Price Per Token ($)</label>
-                            <input type="number" id="bidPrice" class="form-input" placeholder="Enter price" min="1.25" step="0.01" value="1.75">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="bidQuantity" class="form-label">Quantity of Tokens</label>
-                            <input type="number" id="bidQuantity" class="form-input" placeholder="Enter quantity" min="1" step="1">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="bidRound" class="form-label">Round</label>
-                            <select id="bidRound" class="form-input">
-                                <option value="3" selected>Round 3 (Current)</option>
-                                <option value="4">Round 4</option>
-                                <option value="5">Round 5</option>
-                                <option value="6">Round 6</option>
-                            </select>
-                        </div>
-                        
-                        <div class="advanced-bid-info">
-                            <p>Total Bid Amount: $<span id="totalBidAmount">0.00</span></p>
-                        </div>
-                        
-                        <button type="submit" class="bid-button">Place Advanced Bid</button>
-                    </form>
-                </div>
-                
-                <!-- Transaction History -->
-                <div class="transaction-history">
-                    <h3>Transaction History</h3>
-                    <div id="transactionsList" class="transactions-list">
-                        <!-- Dummy Transaction for Round 1 (Won) -->
-                        <div class="transaction-item" data-id="tx1">
-                            <div class="transaction-details">
-                                <div class="transaction-round">Round 1</div>
-                                <div class="transaction-main">1,000 tokens at $1.33</div>
-                                <div class="transaction-total">Total: $1,330.00</div>
-                            </div>
-                            <div class="transaction-status won">WON</div>
-                        </div>
-                        
-                        <!-- Dummy Transaction for Round 2 (Won) -->
-                        <div class="transaction-item" data-id="tx2">
-                            <div class="transaction-details">
-                                <div class="transaction-round">Round 2</div>
-                                <div class="transaction-main">2,000 tokens at $1.45</div>
-                                <div class="transaction-total">Total: $2,900.00</div>
-                            </div>
-                            <div class="transaction-status won">WON</div>
-                        </div>
-                        
-                        <!-- Pending Transaction for Round 3 -->
-                        <div class="transaction-item" data-id="tx3">
-                            <div class="transaction-details">
-                                <div class="transaction-round">Round 3</div>
-                                <div class="transaction-main">1,500 tokens at current price $1.75</div>
-                                <div class="transaction-total">Total: $2,625.00</div>
-                                <div class="execution-time" id="countdown-tx3">05:32:18</div>
-                            </div>
-                            <div class="transaction-status pending">PENDING</div>
-                            <div class="transaction-actions">
-                                <button class="cancel-button">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
             <!-- Portfolio Section -->
             <div class="auction-card">
                 <div class="auction-card-title">Portfolio</div>
