@@ -932,6 +932,21 @@
                                 <p>Total Bid Amount: $<span id="totalBidAmount">0.00</span></p>
                             </div>
                             
+                            <div class="early-bid-discount">
+                                <h4>Early Bid Discount - Limited Time Offer!</h4>
+                                <p>By bidding now, you save <span class="discount-amount">5%</span> compared to later bids.</p>
+                                
+                                <div class="discount-timer-container">
+                                    <span class="discount-timer-label">Time remaining for maximum discount:</span>
+                                    <span class="discount-timer" id="advanced-discount-countdown">05:00</span>
+                                </div>
+                                
+                                <div class="discount-message">Discount decreases as time runs out. Act now!</div>
+                                <p>Estimated tokens at current price: <span id="advanced-estimatedTokens">0</span></p>
+                                <p class="savings-amount">Your savings: <span id="advanced-discountSavings">$0.00</span></p>
+                                <div class="urgent-notification" id="advanced-urgentNotification">⚠️ LAST CHANCE: Discount expiring soon! Act now to secure your savings!</div>
+                            </div>
+                            
                             <button type="submit" class="bid-button">Place Advanced Bid</button>
                         </form>
                     </div>
@@ -1369,6 +1384,27 @@
                     const price = parseFloat(bidPrice.value) || 0;
                     const quantity = parseFloat(bidQuantity.value) || 0;
                     totalBidAmount.textContent = formatCurrency(price * quantity).replace('$', '');
+                    
+                    // Update the estimated tokens in the advanced discount section
+                    const advancedEstimatedTokens = document.getElementById('advanced-estimatedTokens');
+                    if (advancedEstimatedTokens) {
+                        advancedEstimatedTokens.textContent = formatNumber(quantity);
+                    }
+                    
+                    // Update the savings amount based on current discount
+                    const advancedDiscountSavings = document.getElementById('advanced-discountSavings');
+                    const discountPercentage = parseFloat(document.querySelectorAll('.discount-amount')[1]?.textContent) || 5;
+                    if (advancedDiscountSavings) {
+                        const total = price * quantity;
+                        const savings = (total * discountPercentage / 100).toFixed(2);
+                        advancedDiscountSavings.textContent = '$' + savings;
+                        
+                        // Highlight savings if significant
+                        if (savings > 10) {
+                            advancedDiscountSavings.style.color = '#28a745';
+                            advancedDiscountSavings.style.fontWeight = 'bold';
+                        }
+                    }
                 };
                 
                 bidPrice.addEventListener('input', updateTotalBid);
@@ -1990,6 +2026,7 @@
         function startDiscountCountdown() {
             const countdownElement = document.getElementById('discount-countdown');
             const discountElement = document.querySelector('.discount-amount');
+            const advancedCountdownElement = document.getElementById('advanced-discount-countdown');
             
             if (!countdownElement || !discountElement) return;
             
@@ -2006,16 +2043,24 @@
                     minutes--;
                 }
                 
-                // Update the countdown display
+                // Update the countdown display for both simple and advanced bid sections
                 countdownElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                if (advancedCountdownElement) {
+                    advancedCountdownElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                }
                 
                 // Calculate and update the discount percentage based on remaining time
                 const totalSecondsRemaining = minutes * 60 + seconds;
                 const totalInitialSeconds = 5 * 60; // 5 minutes in seconds
                 const currentDiscount = Math.max(1, Math.floor(maxDiscount * totalSecondsRemaining / totalInitialSeconds));
-                discountElement.textContent = `${currentDiscount}%`;
                 
-                // Update savings amount when discount changes
+                // Update all discount amount elements
+                const discountElements = document.querySelectorAll('.discount-amount');
+                discountElements.forEach(el => {
+                    el.textContent = `${currentDiscount}%`;
+                });
+                
+                // Update savings amount for simple bid when discount changes
                 const bidAmount = document.getElementById('bidAmount');
                 const discountSavings = document.getElementById('discountSavings');
                 if (bidAmount && discountSavings) {
@@ -2024,35 +2069,70 @@
                     discountSavings.textContent = '$' + savings;
                 }
                 
+                // Update savings amount for advanced bid when discount changes
+                const bidPrice = document.getElementById('bidPrice');
+                const bidQuantity = document.getElementById('bidQuantity');
+                const advancedDiscountSavings = document.getElementById('advanced-discountSavings');
+                if (bidPrice && bidQuantity && advancedDiscountSavings) {
+                    const price = parseFloat(bidPrice.value) || 0;
+                    const quantity = parseFloat(bidQuantity.value) || 0;
+                    const total = price * quantity;
+                    const savings = (total * currentDiscount / 100).toFixed(2);
+                    advancedDiscountSavings.textContent = '$' + savings;
+                }
+                
                 // Add urgency through visual feedback
                 if (minutes === 0) {
+                    // Update styles for simple bid countdown
                     countdownElement.style.backgroundColor = '#dc3545';
                     countdownElement.style.color = 'white';
                     
-                    // Show urgent notification in last minute
+                    // Update styles for advanced bid countdown
+                    if (advancedCountdownElement) {
+                        advancedCountdownElement.style.backgroundColor = '#dc3545';
+                        advancedCountdownElement.style.color = 'white';
+                    }
+                    
+                    // Show urgent notification in last minute for simple bid
                     const urgentNotification = document.getElementById('urgentNotification');
                     if (urgentNotification) {
                         urgentNotification.style.display = 'block';
                     }
                     
+                    // Show urgent notification in last minute for advanced bid
+                    const advancedUrgentNotification = document.getElementById('advanced-urgentNotification');
+                    if (advancedUrgentNotification) {
+                        advancedUrgentNotification.style.display = 'block';
+                    }
+                    
                     if (seconds <= 30) {
-                        // Flash the timer when less than 30 seconds remain
+                        // Flash the timers when less than 30 seconds remain
                         countdownElement.style.animation = 'blink 1s infinite';
+                        if (advancedCountdownElement) {
+                            advancedCountdownElement.style.animation = 'blink 1s infinite';
+                        }
                     }
                 }
                 
                 if (minutes === 0 && seconds === 0) {
                     clearInterval(interval);
                     countdownElement.textContent = "EXPIRED";
-                    discountElement.textContent = "1%";
-                    
-                    // Remove the animation and set a muted style
-                    const discountBox = document.querySelector('.early-bid-discount');
-                    if (discountBox) {
-                        discountBox.style.animation = 'none';
-                        discountBox.style.backgroundColor = '#e9ecef';
-                        discountBox.style.borderColor = '#dee2e6';
+                    if (advancedCountdownElement) {
+                        advancedCountdownElement.textContent = "EXPIRED";
                     }
+                    
+                    // Update all discount amount elements
+                    discountElements.forEach(el => {
+                        el.textContent = "1%";
+                    });
+                    
+                    // Remove the animation and set a muted style for all discount boxes
+                    const discountBoxes = document.querySelectorAll('.early-bid-discount');
+                    discountBoxes.forEach(box => {
+                        box.style.animation = 'none';
+                        box.style.backgroundColor = '#e9ecef';
+                        box.style.borderColor = '#dee2e6';
+                    });
                 }
             }, 1000);
             
