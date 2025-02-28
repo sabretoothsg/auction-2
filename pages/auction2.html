@@ -532,6 +532,18 @@
             font-size: 0.8rem;
             margin: 0.5rem 0;
         }
+
+        /* Transaction History styles */
+        .transaction-history {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .transaction-history h3 {
+            font-size: 0.95rem;
+            margin: 0 0 0.75rem;
+        }
     </style>
 </head>
 <body>
@@ -731,6 +743,7 @@
                     <div class="bid-tabs">
                         <div class="bid-tab active" data-bid-tab="simple">Simple Bid</div>
                         <div class="bid-tab" data-bid-tab="advanced">Advanced Bid</div>
+                        <div class="bid-tab" data-bid-tab="sell">Sell Tokens</div>
                     </div>
                     
                     <!-- Simple Bid Content -->
@@ -754,10 +767,6 @@
                             
                             <button type="submit" class="bid-button">Place Bid</button>
                         </form>
-                        
-                        <div id="simpleBidsList" class="transactions-list">
-                            <!-- Simple bids will appear here -->
-                        </div>
                     </div>
                     
                     <!-- Advanced Bid Content -->
@@ -791,7 +800,24 @@
                         </form>
                     </div>
                     
-                    <!-- Transaction History -->
+                    <!-- Sell Tokens Content -->
+                    <div class="bid-content" id="sell-bid">
+                        <form id="sellForm">
+                            <div class="form-group">
+                                <label for="sellAmount" class="form-label">Amount to Sell</label>
+                                <input type="number" id="sellAmount" class="form-input" placeholder="Enter amount" min="1" max="3000" step="1">
+                            </div>
+                            
+                            <div class="sell-estimate">
+                                <p>Estimated proceeds at current price ($1.75): $<span id="sellProceeds">0.00</span></p>
+                                <p>Probability of successful sale: <span id="sellProbability">95%</span></p>
+                            </div>
+                            
+                            <button type="submit" class="bid-button">Sell Tokens</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Transaction History moved outside bid-content divs to be common to all tabs -->
                     <div class="transaction-history">
                         <h3>Transaction History</h3>
                         <div id="transactionsList" class="transactions-list">
@@ -1034,45 +1060,6 @@
                         <div class="portfolio-pnl positive">+$1,020.00 (+24.1%)</div>
                     </div>
                 </div>
-                
-                <!-- Sell Interface -->
-                <div class="sell-interface">
-                    <h3>Sell Tokens</h3>
-                    
-                    <form id="sellForm">
-                        <div class="form-group">
-                            <label for="sellAmount" class="form-label">Amount to Sell</label>
-                            <input type="number" id="sellAmount" class="form-input" placeholder="Enter amount" min="1" max="3000" step="1">
-                        </div>
-                        
-                        <div class="sell-estimate">
-                            <p>Estimated proceeds at current price ($1.75): $<span id="sellProceeds">0.00</span></p>
-                            <p>Probability of successful sale: <span id="sellProbability">95%</span></p>
-                        </div>
-                        
-                        <button type="submit" class="bid-button">Sell Tokens</button>
-                    </form>
-                </div>
-                
-                <!-- Sell Transactions -->
-                <div class="sell-transactions">
-                    <h3>Sell Transactions</h3>
-                    <div id="sellTransactionsList" class="transactions-list">
-                        <!-- Pending Sell Transaction -->
-                        <div class="transaction-item" data-id="sell1">
-                            <div class="transaction-details">
-                                <div class="transaction-round">Round 3 - Sell</div>
-                                <div class="transaction-main">500 tokens at $1.75</div>
-                                <div class="transaction-total">$875.00</div>
-                                <div class="execution-time" id="countdown-sell1">02:15:43</div>
-                            </div>
-                            <div class="transaction-status pending">PENDING</div>
-                            <div class="transaction-actions">
-                                <button class="cancel-button" title="Cancel transaction"></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </main>
@@ -1311,7 +1298,7 @@
                     };
                     
                     // Add to sell transactions list
-                    const sellTransactionsList = document.getElementById('sellTransactionsList');
+                    const transactionsList = document.getElementById('transactionsList');
                     const transactionElement = document.createElement('div');
                     transactionElement.className = 'transaction-item';
                     transactionElement.setAttribute('data-id', transaction.id);
@@ -1328,7 +1315,7 @@
                         </div>
                     `;
                     
-                    sellTransactionsList.prepend(transactionElement);
+                    transactionsList.prepend(transactionElement);
                     
                     // Add cancel functionality
                     transactionElement.querySelector('.cancel-button').addEventListener('click', function() {
