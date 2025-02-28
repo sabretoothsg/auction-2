@@ -318,26 +318,32 @@
         /* Chart Legend */
         .chart-legend {
             margin-top: 1rem;
-            padding: 1rem;
+            padding: 0.5rem;
             background-color: #f8f9fa;
             border-radius: 4px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 0.75rem;
         }
         
         .legend-item {
             display: flex;
             align-items: center;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0;
+            white-space: nowrap;
         }
         
         .legend-color {
-            width: 16px;
-            height: 16px;
-            border-radius: 3px;
-            margin-right: 0.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            margin-right: 0.25rem;
         }
         
         .legend-text {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
         
         /* Icons */
@@ -547,26 +553,25 @@
                 <canvas id="round3Chart"></canvas>
             </div>
             <div class="chart-legend">
-                <h4>Legend:</h4>
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgba(0, 123, 255, 0.5);"></div>
-                    <div class="legend-text">Normal: Token quantity allocated for this round</div>
+                    <div class="legend-text">Normal: Round allocation</div>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgba(255, 193, 7, 0.5);"></div>
-                    <div class="legend-text">Prior Round: Additional supply from resold tokens</div>
+                    <div class="legend-text">Prior: Resold tokens</div>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgba(40, 167, 69, 0.5);"></div>
-                    <div class="legend-text">Future Round: Additional supply from future rounds</div>
+                    <div class="legend-text">Future: Borrowed supply</div>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgba(220, 53, 69, 0.5);"></div>
-                    <div class="legend-text">Not Cleared: Bids below clearing price not settled</div>
+                    <div class="legend-text">Not Cleared: Below price</div>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgb(0, 128, 0);"></div>
-                    <div class="legend-text">Current Price: $1.75</div>
+                    <div class="legend-text">Current: $1.75</div>
                 </div>
             </div>
         </div>
@@ -577,26 +582,25 @@
                 <canvas id="round2Chart"></canvas>
             </div>
             <div class="chart-legend">
-                <h4>Legend:</h4>
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgba(0, 123, 255, 0.5);"></div>
-                    <div class="legend-text">Normal: Token quantity allocated for this round</div>
+                    <div class="legend-text">Normal: Round allocation</div>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgba(255, 193, 7, 0.5);"></div>
-                    <div class="legend-text">Prior Round: Additional supply from resold tokens</div>
+                    <div class="legend-text">Prior: Resold tokens</div>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgba(40, 167, 69, 0.5);"></div>
-                    <div class="legend-text">Future Round: Additional supply from future rounds</div>
+                    <div class="legend-text">Future: Borrowed supply</div>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgba(220, 53, 69, 0.5);"></div>
-                    <div class="legend-text">Not Cleared: Bids below clearing price not settled</div>
+                    <div class="legend-text">Not Cleared: Below price</div>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgb(0, 128, 0);"></div>
-                    <div class="legend-text">Clearing Price: $1.45</div>
+                    <div class="legend-text">Clearing: $1.45</div>
                 </div>
             </div>
         </div>
@@ -607,26 +611,25 @@
                 <canvas id="round1Chart"></canvas>
             </div>
             <div class="chart-legend">
-                <h4>Legend:</h4>
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgba(0, 123, 255, 0.5);"></div>
-                    <div class="legend-text">Normal: Token quantity allocated for this round</div>
+                    <div class="legend-text">Normal: Round allocation</div>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgba(255, 193, 7, 0.5);"></div>
-                    <div class="legend-text">Prior Round: Additional supply from resold tokens</div>
+                    <div class="legend-text">Prior: Resold tokens</div>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgba(40, 167, 69, 0.5);"></div>
-                    <div class="legend-text">Future Round: Additional supply from future rounds</div>
+                    <div class="legend-text">Future: Borrowed supply</div>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgba(220, 53, 69, 0.5);"></div>
-                    <div class="legend-text">Not Cleared: Bids below clearing price not settled</div>
+                    <div class="legend-text">Not Cleared: Below price</div>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgb(0, 128, 0);"></div>
-                    <div class="legend-text">Clearing Price: $1.33</div>
+                    <div class="legend-text">Clearing: $1.33</div>
                 </div>
             </div>
         </div>
@@ -641,34 +644,21 @@
                 <canvas id="overviewChart"></canvas>
             </div>
             <div class="chart-legend">
-                <h4>Legend:</h4>
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgba(75, 192, 192, 1);"></div>
-                    <div class="legend-text">Round 3 (Current): Solid line</div>
+                    <div class="legend-text">Round 3 (Current)</div>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgba(153, 102, 255, 0.7);"></div>
-                    <div class="legend-text">Round 2: Dashed line</div>
+                    <div class="legend-text">Round 2</div>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgba(255, 159, 64, 0.7);"></div>
-                    <div class="legend-text">Round 1: Dashed line</div>
+                    <div class="legend-text">Round 1</div>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background-color: rgba(54, 162, 235, 0.4);"></div>
-                    <div class="legend-text">Future Rounds (4-6): Dashed lines (faded)</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(0, 123, 255, 0.5);"></div>
-                    <div class="legend-text">Base Supply</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(255, 193, 7, 0.5);"></div>
-                    <div class="legend-text">Reserve Bank Supply</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(40, 167, 69, 0.5);"></div>
-                    <div class="legend-text">Borrowed from Future Rounds</div>
+                    <div class="legend-text">Future Rounds</div>
                 </div>
             </div>
         </div>
