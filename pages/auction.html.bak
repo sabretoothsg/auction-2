@@ -1,0 +1,4020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auctions - Exchequer Finance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        /* Emergency access banner */
+        .emergency-access-banner {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .emergency-access-banner a {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .emergency-access-banner a:hover {
+            text-decoration: none;
+        }
+        
+        /* Rest of existing styles */
+        :root {
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --background: #F8F9FA;
+            --border-color: #E5E5E5;
+            --link-color: #0066FF;
+            --yellow: #F2C94C;
+            --yellow-light: #FFF3D6;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text-primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 1.75fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .connect-btn {
+            background: var(--yellow);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+
+        .rounds-overview {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background: var(--white);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .round-status {
+            flex: 1;
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            min-width: 100px;
+        }
+
+        .round-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            margin: 0.5rem 0;
+            font-size: 0.8rem;
+        }
+
+        .round-info-row {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .round-stat {
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+
+        .round-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .round-name {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+        }
+
+        .round-badge {
+            font-size: 0.65rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .round-duration {
+            margin-top: 0.5rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .round-duration span {
+            background: var(--yellow-light);
+            color: var(--text-primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-variant-numeric: tabular-nums;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        .round-status.current {
+            background: var(--yellow-light);
+            border: 1px solid var(--yellow);
+        }
+
+        .round-status.current .round-badge {
+            background: var(--yellow);
+            color: var(--text-primary);
+        }
+
+        .round-status.future {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .round-status:hover:not(.future) {
+            background: var(--background);
+        }
+
+        .round-status.active {
+            background: var(--yellow-light);
+        }
+
+        .round-status.current {
+            background: var(--yellow-light);
+            border: 2px solid var(--yellow);
+        }
+
+        .round-status.current .round-badge {
+            background: var(--yellow);
+            color: var(--text-primary);
+        }
+
+        .round-status.future {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .round-status.future .round-badge {
+            background: var(--background);
+            color: var(--text-secondary);
+        }
+
+        .round-status:not(.future) .round-badge:not(.current) {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .auction-section {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .auction-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .auction-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .auction-stats {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .chart-container {
+            height: 400px;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        /* Updated styles for chart elements */
+        .supply-indicator {
+            position: absolute;
+            width: 100%;
+            border-top: 2px dashed #666;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding-right: 1rem;
+            transition: opacity 0.2s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .chart-container:hover .supply-indicator,
+        .chart-container:hover .reserve-zone {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .supply-indicator-label {
+            background: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            margin-left: 1rem;
+            transition: opacity 0.2s ease;
+        }
+
+        .reserve-zone {
+            position: absolute;
+            background: rgba(242, 201, 76, 0.1);
+            width: 100%;
+            transition: opacity 0.2s ease;
+            opacity: 0;
+        }
+
+        .chart-legend {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--background);
+            border-radius: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        .legend-color.base {
+            background: var(--link-color);
+        }
+
+        .legend-color.reserve {
+            background: var(--yellow);
+        }
+
+        /* Add navigation for auction rules */
+        .auction-rules-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .auction-rules-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--link-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .auction-rules-link:hover {
+            background: var(--background);
+            border-color: var(--link-color);
+        }
+
+        .info-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid currentColor;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .clearing-prices {
+            margin-top: 2rem;
+        }
+
+        .clearing-prices h3 {
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .clearing-prices table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .clearing-prices th,
+        .clearing-prices td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .clearing-prices th {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* New styles for table rows */
+        .clearing-prices .completed-round {
+            background-color: #f5f5f5;
+        }
+
+        .clearing-prices .current-round {
+            background-color: rgba(0, 102, 255, 0.05);
+            border: 1px solid rgba(0, 102, 255, 0.2);
+            position: relative;
+        }
+
+        .clearing-prices .current-round td {
+            position: relative;
+        }
+
+        .clearing-prices .current-round::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 2px solid rgba(0, 102, 255, 0.3);
+            animation: pulse 2s infinite;
+            pointer-events: none;
+        }
+
+        .status-completed {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-completed::before {
+            content: '✓';
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        /* Styles for quantity column */
+        .quantity-col {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .buy-section {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .buy-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .buy-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .duration-container {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .duration-container::before {
+            content: "This bar shows how much time remains in the current auction round.";
+            display: none;
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            z-index: 1000;
+        }
+
+        .duration-container:hover::before {
+            display: block;
+        }
+
+        .duration-bar {
+            background: var(--yellow-light);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .duration-progress {
+            background: var(--yellow);
+            width: 30%;
+            height: 100%;
+        }
+
+        .discount-badge {
+            background: var(--yellow-light);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 16px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .reserve-info {
+            padding: 0.75rem;
+            margin: 0.75rem 0;
+        }
+
+        .reserve-info p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .bid-controls {
+            margin-top: 1rem;
+        }
+
+        .bid-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0;
+        }
+
+        .bid-tab {
+            padding: 0.75rem 1rem;
+            background: none;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .bid-tab:hover {
+            color: var(--text-primary);
+        }
+
+        .bid-tab.active {
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--yellow);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .total-amount {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            padding: 0.75rem;
+            background: var(--background);
+            border-radius: 8px;
+        }
+
+        .set-order-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--yellow);
+            border: none;
+            border-radius: 25px;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .reserve-bank {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            grid-column: span 2;
+        }
+
+        .reserve-bank-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .reserve-bank-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--background);
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        [title] {
+            position: relative;
+            cursor: help;
+        }
+
+        [title]:hover::before {
+            content: attr(title);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem 1rem;
+            background: var(--text-primary);
+            color: white;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            z-index: 1000;
+        }
+
+        .main-chart-section {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 0.75rem;
+        }
+
+        .main-chart {
+            height: 500px;
+            margin-bottom: 1rem;
+        }
+
+        .tab-navigation {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 8px;
+        }
+
+        .tab-button:hover {
+            background: var(--background);
+        }
+
+        .tab-button.active {
+            color: var(--text-primary);
+            background: var(--yellow-light);
+        }
+
+        .tab-button.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .tab-button.disabled:hover {
+            background: none;
+        }
+
+        .tab-content {
+            position: relative;
+        }
+
+        .tab-pane {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tab-pane.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .round-stats {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .section-header {
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .rounds-overview {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background: var(--white);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .round-status {
+            flex: 1;
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            min-width: 100px;
+        }
+
+        .round-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            margin: 0.5rem 0;
+            font-size: 0.8rem;
+        }
+
+        .round-info-row {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .round-stat {
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+
+        .round-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .round-name {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+        }
+
+        .round-badge {
+            font-size: 0.65rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .round-duration {
+            margin-top: 0.5rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .round-duration span {
+            background: var(--yellow-light);
+            color: var(--text-primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-variant-numeric: tabular-nums;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        .round-status.current {
+            background: var(--yellow-light);
+            border: 1px solid var(--yellow);
+        }
+
+        .round-status.current .round-badge {
+            background: var(--yellow);
+            color: var(--text-primary);
+        }
+
+        .round-status.future {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .round-status:hover:not(.future) {
+            background: var(--background);
+        }
+
+        .round-status.active {
+            background: var(--yellow-light);
+        }
+
+        .round-status.current {
+            background: var(--yellow-light);
+            border: 2px solid var(--yellow);
+        }
+
+        .round-status.current .round-badge {
+            background: var(--yellow);
+            color: var(--text-primary);
+        }
+
+        .round-status.future {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .round-status.future .round-badge {
+            background: var(--background);
+            color: var(--text-secondary);
+        }
+
+        .round-status:not(.future) .round-badge:not(.current) {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .auction-timeline {
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .timeline-round {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .round-countdown {
+            background: var(--yellow-light);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            color: var(--text-primary);
+            display: inline-block;
+            margin-left: 1rem;
+        }
+
+        .timeline-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .timeline-badge.completed {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .timeline-badge.active {
+            background: var(--yellow);
+            color: var(--text-primary);
+        }
+
+        .timeline-badge.upcoming {
+            background: var(--background);
+            color: var(--text-secondary);
+        }
+
+        .timeline-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-stat {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .timeline-progress {
+            height: 6px;
+            background: var(--background);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .timeline-progress .progress-bar {
+            height: 100%;
+            background: var(--link-color);
+            width: 0;
+            transition: width 0.3s ease;
+        }
+
+        .timeline-round.completed .progress-bar {
+            background: #4CAF50;
+        }
+
+        .timeline-round.active .progress-bar {
+            background: var(--yellow);
+        }
+
+        .timeline-round.upcoming {
+            opacity: 0.7;
+        }
+
+        .auction-total-time {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .bid-content {
+            display: none;
+            padding-top: 1rem;
+        }
+
+        .bid-content.active {
+            display: block;
+        }
+
+        .bid-form {
+            background: var(--background);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .bid-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1rem 0;
+        }
+
+        .reserve-probability {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .active-bids {
+            margin: 1.5rem 0;
+        }
+
+        .active-bids h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .bids-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .bid-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+
+        .bid-item-details {
+            flex: 1;
+        }
+
+        .bid-item-round {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .bid-item-main {
+            font-weight: 500;
+        }
+
+        .bid-item-total {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .remove-bid {
+            background: none;
+            border: none;
+            color: #FF6B6B;
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+
+        .add-bid-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--background);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .add-bid-btn:hover {
+            background: var(--yellow-light);
+        }
+
+        .cancel-bid-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .cancel-bid-btn:hover {
+            opacity: 1;
+        }
+
+        .trade-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            background: var(--background);
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .trade-tab {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .trade-tab.active[data-mode="buy"] {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .trade-tab.active[data-mode="sell"] {
+            background: #FF6B6B;
+            color: white;
+        }
+
+        .portfolio-summary {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .portfolio-rounds {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .portfolio-round {
+            padding: 1rem;
+            background: var(--background);
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .portfolio-round.current {
+            border: 2px solid var(--yellow);
+        }
+
+        .round-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .token-amount {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .token-value {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .market-liquidity {
+            background: #E8F5E9;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+        }
+
+        .liquidity-label {
+            font-weight: 500;
+            color: #2E7D32;
+        }
+
+        .liquidity-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2E7D32;
+            margin: 0.5rem 0;
+        }
+
+        .liquidity-info {
+            font-size: 0.875rem;
+            color: #2E7D32;
+        }
+
+        .bid-form.sell {
+            border: 1px solid #FF6B6B;
+        }
+
+        .sell-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-box, .fee-structure {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 6px;
+        }
+
+        .info-box h4, .fee-structure h4 {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .fee-structure ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .fee-structure li {
+            margin: 0.25rem 0;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .sell-summary {
+            display: grid;
+            gap: 0.5rem;
+            background: var(--background);
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+        }
+
+        .set-order-btn.sell {
+            background: #FF6B6B;
+            color: white;
+        }
+
+        .transaction-history {
+            margin-top: 2rem;
+            background: var(--white);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .history-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .history-tab {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            background: var(--background);
+            cursor: pointer;
+        }
+
+        .history-tab.active {
+            background: var(--yellow);
+            font-weight: 500;
+        }
+
+        .transaction-item {
+            background: var(--background);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .transaction-item.buy {
+            border-left: 4px solid #4CAF50;
+        }
+
+        .transaction-item.sell {
+            border-left: 4px solid #FF6B6B;
+        }
+
+        .transaction-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .transaction-type {
+            font-weight: 500;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        .transaction-item.buy .transaction-type {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .transaction-item.sell .transaction-type {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+
+        .transaction-time {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .transaction-details {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .transaction-main {
+            font-weight: 500;
+        }
+
+        .transaction-round {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .transaction-total {
+            text-align: right;
+            font-size: 0.875rem;
+        }
+
+        .countdown-tooltip {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-primary);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            line-height: 1.5;
+        }
+
+        .countdown-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: var(--text-primary) transparent transparent transparent;
+        }
+
+        .nav-countdown:hover .countdown-tooltip {
+            display: block;
+        }
+
+        /* Additional styles to ensure tab switching works properly */
+        .round-status {
+            cursor: pointer !important;
+            position: relative;
+            z-index: 5;
+            transition: all 0.2s ease;
+        }
+        
+        .round-status:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .round-status[data-tab="round2"] {
+            z-index: 10;
+        }
+        
+        /* Force tab panes to be hidden by default and shown when active */
+        .tab-pane {
+            display: none !important;
+        }
+        
+        .tab-pane.active {
+            display: block !important;
+        }
+        
+        /* Direct tab links styling */
+        .direct-tab-links {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f8f8;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .direct-tab-links a {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 15px;
+            background: #eee;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        
+        .direct-tab-links a:hover {
+            background: #ddd;
+            transform: translateY(-2px);
+        }
+        
+        .direct-tab-links a.active {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        /* Force clickable area to capture all events */
+        .round-header, .round-info, .round-duration {
+            pointer-events: none;
+        }
+
+        .countdown-timer {
+            font-weight: bold;
+            color: #FFA726;
+            background-color: rgba(255, 167, 38, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .transaction-status {
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 8px;
+        }
+
+        .transaction-status.pending {
+            background-color: #FFA726;
+            color: white;
+        }
+
+        .execution-time {
+            font-size: 0.85rem;
+            color: #FFA726;
+            margin-top: 4px;
+        }
+
+        .market-liquidity {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: var(--yellow-light);
+            border-radius: 6px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <site-header></site-header>
+
+    <main class="container">
+        <button class="connect-btn">Connect Wallet</button>
+
+        <div class="rounds-overview">
+            <div class="round-status" data-tab="round1">
+                <div class="round-header">
+                    <span class="round-name">Round 1</span>
+                    <span class="round-badge">Done</span>
+                </div>
+                <div class="round-info">
+                    <div class="round-info-row">
+                        <div class="round-stat" title="Duration: 12 hours">⏱️12h</div>
+                        <div class="round-stat" title="Reserve Price: $1.25">📊$1.25</div>
+                    </div>
+                    <div class="round-info-row">
+                        <div class="round-stat" title="Clearing Price: $1.25">✨$1.25</div>
+                        <div class="round-stat" title="Quantity: 100,000">📦100k</div>
+                    </div>
+                </div>
+            </div>
+            <div class="round-status" data-tab="round2">
+                <div class="round-header">
+                    <span class="round-name">Round 2</span>
+                    <span class="round-badge">Done</span>
+                </div>
+                <div class="round-info">
+                    <div class="round-info-row">
+                        <div class="round-stat" title="Duration: 12 hours">⏱️12h</div>
+                        <div class="round-stat" title="Reserve Price: $1.25">📊$1.25</div>
+                    </div>
+                    <div class="round-info-row">
+                        <div class="round-stat" title="Clearing Price: $1.75">✨$1.75</div>
+                        <div class="round-stat" title="Quantity: 80,000">📦80k</div>
+                    </div>
+                </div>
+            </div>
+            <div class="round-status current" data-tab="round3">
+                <div class="round-header">
+                    <span class="round-name">Round 3</span>
+                    <span class="round-badge">Live</span>
+                </div>
+                <div class="round-info">
+                    <div class="round-info-row">
+                        <div class="round-stat" title="Duration: 12 hours">⏱️12h</div>
+                        <div class="round-stat" title="Reserve Price: $1.50">📊$1.50</div>
+                    </div>
+                    <div class="round-info-row">
+                        <div class="round-stat" title="Current Price: $2.25">💫$2.25</div>
+                        <div class="round-stat" title="Target Quantity: 133,000">📦133k</div>
+                    </div>
+                </div>
+                <div class="round-duration">
+                    <span id="countdown">Loading...</span>
+                </div>
+            </div>
+            <div class="round-status future" data-tab="round4">
+                <div class="round-header">
+                    <span class="round-name">Round 4</span>
+                    <span class="round-badge">Next</span>
+                </div>
+                <div class="round-info">
+                    <div class="round-info-row">
+                        <div class="round-stat" title="Duration: 12 hours">⏱️12h</div>
+                        <div class="round-stat" title="Reserve Price: $1.50">📊$1.50</div>
+                    </div>
+                    <div class="round-info-row">
+                        <div class="round-stat" title="Clearing Price: TBD">✨--</div>
+                        <div class="round-stat" title="Target Quantity: 100,000">📦100k</div>
+                    </div>
+                </div>
+            </div>
+            <div class="round-status future" data-tab="round5">
+                <div class="round-header">
+                    <span class="round-name">Round 5</span>
+                    <span class="round-badge">Next</span>
+                </div>
+                <div class="round-info">
+                    <div class="round-info-row">
+                        <div class="round-stat" title="Duration: 12 hours">⏱️12h</div>
+                        <div class="round-stat" title="Reserve Price: $1.75">📊$1.75</div>
+                    </div>
+                    <div class="round-info-row">
+                        <div class="round-stat" title="Clearing Price: TBD">✨--</div>
+                        <div class="round-stat" title="Target Quantity: 120,000">📦120k</div>
+                    </div>
+                </div>
+            </div>
+            <div class="round-status future" data-tab="round6">
+                <div class="round-header">
+                    <span class="round-name">Round 6</span>
+                    <span class="round-badge">Next</span>
+                </div>
+                <div class="round-info">
+                    <div class="round-info-row">
+                        <div class="round-stat" title="Duration: 12 hours">⏱️12h</div>
+                        <div class="round-stat" title="Reserve Price: $1.75">📊$1.75</div>
+                    </div>
+                    <div class="round-info-row">
+                        <div class="round-stat" title="Clearing Price: TBD">✨--</div>
+                        <div class="round-stat" title="Target Quantity: 100,000">📦100k</div>
+                    </div>
+                </div>
+            </div>
+            <div class="round-status" data-tab="overview">
+                <div class="round-header">
+                    <span class="round-name">Overview</span>
+                </div>
+                <div class="round-info">
+                    <div class="round-info-row">
+                        <div class="round-stat" title="Total Rounds: 6">🔄 6 Rounds</div>
+                        <div class="round-stat" title="Current Round: 3">📍 Round 3</div>
+                    </div>
+                    <div class="round-info-row">
+                        <div class="round-stat" title="Total Supply: 633,000">📦 633k</div>
+                        <div class="round-stat" title="Average Price: $1.58">💰 $1.58</div>
+                    </div>
+                </div>
+                <div class="round-duration">
+                    <span id="overview-countdown">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-wrapper">
+            <!-- Main Chart Section -->
+            <section class="main-chart-section card">
+                <div class="tab-content">
+                    <!-- Round 3 Tab (Default Active) -->
+                    <div class="tab-pane active" id="round3">
+                        <div class="section-header">
+                            <h2 class="section-title">Round 3 Bids</h2>
+                            <div class="round-stats">
+                                <span>Current Price: $2.25</span>
+                                <span>Reserve Price: $1.50</span>
+                                <span>Total Supply: 133,000</span>
+                            </div>
+                        </div>
+                        <div class="chart-container main-chart">
+                            <canvas id="demandChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Round 2 Tab -->
+                    <div class="tab-pane" id="round2">
+                        <div class="section-header">
+                            <h2 class="section-title">Round 2 Bids</h2>
+                            <div class="round-stats">
+                                <span>Clearing Price: $1.75</span>
+                                <span>Reserve Price: $1.25</span>
+                                <span>Total Supply: 80,000</span>
+                            </div>
+                        </div>
+                        <div class="chart-container main-chart">
+                            <canvas id="round2Chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Round 1 Tab -->
+                    <div class="tab-pane" id="round1">
+                        <div class="section-header">
+                            <h2 class="section-title">Round 1 Bids</h2>
+                            <div class="round-stats">
+                                <span>Clearing Price: $1.25</span>
+                                <span>Reserve Price: $1.25</span>
+                                <span>Total Supply: 100,000</span>
+                            </div>
+                        </div>
+                        <div class="chart-container main-chart">
+                            <canvas id="round1Chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Auction Overview Tab -->
+                    <div class="tab-pane" id="overview">
+                        <div class="section-header">
+                            <h2 class="section-title">Auction Overview</h2>
+                            <div class="auction-total-time">
+                                <span>Total Auction Duration: </span>
+                                <span id="totalAuctionTime">Loading...</span>
+                            </div>
+                        </div>
+                        
+                        <div class="unified-chart-container" style="height: 600px; margin-bottom: 30px;">
+                            <canvas id="unifiedChart"></canvas>
+                        </div>
+                        
+                        <div class="controls-container" style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                            <div class="round-toggles" style="display: flex; gap: 10px;">
+                                <button class="round-toggle active" data-round="1">Round 1</button>
+                                <button class="round-toggle" data-round="2">Round 2</button>
+                                <button class="round-toggle" data-round="3">Round 3</button>
+                                <button class="round-toggle" data-round="4">Round 4</button>
+                                <button class="round-toggle" data-round="5">Round 5</button>
+                                <button class="round-toggle" data-round="6">Round 6</button>
+                            </div>
+                            <button id="focusModeToggle">Toggle Focus Mode</button>
+                        </div>
+                        
+                        <div class="metrics-panel" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px;">
+                            <!-- Metrics will be populated by JavaScript -->
+                        </div>
+                        
+                        <div class="auction-summary">
+                            <h3>Auction Progress</h3>
+                            <p>Track the evolution of demand and pricing across all auction rounds. Use the controls above to customize your view.</p>
+                        </div>
+                        
+                        <div class="chart-container main-chart">
+                            <canvas id="auctionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column (Buy Section) -->
+            <section class="buy-section card">
+                <div class="buy-header">
+                    <h2 class="buy-title">Bid for Note</h2>
+                    <button style="background: none; border: none;">♡</button>
+                </div>
+
+                <div class="discount-badge">
+                    Current Round Discount: 15%
+                </div>
+
+                <div class="reserve-info">
+                    <p><strong>Current Reserve Price:</strong> $1.50</p>
+                    <p>You pay clearing price. Early bids get discounts.</p>
+                </div>
+
+                <div class="auction-rules-nav">
+                    <a href="/auction-rules.html" class="auction-rules-link">
+                        <span class="info-icon">i</span>
+                        Learn more about auction rules
+                    </a>
+                </div>
+
+                <div class="bid-controls">
+                    <div class="bid-tabs">
+                        <button class="bid-tab active" data-tab="simple-bid">Simple Bidding</button>
+                        <button class="bid-tab" data-tab="advanced-bid">Advanced Bidding</button>
+                    </div>
+
+                    <div class="bid-content active" id="simple-bid">
+                        <div class="input-group">
+                            <label>Total USDC to spend</label>
+                            <input type="number" class="input-field" id="simpleBidAmount" placeholder="Enter amount in USDC">
+                            <p class="input-help" style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.875rem;">
+                                We'll bid to get you the most tokens possible at the clearing price for this round.
+                            </p>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Maximum Price per Token</label>
+                            <input type="number" class="input-field" id="simpleMaxPrice" placeholder="Enter max price per token" step="0.01">
+                            <p class="input-help" style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.875rem;">
+                                Your bid will only execute if the clearing price is at or below this price.
+                            </p>
+                        </div>
+
+                        <div class="active-bids" style="margin-top: 1rem;">
+                            <h3>Your Auto Bid</h3>
+                            <div class="bids-list" id="simpleBidsList">
+                                <!-- Auto bids will be listed here -->
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary set-order-btn" id="simpleSubmitButton"
+                                title="Your bid will be placed at the clearing price for this round">
+                            Place auto bid
+                        </button>
+                    </div>
+
+                    <div class="bid-content" id="advanced-bid">
+                        <div class="trade-tabs">
+                            <button class="trade-tab active" data-mode="buy">Buy</button>
+                            <button class="trade-tab" data-mode="sell">Sell</button>
+                        </div>
+
+                            <div class="portfolio-summary">
+                                <h3>Your Portfolio</h3>
+                                <div class="portfolio-rounds">
+                                    <div class="portfolio-round">
+                                        <div class="round-label">Round 1</div>
+                                        <div class="token-amount">5,000 tokens</div>
+                                        <div class="token-value">@ $1.25</div>
+                                    </div>
+                                    <div class="portfolio-round">
+                                        <div class="round-label">Round 2</div>
+                                        <div class="token-amount">3,000 tokens</div>
+                                        <div class="token-value">@ $1.75</div>
+                                    </div>
+                                    <div class="portfolio-round current">
+                                        <div class="round-label">Round 3</div>
+                                        <div class="token-amount">2,000 tokens</div>
+                                        <div class="token-value">@ $2.25</div>
+                                    </div>
+                                </div>
+                                <div class="market-liquidity">
+                                    <div class="liquidity-label">Current Market Liquidity</div>
+                                    <div class="liquidity-value">$125,000 USDC</div>
+                                    <div class="liquidity-info">Available for instant settlements</div>
+                                </div>
+                            </div>
+
+                            <div class="trade-content active" id="buy-form">
+                                <div class="bid-form buy">
+                                    <div class="input-group">
+                                        <label>Round</label>
+                                        <select class="input-field" id="bidRound">
+                                            <option value="3">Round 3 (Current)</option>
+                                            <option value="4">Round 4</option>
+                                            <option value="5">Round 5</option>
+                                            <option value="6">Round 6</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Quantity</label>
+                                        <input type="number" class="input-field" id="bidQuantity" placeholder="Enter quantity">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Bid Price</label>
+                                        <input type="number" class="input-field" id="bidPrice" placeholder="Enter price per token" step="0.01">
+                                    </div>
+                                    <div class="bid-summary">
+                                        <div class="total-amount">Total: <span id="bidTotal">$0.00</span></div>
+                                        <div class="reserve-probability" id="reserveProbability">
+                                            Reserve Bank Probability: <span>0%</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary set-order-btn" id="submitBidButton">
+                                        Submit Bid
+                                    </button>
+                                </div>
+
+                                <div class="active-bids">
+                                    <h3>Your Submitted Bids</h3>
+                                    <div class="bids-list" id="bidsList">
+                                        <!-- Bids will be listed here -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="trade-content" id="sell-form">
+                                <div class="sell-info">
+                                    <div class="info-box">
+                                        <h4>Early Round Seller Benefits</h4>
+                                        <p>Sell tokens from earlier rounds (1-2) with reduced fees and priority matching.</p>
+                                    </div>
+                                    <div class="fee-structure">
+                                        <h4>Selling Fee Structure</h4>
+                                        <ul>
+                                            <li>Round 1 tokens: 0.5% fee</li>
+                                            <li>Round 2 tokens: 1.0% fee</li>
+                                            <li>Round 3 tokens: 1.5% fee</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="bid-form sell">
+                                    <div class="input-group">
+                                        <label>Source Round</label>
+                                        <select class="input-field" id="sellRound">
+                                            <option value="1">Round 1 (5,000 available)</option>
+                                            <option value="2">Round 2 (3,000 available)</option>
+                                            <option value="3">Round 3 (2,000 available)</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Quantity to Sell</label>
+                                        <input type="number" class="input-field" id="sellQuantity" placeholder="Enter quantity">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Sell Price</label>
+                                        <input type="number" class="input-field" id="sellPrice" placeholder="Enter price per token" step="0.01">
+                                    </div>
+                                    <div class="sell-summary">
+                                        <div class="total-amount">Total: <span id="sellTotal">$0.00</span></div>
+                                        <div class="fee-amount">Fee: <span id="sellFee">$0.00</span></div>
+                                        <div class="net-amount">Net Proceeds: <span id="sellNet">$0.00</span></div>
+                                    </div>
+                                    <button class="btn btn-primary set-order-btn sell" id="submitSellButton">
+                                        Submit Sell Order
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="transaction-history">
+                                <h3>Transaction History</h3>
+                                <div class="history-tabs">
+                                    <button class="history-tab active" data-type="all">All</button>
+                                    <button class="history-tab" data-type="buys">Buys</button>
+                                    <button class="history-tab" data-type="sells">Sells</button>
+                                </div>
+                                <div class="history-list" id="transactionHistory">
+                                    <!-- Transaction history will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <site-footer></site-footer>
+
+    <script src="/components/Header.js"></script>
+    <script src="/components/Footer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+    <script>
+        // Global variables
+        let activeBids = [];
+        let transactions = []; // Move transactions to global scope
+        let charts = {}; // Restore charts variable
+        let currentSimpleBid = null; // Restore currentSimpleBid variable
+        
+        // Round data with base quantities and additional supply details
+        const roundBaseQuantities = {
+            round1: 80000,  // Base quantity for Round 1
+            round2: 100000,  // Base quantity for Round 2
+            round3: 100000  // Base quantity for Round 3
+        };
+
+        const round3AdditionalSupply = {
+            fromFutureRounds: 20000,       // Tokens pulled from future rounds due to excess demand
+            fromPriorRoundResales: 13000   // Tokens being resold from prior rounds
+        };
+
+        // Add Round 2 Supply Configuration
+        const round2SupplyConfig = {
+            baseSupply: 100000,           // Base tokens allocated for Round 2
+            priorRoundTokens: 10000,     // Small quantity of prior round tokens
+            futureRoundTokens: 0,        // No future round tokens since Round 2 is closed
+            get totalSupply() {
+                return this.baseSupply + this.priorRoundTokens + this.futureRoundTokens;
+            },
+            reservePrice: 1.25,          // Minimum acceptable price
+            clearingPrice: 1.75          // Fixed clearing price since Round 2 is closed
+        };
+
+        const round3BasePoints = [
+            { cumulative: 0, price: 3.00 },
+            { cumulative: 30000, price: 2.80 },
+            { cumulative: 60000, price: 2.60 },
+            { cumulative: 80000, price: 2.40 },  // Base supply point
+            { cumulative: 100000, price: 2.20 },
+            { cumulative: 110000, price: 2.00 }, // Future rounds end
+            { cumulative: 133000, price: 1.80 }, // Total supply (includes resold)
+            { cumulative: 160000, price: 1.70 },
+            { cumulative: 200000, price: 1.60 },
+            { cumulative: 250000, price: 1.50 }, // Reserve price
+            { cumulative: 300000, price: 1.40 }
+        ];
+
+        const round2BasePoints = [
+            { cumulative: 0, price: 2.5 },
+            { cumulative: 20000, price: 2.25 },
+            { cumulative: 40000, price: 2.0 },
+            { cumulative: 60000, price: 1.9 },
+            { cumulative: 80000, price: 1.75 }, // Clearing price
+            { cumulative: 80000, price: 1.65 },
+            { cumulative: 100000, price: 1.65 },
+            { cumulative: 100000, price: 1.5 },
+            { cumulative: 120000, price: 1.5 },
+            { cumulative: 120000, price: 1.35 },
+            { cumulative: 140000, price: 1.35 },
+            { cumulative: 140000, price: 1.25 }, // Reserve price
+            { cumulative: 160000, price: 1.25 },
+            { cumulative: 160000, price: 1.15 },
+            { cumulative: 180000, price: 1.15 },
+            { cumulative: 180000, price: 1.0 },
+            { cumulative: 200000, price: 1.0 }
+        ];
+
+        const round1BasePoints = [
+            { cumulative: 0, price: 1.1 },
+            { cumulative: 0, price: 1.15 },
+            { cumulative: 40000, price: 1.15 },
+            { cumulative: 40000, price: 1.2 },
+            { cumulative: 70000, price: 1.2 },
+            { cumulative: 70000, price: 1.25 },
+            { cumulative: 100000, price: 1.25 },
+            { cumulative: 100000, price: 1.35 },
+            { cumulative: 120000, price: 1.35 },
+            { cumulative: 120000, price: 1.5 },
+            { cumulative: 140000, price: 1.5 }
+        ];
+
+        // Supply configuration for Round 3
+        const round3SupplyConfig = {
+            baseSupply: 80000,           // Base tokens allocated for Round 3
+            priorRoundTokens: 30000,     // Tokens from previous rounds resold
+            futureRoundTokens: 23000,    // Tokens from future rounds
+            get totalSupply() {
+                return this.baseSupply + this.priorRoundTokens + this.futureRoundTokens;
+            },
+            reservePrice: 1.50,          // Minimum acceptable price
+            get clearingPrice() {
+                return getPrice(round3BasePoints, this.totalSupply);
+            }
+        };
+
+        // Helper function to get price at a specific quantity point
+        function getPrice(points, quantity) {
+            // Find the segment where quantity falls
+            for (let i = 0; i < points.length - 1; i++) {
+                if (points[i].cumulative <= quantity && points[i + 1].cumulative >= quantity) {
+                    const p1 = points[i];
+                    const p2 = points[i + 1];
+                    
+                    // Linear interpolation
+                    if (p1.cumulative === p2.cumulative) return p1.price;
+                    const ratio = (quantity - p1.cumulative) / (p2.cumulative - p1.cumulative);
+                    return p1.price + ratio * (p2.price - p1.price);
+                }
+            }
+            
+            // Default to last point price if beyond the range
+            if (quantity >= points[points.length - 1].cumulative) {
+                return points[points.length - 1].price;
+            }
+            
+            // Default to first point price if below the range
+            return points[0].price;
+        }
+
+        // Generate a smooth demand curve from base points
+        function generateDemandCurve(basePoints) {
+            console.log('Generating demand curve with base points:', basePoints);
+            if (!basePoints || basePoints.length === 0) {
+                console.error('No base points provided for demand curve');
+                return [];
+            }
+            
+            try {
+                // Create a more granular curve by interpolating between points
+                const result = [];
+                const step = 5000; // Step size for interpolation (5000 tokens)
+                
+                // Start with the first point
+                result.push({...basePoints[0]});
+                
+                // Generate points between each pair of base points
+                for (let i = 0; i < basePoints.length - 1; i++) {
+                    const start = basePoints[i];
+                    const end = basePoints[i + 1];
+                    
+                    // Skip if same cumulative value (vertical line segment)
+                    if (start.cumulative === end.cumulative) {
+                        result.push({...end});
+                        continue;
+                    }
+                    
+                    // Calculate how many points to add between start and end
+                    const steps = Math.max(1, Math.floor((end.cumulative - start.cumulative) / step));
+                    const stepSize = (end.cumulative - start.cumulative) / steps;
+                    
+                    // Add interpolated points
+                    for (let j = 1; j <= steps; j++) {
+                        const cumulative = start.cumulative + j * stepSize;
+                        const price = getPrice(basePoints, cumulative);
+                        result.push({
+                            cumulative: cumulative,
+                            price: price
+                        });
+                    }
+                }
+                
+                console.log('Generated demand curve with', result.length, 'points');
+                return result;
+            } catch (error) {
+                console.error('Error generating demand curve:', error);
+                // Return a simple fallback curve
+                return basePoints.map(point => ({...point}));
+            }
+        }
+
+        // Calculate area under curve
+        function calculateAreaUnderCurve(points, startQuantity, endQuantity) {
+            let area = 0;
+            
+            // Find the relevant points within our range
+            const relevantPoints = [
+                { cumulative: startQuantity, price: getPrice(points, startQuantity) },
+                ...points.filter(p => p.cumulative > startQuantity && p.cumulative < endQuantity),
+                { cumulative: endQuantity, price: getPrice(points, endQuantity) }
+            ];
+            
+            // Calculate area using trapezoidal rule
+            for (let i = 0; i < relevantPoints.length - 1; i++) {
+                const width = relevantPoints[i + 1].cumulative - relevantPoints[i].cumulative;
+                const avgHeight = (relevantPoints[i + 1].price + relevantPoints[i].price) / 2;
+                area += width * avgHeight;
+            }
+            
+            // Round to nearest whole number
+            return Math.round(area);
+        }
+
+        // Chart creation function
+        function createDemandChart(ctx, basePoints, currentSupply, currentPrice, reservePrice, isCurrentRound = false, isOverview = false, isRound2 = false) {
+            if (isOverview) {
+                // Create overview chart showing all rounds
+                const clearingPoints = [
+                    { round: 1, x: 100000, y: 1.25 },  // Round 1 clearing point
+                    { round: 2, x: 80000, y: 1.75 },   // Round 2 clearing point
+                    { round: 3, x: 133000, y: 2.25 }   // Round 3 current point
+                ];
+
+                // Create round base quantity markers
+                const baseQuantityMarkers = [
+                    { round: 1, x: roundBaseQuantities.round1, y: 1.0, label: 'R1 Base' },
+                    { round: 2, x: roundBaseQuantities.round2, y: 1.0, label: 'R2 Base' }, 
+                    { round: 3, x: roundBaseQuantities.round3, y: 1.0, label: 'R3 Base' }
+                ];
+
+                return new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [
+                            {
+                                label: 'Round 1 Demand',
+                                data: round1BasePoints.map(d => ({x: d.cumulative, y: d.price})),
+                                borderColor: '#FF6B6B',
+                                backgroundColor: '#FF6B6B',
+                                showLine: true,
+                                borderWidth: 2,
+                                pointRadius: 0,
+                                tension: 0.3,
+                                fill: false
+                            },
+                            {
+                                label: 'Round 2 Demand',
+                                data: round2BasePoints.map(d => ({x: d.cumulative, y: d.price})),
+                                borderColor: '#4CAF50',
+                                backgroundColor: '#4CAF50',
+                                showLine: true,
+                                borderWidth: 2,
+                                pointRadius: 0,
+                                tension: 0.3,
+                                fill: false
+                            },
+                            {
+                                label: 'Round 3 Demand',
+                                data: round3BasePoints.map(d => ({x: d.cumulative, y: d.price})),
+                                borderColor: '#FFA726',
+                                backgroundColor: '#FFA726',
+                                showLine: true,
+                                borderWidth: 2,
+                                pointRadius: 0,
+                                tension: 0.3,
+                                fill: false
+                            },
+                            {
+                                label: 'Clearing Points',
+                                data: clearingPoints.map(p => ({
+                                    x: p.x,
+                                    y: p.y,
+                                    round: p.round
+                                })),
+                                backgroundColor: '#FFFFFF',
+                                borderColor: '#000000',
+                                borderWidth: 2,
+                                pointRadius: 8,
+                                pointStyle: 'star',
+                                showLine: false
+                            },
+                            {
+                                label: 'Base Quantities',
+                                data: baseQuantityMarkers,
+                                backgroundColor: 'rgba(100, 100, 100, 0.7)',
+                                borderColor: 'rgba(100, 100, 100, 0.7)',
+                                borderWidth: 2,
+                                pointRadius: 6,
+                                pointStyle: 'triangle',
+                                showLine: false
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'nearest',
+                            axis: 'x',
+                            intersect: false
+                        },
+                        plugins: {
+                            tooltip: {
+                                enabled: true,
+                                mode: 'nearest',
+                                intersect: false,
+                                callbacks: {
+                                    label: function(context) {
+                                        if (context.dataset.label === 'Clearing Points') {
+                                            const point = context.dataset.data[context.dataIndex];
+                                            return [
+                                                `Round ${point.round}`,
+                                                `Price: $${point.y.toFixed(2)}`,
+                                                `Quantity: ${point.x.toLocaleString()} tokens`
+                                            ];
+                                        } else if (context.dataset.label === 'Base Quantities') {
+                                            const point = context.dataset.data[context.dataIndex];
+                                            return [
+                                                `${point.label}`,
+                                                `Quantity: ${point.x.toLocaleString()} tokens`
+                                            ];
+                                        } else {
+                                            return [
+                                                `${context.dataset.label}`,
+                                                `Price: $${context.parsed.y.toFixed(2)}`,
+                                                `Quantity: ${context.parsed.x.toLocaleString()} tokens`
+                                            ];
+                                        }
+                                    }
+                                }
+                            },
+                            legend: {
+                                display: true,
+                                position: 'bottom',
+                                labels: {
+                                    usePointStyle: true,
+                                    padding: 20
+                                }
+                            },
+                            annotation: {
+                                annotations: {
+                                    r1BaseQuantity: {
+                                        type: 'line',
+                                        xMin: roundBaseQuantities.round1,
+                                        xMax: roundBaseQuantities.round1,
+                                        yMin: 1.0,
+                                        yMax: 3.0,
+                                        borderColor: 'rgba(255, 107, 107, 0.5)',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            enabled: true,
+                                            content: 'R1 Base',
+                                            position: 'start'
+                                        }
+                                    },
+                                    r2BaseQuantity: {
+                                        type: 'line',
+                                        xMin: roundBaseQuantities.round2,
+                                        xMax: roundBaseQuantities.round2,
+                                        yMin: 1.0,
+                                        yMax: 3.0,
+                                        borderColor: 'rgba(76, 175, 80, 0.5)',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            enabled: true,
+                                            content: 'R2 Base',
+                                            position: 'start'
+                                        }
+                                    },
+                                    r3BaseQuantity: {
+                                        type: 'line',
+                                        xMin: roundBaseQuantities.round3,
+                                        xMax: roundBaseQuantities.round3,
+                                        yMin: 1.0,
+                                        yMax: 3.0,
+                                        borderColor: 'rgba(255, 167, 38, 0.5)',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            enabled: true,
+                                            content: 'R3 Base',
+                                            position: 'start'
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                position: 'bottom',
+                                title: {
+                                    display: true,
+                                    text: 'Cumulative Demand (Tokens)',
+                                    font: {
+                                        size: 14,
+                                        weight: '500'
+                                    }
+                                },
+                                min: 0,
+                                max: 300000,
+                                ticks: {
+                                    stepSize: 50000,
+                                    callback: function(value) {
+                                        return value.toLocaleString();
+                                    }
+                                }
+                            },
+                            y: {
+                                type: 'linear',
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: 'Price ($)',
+                                    font: {
+                                        size: 14,
+                                        weight: '500'
+                                    }
+                                },
+                                min: 1.0,
+                                max: 3.0,
+                                ticks: {
+                                    stepSize: 0.5,
+                                    callback: function(value) {
+                                        return '$' + value.toFixed(2);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Individual round chart - Round 3 enhanced view
+            if (isCurrentRound) {
+                // Get supply configuration
+                const supplyConfig = round3SupplyConfig;
+                
+                // Calculate areas under the curve for different sections
+                const baseAreaValue = calculateAreaUnderCurve(basePoints, 0, supplyConfig.baseSupply);
+                const priorRoundsAreaValue = calculateAreaUnderCurve(basePoints, supplyConfig.baseSupply, 
+                    supplyConfig.baseSupply + supplyConfig.priorRoundTokens);
+                const futureRoundsAreaValue = calculateAreaUnderCurve(basePoints, 
+                    supplyConfig.baseSupply + supplyConfig.priorRoundTokens, supplyConfig.totalSupply);
+                const totalAreaValue = baseAreaValue + priorRoundsAreaValue + futureRoundsAreaValue;
+                
+                // Area below clearing price
+                const belowClearingPriceAreaValue = calculateAreaUnderCurve(
+                    basePoints, supplyConfig.totalSupply, 300000);
+                
+                return new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [
+                            // Main demand curve (red line)
+                            {
+                                label: 'Cumulative Demand',
+                                data: basePoints.map(d => ({x: d.cumulative, y: d.price})),
+                                borderColor: '#FF0000',
+                                backgroundColor: '#FF0000',
+                                showLine: true,
+                                borderWidth: 3,
+                                pointRadius: 0,
+                                tension: 0,
+                                fill: false
+                            },
+                            // Base Supply Area (blue shaded)
+                            {
+                                label: `Base Supply ($${baseAreaValue.toLocaleString()})`,
+                                data: [
+                                    {x: 0, y: 1.00},
+                                    {x: 0, y: getPrice(basePoints, 0)},
+                                    ...basePoints.filter(d => d.cumulative <= supplyConfig.baseSupply)
+                                        .map(d => ({x: d.cumulative, y: d.price})),
+                                    {x: supplyConfig.baseSupply, y: getPrice(basePoints, supplyConfig.baseSupply)},
+                                    {x: supplyConfig.baseSupply, y: 1.00}
+                                ],
+                                backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                                borderColor: 'rgba(0, 0, 255, 0.8)',
+                                borderWidth: 1,
+                                fill: true,
+                                showLine: true,
+                                pointRadius: 0
+                            },
+                            // Prior Rounds Area (yellow shaded)
+                            {
+                                label: `Prior Round Tokens ($${priorRoundsAreaValue.toLocaleString()})`,
+                                data: [
+                                    {x: supplyConfig.baseSupply, y: 1.00},
+                                    {x: supplyConfig.baseSupply, y: getPrice(basePoints, supplyConfig.baseSupply)},
+                                    ...basePoints.filter(d => d.cumulative > supplyConfig.baseSupply && 
+                                                d.cumulative <= supplyConfig.baseSupply + supplyConfig.priorRoundTokens)
+                                        .map(d => ({x: d.cumulative, y: d.price})),
+                                    {x: supplyConfig.baseSupply + supplyConfig.priorRoundTokens, 
+                                     y: getPrice(basePoints, supplyConfig.baseSupply + supplyConfig.priorRoundTokens)},
+                                    {x: supplyConfig.baseSupply + supplyConfig.priorRoundTokens, y: 1.00}
+                                ],
+                                backgroundColor: 'rgba(255, 255, 0, 0.2)',
+                                borderColor: 'rgba(255, 255, 0, 0.8)',
+                                borderWidth: 1,
+                                fill: true,
+                                showLine: true,
+                                pointRadius: 0
+                            },
+                            // Future Rounds Area (green shaded)
+                            {
+                                label: `Future Round Tokens ($${futureRoundsAreaValue.toLocaleString()})`,
+                                data: [
+                                    {x: supplyConfig.baseSupply + supplyConfig.priorRoundTokens, y: 1.00},
+                                    {x: supplyConfig.baseSupply + supplyConfig.priorRoundTokens, 
+                                     y: getPrice(basePoints, supplyConfig.baseSupply + supplyConfig.priorRoundTokens)},
+                                    ...basePoints.filter(d => d.cumulative > supplyConfig.baseSupply + supplyConfig.priorRoundTokens && 
+                                                d.cumulative <= supplyConfig.totalSupply)
+                                        .map(d => ({x: d.cumulative, y: d.price})),
+                                    {x: supplyConfig.totalSupply, y: supplyConfig.clearingPrice},
+                                    {x: supplyConfig.totalSupply, y: 1.00}
+                                ],
+                                backgroundColor: 'rgba(0, 255, 0, 0.2)',
+                                borderColor: 'rgba(0, 255, 0, 0.8)',
+                                borderWidth: 1,
+                                fill: true,
+                                showLine: true,
+                                pointRadius: 0
+                            },
+                            // Below Clearing Price Area (light green)
+                            {
+                                label: `Below Clearing Price ($${belowClearingPriceAreaValue.toLocaleString()})`,
+                                data: [
+                                    {x: supplyConfig.totalSupply, y: 1.00},
+                                    {x: supplyConfig.totalSupply, y: supplyConfig.clearingPrice},
+                                    ...basePoints.filter(d => d.cumulative > supplyConfig.totalSupply)
+                                        .map(d => ({x: d.cumulative, y: d.price})),
+                                    {x: 300000, y: getPrice(basePoints, 300000)},
+                                    {x: 300000, y: 1.00}
+                                ],
+                                backgroundColor: 'rgba(144, 238, 144, 0.3)',
+                                borderColor: 'rgba(144, 238, 144, 0.5)',
+                                borderWidth: 1,
+                                fill: true,
+                                showLine: true,
+                                pointRadius: 0
+                            },
+                            // Clearing Point (star marker)
+                            {
+                                label: 'Current Clearing Price',
+                                data: [{x: supplyConfig.totalSupply, y: supplyConfig.clearingPrice}],
+                                backgroundColor: '#FF0000',
+                                borderColor: '#000000',
+                                borderWidth: 2,
+                                pointRadius: 10,
+                                pointStyle: 'star',
+                                showLine: false
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'nearest',
+                            axis: 'x',
+                            intersect: false
+                        },
+                        plugins: {
+                            tooltip: {
+                                enabled: true,
+                                mode: 'nearest',
+                                intersect: false,
+                                callbacks: {
+                                    label: function(context) {
+                                        const dataset = context.dataset;
+                                        const label = dataset.label;
+                                        
+                                        if (label === 'Current Clearing Price') {
+                                            return [
+                                                'Current Status',
+                                                `Price: $${supplyConfig.clearingPrice.toFixed(2)}`,
+                                                `Total Supply: ${supplyConfig.totalSupply.toLocaleString()} tokens`,
+                                                `Base Supply: ${supplyConfig.baseSupply.toLocaleString()} tokens`,
+                                                `Prior Rounds: ${supplyConfig.priorRoundTokens.toLocaleString()} tokens`,
+                                                `Future Rounds: ${supplyConfig.futureRoundTokens.toLocaleString()} tokens`,
+                                                `Premium: $${(supplyConfig.clearingPrice - supplyConfig.reservePrice).toFixed(2)} above reserve`,
+                                                'Adding supply would decrease the clearing price'
+                                            ];
+                                        } else if (label === 'Cumulative Demand') {
+                                            const x = context.parsed.x;
+                                            const y = context.parsed.y;
+                                            const hypotheticalPrice = getPrice(basePoints, x);
+                                            
+                                            return [
+                                                `Price: $${y.toFixed(2)}`,
+                                                `Quantity: ${x.toLocaleString()} tokens`,
+                                                `If supply was ${x.toLocaleString()}, clearing price would be $${hypotheticalPrice.toFixed(2)}`
+                                            ];
+                                        } else {
+                                            // For area labels, show the area value
+                                            if (label.includes('Area')) {
+                                                const areaValue = label.match(/\$([0-9,]+)/)[1];
+                                                return [`Economic Value: $${areaValue}`];
+                                            }
+                                            return label;
+                                        }
+                                    }
+                                }
+                            },
+                            legend: {
+                                display: true,
+                                position: 'bottom',
+                                labels: {
+                                    usePointStyle: true,
+                                    padding: 15,
+                                    boxWidth: 15,
+                                    boxHeight: 15
+                                }
+                            },
+                            annotation: {
+                                annotations: {
+                                    // Vertical supply lines
+                                    baseSupplyLine: {
+                                        type: 'line',
+                                        xMin: supplyConfig.baseSupply,
+                                        xMax: supplyConfig.baseSupply,
+                                        yMin: 1.0,
+                                        yMax: 3.0,
+                                        borderColor: 'rgba(0, 0, 255, 0.8)',
+                                        borderWidth: 2,
+                                        borderDash: [6, 6],
+                                        label: {
+                                            enabled: true,
+                                            content: 'Base Supply',
+                                            position: 'top'
+                                        }
+                                    },
+                                    priorRoundLine: {
+                                        type: 'line',
+                                        xMin: supplyConfig.baseSupply + supplyConfig.priorRoundTokens,
+                                        xMax: supplyConfig.baseSupply + supplyConfig.priorRoundTokens,
+                                        yMin: 1.0,
+                                        yMax: 3.0,
+                                        borderColor: 'rgba(255, 255, 0, 0.8)',
+                                        borderWidth: 2,
+                                        borderDash: [6, 6],
+                                        label: {
+                                            enabled: true,
+                                            content: 'Prior Round Tokens',
+                                            position: 'top'
+                                        }
+                                    },
+                                    futureRoundLine: {
+                                        type: 'line',
+                                        xMin: supplyConfig.totalSupply,
+                                        xMax: supplyConfig.totalSupply,
+                                        yMin: 1.0,
+                                        yMax: 3.0,
+                                        borderColor: 'rgba(0, 128, 0, 0.8)', 
+                                        borderWidth: 2,
+                                        borderDash: [6, 6],
+                                        label: {
+                                            enabled: true,
+                                            content: 'Total Available Supply',
+                                            position: 'top'
+                                        }
+                                    },
+                                    // Horizontal price lines
+                                    reservePriceLine: {
+                                        type: 'line',
+                                        xMin: 0,
+                                        xMax: 300000,
+                                        yMin: supplyConfig.reservePrice,
+                                        yMax: supplyConfig.reservePrice,
+                                        borderColor: 'rgba(255, 255, 0, 0.8)',
+                                        borderWidth: 2,
+                                        borderDash: [6, 6],
+                                        label: {
+                                            enabled: true,
+                                            content: `Reserve Price: $${supplyConfig.reservePrice.toFixed(2)}`,
+                                            position: 'start'
+                                        }
+                                    },
+                                    clearingPriceLine: {
+                                        type: 'line',
+                                        xMin: 0,
+                                        xMax: supplyConfig.totalSupply,
+                                        yMin: supplyConfig.clearingPrice,
+                                        yMax: supplyConfig.clearingPrice,
+                                        borderColor: 'rgba(255, 0, 0, 0.8)',
+                                        borderWidth: 2,
+                                        label: {
+                                            enabled: true,
+                                            content: `Current Clearing Price: $${supplyConfig.clearingPrice.toFixed(2)}`,
+                                            position: 'start'
+                                        }
+                                    },
+                                    // Total value label
+                                    totalValue: {
+                                        type: 'label',
+                                        xValue: supplyConfig.totalSupply / 2,
+                                        yValue: 2.8,
+                                        backgroundColor: 'rgba(50, 50, 50, 0.8)',
+                                        content: `Value of Round: $${totalAreaValue.toLocaleString()}`,
+                                        font: {
+                                            size: 14,
+                                            weight: 'bold'
+                                        },
+                                        color: 'white',
+                                        padding: 8
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                position: 'bottom',
+                                title: {
+                                    display: true,
+                                    text: 'Cumulative Demand (Tokens)',
+                                    font: {
+                                        size: 14,
+                                        weight: '500'
+                                    }
+                                },
+                                min: 0,
+                                max: 300000,
+                                ticks: {
+                                    stepSize: 50000,
+                                    callback: function(value) {
+                                        return value.toLocaleString();
+                                    }
+                                }
+                            },
+                            y: {
+                                type: 'linear',
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: 'Price ($)',
+                                    font: {
+                                        size: 14,
+                                        weight: '500'
+                                    }
+                                },
+                                min: 1.00,
+                                max: 3.00,
+                                ticks: {
+                                    stepSize: 0.25,
+                                    callback: function(value) {
+                                        return '$' + value.toFixed(2);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Individual round chart - Round 2 enhanced view
+            if (isRound2) {
+                console.log('Creating Round 2 enhanced view chart');
+                const supplyConfig = round2SupplyConfig;
+                
+                // Calculate area values
+                const baseAreaValue = calculateAreaUnderCurve(basePoints, 0, supplyConfig.baseSupply);
+                const priorAreaValue = calculateAreaUnderCurve(basePoints, supplyConfig.baseSupply, supplyConfig.baseSupply + supplyConfig.priorRoundTokens);
+                const totalAreaValue = baseAreaValue + priorAreaValue;
+                
+                return new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [
+                            // Main demand curve (green line)
+                            {
+                                label: 'Cumulative Demand',
+                                data: basePoints.map(d => ({x: d.cumulative, y: d.price})),
+                                borderColor: '#4CAF50',
+                                backgroundColor: '#4CAF50',
+                                showLine: true,
+                                borderWidth: 3,
+                                pointRadius: 0,
+                                tension: 0,
+                                fill: false
+                            },
+                            // Base Supply Area (blue shaded)
+                            {
+                                label: `Base Supply ($${baseAreaValue.toLocaleString()})`,
+                                data: [
+                                    {x: 0, y: 1.00},
+                                    {x: 0, y: getPrice(basePoints, 0)},
+                                    ...basePoints.filter(d => d.cumulative <= supplyConfig.baseSupply)
+                                        .map(d => ({x: d.cumulative, y: d.price})),
+                                    {x: supplyConfig.baseSupply, y: getPrice(basePoints, supplyConfig.baseSupply)},
+                                    {x: supplyConfig.baseSupply, y: 1.00}
+                                ],
+                                backgroundColor: 'rgba(0, 0, 255, 0.4)',
+                                borderColor: 'rgba(0, 0, 255, 0.8)',
+                                borderWidth: 1,
+                                fill: true,
+                                showLine: true,
+                                pointRadius: 0
+                            },
+                            // Prior Rounds Area (yellow shaded)
+                            {
+                                label: `Sold Tokens ($${priorAreaValue.toLocaleString()})`,
+                                data: [
+                                    {x: supplyConfig.baseSupply, y: 1.00},
+                                    {x: supplyConfig.baseSupply, y: getPrice(basePoints, supplyConfig.baseSupply)},
+                                    ...basePoints.filter(d => d.cumulative > supplyConfig.baseSupply && d.cumulative <= supplyConfig.totalSupply)
+                                        .map(d => ({x: d.cumulative, y: d.price})),
+                                    {x: supplyConfig.totalSupply, y: getPrice(basePoints, supplyConfig.totalSupply)},
+                                    {x: supplyConfig.totalSupply, y: 1.00}
+                                ],
+                                backgroundColor: 'rgba(255, 205, 86, 0.4)',
+                                borderColor: 'rgba(255, 205, 86, 0.8)',
+                                borderWidth: 1,
+                                fill: true,
+                                showLine: true,
+                                pointRadius: 0
+                            },
+                            // Below Clearing Price Area (light green)
+                            {
+                                label: `Below Clearing Price ($${belowClearingPriceAreaValue.toLocaleString()})`,
+                                data: [
+                                    {x: supplyConfig.totalSupply, y: 1.00},
+                                    {x: supplyConfig.totalSupply, y: supplyConfig.clearingPrice},
+                                    ...basePoints.filter(d => d.cumulative > supplyConfig.totalSupply)
+                                        .map(d => ({x: d.cumulative, y: d.price})),
+                                    {x: 200000, y: getPrice(basePoints, 200000)},
+                                    {x: 200000, y: 1.00}
+                                ],
+                                backgroundColor: 'rgba(144, 238, 144, 0.3)',
+                                borderColor: 'rgba(144, 238, 144, 0.5)',
+                                borderWidth: 1,
+                                fill: true,
+                                showLine: true,
+                                pointRadius: 0
+                            },
+                            // Clearing Point (star marker)
+                            {
+                                label: 'Clearing Price',
+                                data: [{x: supplyConfig.totalSupply, y: supplyConfig.clearingPrice}],
+                                backgroundColor: '#4CAF50',
+                                borderColor: '#000000',
+                                borderWidth: 2,
+                                pointRadius: 10,
+                                pointStyle: 'star',
+                                showLine: false
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'nearest',
+                            axis: 'x',
+                            intersect: false
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: `Value of Round: $${totalAreaValue.toLocaleString()}`,
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                },
+                                padding: 20
+                            },
+                            tooltip: {
+                                enabled: true,
+                                mode: 'nearest',
+                                intersect: false,
+                                callbacks: {
+                                    label: function(context) {
+                                        if (context.dataset.label === 'Clearing Price') {
+                                            return [
+                                                'Clearing Price',
+                                                `Price: $${context.parsed.y.toFixed(2)}`,
+                                                `Total Supply: ${context.parsed.x.toLocaleString()} tokens`
+                                            ];
+                                        } else {
+                                            return [
+                                                `${context.dataset.label}`,
+                                                `Price: $${context.parsed.y.toFixed(2)}`,
+                                                `Quantity: ${context.parsed.x.toLocaleString()} tokens`
+                                            ];
+                                        }
+                                    }
+                                }
+                            },
+                            legend: {
+                                display: true,
+                                position: 'bottom',
+                                labels: {
+                                    usePointStyle: true,
+                                    padding: 20
+                                },
+                                filter: function(item, chart) {
+                                    // Hide certain datasets from the legend if needed
+                                    return true;
+                                }
+                            },
+                            annotation: {
+                                annotations: {
+                                    clearingLine: {
+                                        type: 'line',
+                                        yMin: supplyConfig.clearingPrice,
+                                        yMax: supplyConfig.clearingPrice,
+                                        xMin: 0,
+                                        xMax: supplyConfig.totalSupply,
+                                        borderColor: 'rgba(0, 0, 0, 0.5)',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            enabled: true,
+                                            content: `Clearing Price: $${supplyConfig.clearingPrice.toFixed(2)}`,
+                                            position: 'start'
+                                        }
+                                    },
+                                    reserveLine: {
+                                        type: 'line',
+                                        yMin: supplyConfig.reservePrice,
+                                        yMax: supplyConfig.reservePrice,
+                                        xMin: 0,
+                                        xMax: 200000,
+                                        borderColor: 'rgba(255, 0, 0, 0.5)',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            enabled: true,
+                                            content: `Reserve Price: $${supplyConfig.reservePrice.toFixed(2)}`,
+                                            position: 'start'
+                                        }
+                                    },
+                                    totalSupplyLine: {
+                                        type: 'line',
+                                        xMin: supplyConfig.totalSupply,
+                                        xMax: supplyConfig.totalSupply,
+                                        yMin: 1.0,
+                                        yMax: supplyConfig.clearingPrice,
+                                        borderColor: 'rgba(0, 0, 0, 0.5)',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            enabled: true,
+                                            content: `Total Supply: ${supplyConfig.totalSupply.toLocaleString()}`,
+                                            position: 'start'
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                position: 'bottom',
+                                title: {
+                                    display: true,
+                                    text: 'Cumulative Demand (Tokens)',
+                                    font: {
+                                        size: 14,
+                                        weight: '500'
+                                    }
+                                },
+                                min: 0,
+                                max: 200000,
+                                ticks: {
+                                    stepSize: 25000,
+                                    callback: function(value) {
+                                        return value.toLocaleString();
+                                    }
+                                }
+                            },
+                            y: {
+                                type: 'linear',
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: 'Price ($)',
+                                    font: {
+                                        size: 14,
+                                        weight: '500'
+                                    }
+                                },
+                                min: 1.0,
+                                max: 2.5,
+                                ticks: {
+                                    stepSize: 0.25,
+                                    callback: function(value) {
+                                        return '$' + value.toFixed(2);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Original chart creation code for other individual rounds
+            return new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            label: 'Demand Curve',
+                            data: generateDemandCurve(basePoints),
+                            borderColor: '#FF6B6B',
+                            backgroundColor: '#FF6B6B',
+                            showLine: true,
+                            borderWidth: 2,
+                            pointRadius: 2,
+                            tension: 0.3,
+                            fill: false
+                        },
+                        {
+                            label: isCurrentRound ? 'Current Status' : 'Clearing Price',
+                            data: [{x: currentSupply, y: currentPrice}],
+                            backgroundColor: '#4CAF50',
+                            borderColor: '#4CAF50',
+                            pointRadius: 8,
+                            pointStyle: 'star',
+                            showLine: false
+                        },
+                        {
+                            label: 'Round 3 Demand Above Reserve Price',
+                            data: [
+                                {x: currentSupply, y: reservePrice},
+                                ...generateDemandCurve(basePoints)
+                                    .filter(d => d.cumulative >= currentSupply)
+                                    .map(d => ({x: d.cumulative, y: d.price})),
+                                {x: basePoints[basePoints.length - 1].cumulative, y: reservePrice}
+                            ],
+                            backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                            borderColor: 'rgba(76, 175, 80, 0)',
+                            fill: true,
+                            showLine: true,
+                            pointRadius: 0,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
+                    },
+                    plugins: {
+                        tooltip: {
+                            enabled: true,
+                            mode: 'nearest',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.dataset.label === 'Demand Curve') {
+                                        return [
+                                            `Price: $${context.parsed.y.toFixed(2)}`,
+                                            `Quantity: ${context.parsed.x.toLocaleString()} tokens`
+                                        ];
+                                    } else if (context.dataset.label === 'Current Status' || context.dataset.label === 'Clearing Price') {
+                                        const tooltipLabel = isCurrentRound ? 'Current Status' : 'Clearing Price';
+                                        return [
+                                            tooltipLabel,
+                                            `Price: $${context.parsed.y.toFixed(2)}`,
+                                            `Quantity: ${context.parsed.x.toLocaleString()} tokens`,
+                                            `Premium: $${(context.parsed.y - reservePrice).toFixed(2)} above reserve`
+                                        ];
+                                    }
+                                    return context.dataset.label;
+                                }
+                            }
+                        },
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Cumulative Demand (Tokens)',
+                                font: {
+                                    size: 14,
+                                    weight: '500'
+                                }
+                            },
+                            min: 0,
+                            max: 300000,
+                            ticks: {
+                                stepSize: 50000,
+                                callback: function(value) {
+                                    return value.toLocaleString();
+                                }
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Price ($)',
+                                font: {
+                                    size: 14,
+                                    weight: '500'
+                                }
+                            },
+                            min: 1.0,
+                            max: 3.0,
+                            ticks: {
+                                stepSize: 0.5,
+                                callback: function(value) {
+                                    return '$' + value.toFixed(2);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function findPointOnDemandCurve(quantity, price, roundData) {
+            const points = generateDemandCurve(roundData);
+            let bestPoint = null;
+            let minDistance = Infinity;
+
+            // First try to find a point with exact quantity
+            const exactQuantityPoints = points.filter(p => Math.abs(p.cumulative - quantity) < 1000);
+            if (exactQuantityPoints.length > 0) {
+                // Find the point with closest price
+                bestPoint = exactQuantityPoints.reduce((best, current) => {
+                    const currentDist = Math.abs(current.price - price);
+                    const bestDist = Math.abs(best.price - price);
+                    return currentDist < bestDist ? current : best;
+                });
+            } else {
+                // If no exact quantity match, find closest point overall
+                points.forEach(point => {
+                    // Weight quantity matches more heavily than price matches
+                    const quantityWeight = 1;
+                    const priceWeight = 2;
+                    const distance = Math.sqrt(
+                        quantityWeight * Math.pow((point.cumulative - quantity) / 50000, 2) + 
+                        priceWeight * Math.pow((point.price - price) / 0.5, 2)
+                    );
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        bestPoint = point;
+                    }
+                });
+            }
+            
+            return bestPoint || points[0];
+        }
+
+        function calculateSimpleBid(amount, maxPrice) {
+            console.log('Calculating simple bid with amount:', amount, 'and max price:', maxPrice);
+            const currentPrice = 2.25; // Current round price
+            
+            // Check if max price is below current price
+            if (maxPrice < currentPrice) {
+                console.error('Max price is below current price');
+                throw new Error(`Maximum price must be at least the current price ($${currentPrice})`);
+            }
+            
+            // Calculate quantity based on the amount and current price
+            const quantity = Math.floor(amount / currentPrice);
+            console.log('Calculated quantity:', quantity);
+            
+            try {
+                // Find the closest point on the demand curve that's at or below maxPrice
+                console.log('Generating demand curve...');
+                const demandPoints = generateDemandCurve(round3BasePoints);
+                console.log('Demand curve generated with', demandPoints.length, 'points');
+                
+                let bestPoint = null;
+                let minDistance = Infinity;
+                
+                console.log('Finding best point on demand curve...');
+                for (const point of demandPoints) {
+                    // Only consider points at or below maxPrice
+                    if (point.price <= maxPrice) {
+                        const distance = Math.abs(point.cumulative - quantity);
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            bestPoint = point;
+                        }
+                    }
+                }
+                
+                // If no point found (shouldn't happen given our checks), use current price point
+                if (!bestPoint) {
+                    console.warn('No suitable point found on demand curve, using current price point');
+                    bestPoint = { cumulative: quantity, price: currentPrice };
+                }
+                
+                console.log('Best point found:', bestPoint);
+                
+                return {
+                    id: Date.now(),
+                    round: '3',
+                    quantity: bestPoint.cumulative,
+                    price: bestPoint.price,
+                    maxPrice: maxPrice,
+                    total: amount,
+                    isAutoBid: true
+                };
+            } catch (error) {
+                console.error('Error in calculateSimpleBid:', error);
+                // Fallback to a simple calculation
+                return {
+                    id: Date.now(),
+                    round: '3',
+                    quantity: quantity,
+                    price: currentPrice,
+                    maxPrice: maxPrice,
+                    total: amount,
+                    isAutoBid: true
+                };
+            }
+        }
+
+        function updateSimpleBidsList(bid) {
+            console.log('Updating simple bids list with bid:', bid);
+            const bidsList = document.getElementById('simpleBidsList');
+            
+            if (!bidsList) {
+                console.error('simpleBidsList element not found');
+                return;
+            }
+            
+            try {
+                bidsList.innerHTML = '';
+
+                if (bid) {
+                    const bidElement = document.createElement('div');
+                    bidElement.className = 'bid-item';
+                    
+                    // Different display based on status
+                    if (bid.status === 'pending') {
+                        bidElement.innerHTML = `
+                            <div class="bid-item-details">
+                                <div class="bid-item-round">Round ${bid.round} - Auto Bid (Pending)</div>
+                                <div class="bid-item-main">
+                                    ${bid.quantity.toLocaleString()} tokens at up to $${bid.maxPrice.toFixed(2)}
+                                </div>
+                                <div class="bid-item-total">
+                                    Total USDC committed: $${bid.total.toFixed(2)}
+                                    <div style="color: #FFA726; margin-top: 0.25rem;">
+                                        Will execute at clearing price in <span id="countdown-${bid.id}" class="countdown-timer">5:00</span>
+                                    </div>
+                                    <div style="color: #4CAF50; margin-top: 0.25rem;">
+                                        Expected execution price: $${bid.price.toFixed(2)}
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="cancel-bid-btn" onclick="cancelSimpleBid()">
+                                <span style="color: #FF6B6B;">✕</span>
+                            </button>
+                        `;
+                    } else {
+                        bidElement.innerHTML = `
+                            <div class="bid-item-details">
+                                <div class="bid-item-round">Round ${bid.round} - Auto Bid (Executed)</div>
+                                <div class="bid-item-main">
+                                    ${bid.quantity.toLocaleString()} tokens at $${bid.price.toFixed(2)}
+                                </div>
+                                <div class="bid-item-total">
+                                    Total USDC spent: $${bid.total.toFixed(2)}
+                                    <div style="color: #4CAF50; margin-top: 0.25rem;">
+                                        Executed at clearing price
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="cancel-bid-btn" onclick="cancelSimpleBid()">
+                                <span style="color: #FF6B6B;">✕</span>
+                            </button>
+                        `;
+                    }
+                    
+                    bidsList.appendChild(bidElement);
+                    console.log('Bid element added to list');
+                }
+            } catch (error) {
+                console.error('Error updating simple bids list:', error);
+                // Try a simpler approach
+                if (bidsList && bid) {
+                    bidsList.innerHTML = `
+                        <div class="bid-item">
+                            <div class="bid-item-details">
+                                <div class="bid-item-round">Round ${bid.round} - Auto Bid</div>
+                                <div class="bid-item-main">
+                                    ${bid.quantity} tokens at $${bid.price}
+                                </div>
+                                <div class="bid-item-total">
+                                    Total: $${bid.total}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // Global functions
+        function cancelSimpleBid() {
+            console.log('Canceling simple bid:', currentSimpleBid);
+            if (currentSimpleBid && currentSimpleBid.status === 'pending') {
+                // Remove from transactions
+                transactions = transactions.filter(t => t.id !== currentSimpleBid.id);
+                
+                // Remove from activeBids
+                activeBids = activeBids.filter(b => b.id !== currentSimpleBid.id);
+                
+                updateTransactionHistory();
+                updateDemandCurveVisualization();
+            }
+            
+            currentSimpleBid = null;
+            updateSimpleBidsList(null);
+
+            // Re-enable the form
+            const simpleBidAmount = document.getElementById('simpleBidAmount');
+            const simpleMaxPrice = document.getElementById('simpleMaxPrice');
+            const simpleSubmitButton = document.getElementById('simpleSubmitButton');
+
+            if (simpleBidAmount && simpleMaxPrice && simpleSubmitButton) {
+                simpleBidAmount.disabled = false;
+                simpleMaxPrice.disabled = false;
+                simpleSubmitButton.disabled = false;
+                simpleSubmitButton.textContent = 'Place auto bid';
+
+                // Clear the inputs
+                simpleBidAmount.value = '';
+                simpleMaxPrice.value = '';
+            }
+        }
+
+        // Initialize advanced bid form event listeners
+        const bidQuantityInput = document.getElementById('bidQuantity');
+        const bidPriceInput = document.getElementById('bidPrice');
+        const submitBidButton = document.getElementById('submitBidButton');
+
+        if (bidQuantityInput && bidPriceInput) {
+            bidQuantityInput.addEventListener('input', updateBidTotal);
+            bidPriceInput.addEventListener('input', updateBidTotal);
+        }
+
+        if (submitBidButton) {
+            submitBidButton.addEventListener('click', addBid);
+        }
+
+        // Add updateBidTotal function
+        function updateBidTotal() {
+            const quantity = parseFloat(bidQuantityInput.value) || 0;
+            const price = parseFloat(bidPriceInput.value) || 0;
+            const total = quantity * price;
+            document.getElementById('bidTotal').textContent = `$${total.toFixed(2)}`;
+            
+            if (price > 0 && quantity > 0) {
+                const probability = calculateClearingProbability(price, quantity);
+                document.getElementById('reserveProbability').innerHTML = 
+                    `Reserve Bank Probability: <span>${probability}%</span>`;
+            }
+        }
+
+        // Initialize trade tabs
+        const tradeTabs = document.querySelectorAll('.trade-tab');
+        const tradeContents = document.querySelectorAll('.trade-content');
+
+        tradeTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const mode = tab.getAttribute('data-mode');
+                
+                // Update tab styles
+                tradeTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Show/hide appropriate content
+                tradeContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === `${mode}-form`) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Initialize history tabs
+        const historyTabs = document.querySelectorAll('.history-tab');
+        historyTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const type = tab.getAttribute('data-type');
+                historyTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                updateTransactionHistory(type);
+            });
+        });
+
+        // Sell form functionality
+        const sellQuantityInput = document.getElementById('sellQuantity');
+        const sellPriceInput = document.getElementById('sellPrice');
+        const sellRoundSelect = document.getElementById('sellRound');
+        const submitSellButton = document.getElementById('submitSellButton');
+
+        function updateSellSummary() {
+            const quantity = parseFloat(sellQuantityInput.value) || 0;
+            const price = parseFloat(sellPriceInput.value) || 0;
+            const round = parseInt(sellRoundSelect.value);
+            
+            const total = quantity * price;
+            const feeRate = getFeeRate(round);
+            const fee = total * feeRate;
+            const net = total - fee;
+
+            document.getElementById('sellTotal').textContent = `$${total.toFixed(2)}`;
+            document.getElementById('sellFee').textContent = `$${fee.toFixed(2)} (${(feeRate * 100).toFixed(1)}%)`;
+            document.getElementById('sellNet').textContent = `$${net.toFixed(2)}`;
+        }
+
+        function getFeeRate(round) {
+            switch(round) {
+                case 1: return 0.005; // 0.5%
+                case 2: return 0.01;  // 1.0%
+                case 3: return 0.015; // 1.5%
+                default: return 0.015;
+            }
+        }
+
+        if (sellQuantityInput && sellPriceInput && sellRoundSelect) {
+            sellQuantityInput.addEventListener('input', updateSellSummary);
+            sellPriceInput.addEventListener('input', updateSellSummary);
+            sellRoundSelect.addEventListener('change', updateSellSummary);
+        }
+
+        if (submitSellButton) {
+            submitSellButton.addEventListener('click', submitSellOrder);
+        }
+
+        function submitSellOrder() {
+            const round = parseInt(sellRoundSelect.value);
+            const quantity = parseFloat(sellQuantityInput.value);
+            const price = parseFloat(sellPriceInput.value);
+            
+            if (!quantity || !price) {
+                alert('Please enter both quantity and price');
+                return;
+            }
+
+            // Validate against available balance
+            const availableTokens = getAvailableTokens(round);
+            if (quantity > availableTokens) {
+                alert(`You can only sell up to ${availableTokens.toLocaleString()} tokens from Round ${round}`);
+                return;
+            }
+
+            const sellOrder = {
+                id: Date.now(),
+                type: 'sell',
+                round: round,
+                quantity: quantity,
+                price: price,
+                total: quantity * price,
+                fee: quantity * price * getFeeRate(round),
+                timestamp: Date.now()
+            };
+            
+            // Add to transactions
+            transactions.push(sellOrder);
+            updateTransactionHistory();
+            
+            // Update portfolio
+            portfolio[round] -= quantity;
+                const sellOrder = {
+                    id: Date.now(),
+                    type: 'sell',
+                    round: round,
+                    quantity: quantity,
+                    price: price,
+                    total: quantity * price,
+                    fee: quantity * price * getFeeRate(round),
+                    timestamp: Date.now()
+                };
+                
+                // Add to transactions
+                transactions.push(sellOrder);
+                updateTransactionHistory();
+                
+                // Update portfolio
+                portfolio[round] -= quantity;
+                updatePortfolioDisplay();
+                
+                // Clear form
+                sellQuantityInput.value = '';
+                sellPriceInput.value = '';
+                updateSellSummary();
+                
+                alert(`Sell order for ${quantity.toLocaleString()} tokens from Round ${round} at $${price.toFixed(2)} submitted successfully.`);
+            }
+
+            function getAvailableTokens(round) {
+                return portfolio[round] || 0;
+            }
+
+            // Portfolio display
+            const portfolio = {
+                1: 5000,  // Round 1: 5,000 tokens
+                2: 3000,  // Round 2: 3,000 tokens
+                3: 2000   // Round 3: 2,000 tokens
+            };
+
+            function updatePortfolioDisplay() {
+                // Update portfolio rounds display
+                const portfolioRounds = document.querySelector('.portfolio-rounds');
+                if (portfolioRounds) {
+                    portfolioRounds.innerHTML = Object.entries(portfolio)
+                        .map(([round, amount]) => `
+                            <div class="portfolio-round${round === '3' ? ' current' : ''}">
+                                <div class="round-label">Round ${round}</div>
+                                <div class="token-amount">${amount.toLocaleString()} tokens</div>
+                                <div class="token-value">@ $${(round === '1' ? 1.25 : round === '2' ? 1.75 : 2.25).toFixed(2)}</div>
+                            </div>
+                        `).join('');
+                }
+                
+                // Update sell round options
+                const sellRoundSelect = document.getElementById('sellRound');
+                if (sellRoundSelect) {
+                    sellRoundSelect.innerHTML = Object.entries(portfolio)
+                        .map(([round, amount]) => `
+                            <option value="${round}">Round ${round} (${amount.toLocaleString()} available)</option>
+                        `).join('');
+                }
+            }
+
+            // Transaction history
+            function updateTransactionHistory(type = 'all') {
+                const historyList = document.getElementById('transactionHistory');
+                const filteredTransactions = type === 'all' 
+                    ? transactions 
+                    : transactions.filter(t => t.type === type);
+
+                historyList.innerHTML = filteredTransactions.map(t => `
+                    <div class="transaction-item ${t.type}">
+                        <div class="transaction-header">
+                            <span class="transaction-type">${t.type.toUpperCase()}</span>
+                            <span class="transaction-time">${new Date(t.timestamp).toLocaleString()}</span>
+                            ${t.status === 'pending' ? '<span class="transaction-status pending">PENDING</span>' : ''}
+                        </div>
+                        <div class="transaction-details">
+                            <div class="transaction-main">
+                                ${t.quantity.toLocaleString()} tokens @ $${t.price.toFixed(2)}
+                                ${t.status === 'pending' ? 
+                                    `<div class="execution-time">Executes in: <span class="countdown-timer" id="history-countdown-${t.id}">
+                                        ${Math.floor((t.executionTime - Date.now()) / (60 * 1000))}:${Math.floor(((t.executionTime - Date.now()) % (60 * 1000)) / 1000).toString().padStart(2, '0')}
+                                    </span></div>` : ''}
+                            </div>
+                            <div class="transaction-round">Round ${t.round}</div>
+                            <div class="transaction-total">
+                                Total: $${t.total.toFixed(2)}
+                                ${t.fee ? `<br>Fee: $${t.fee.toFixed(2)}` : ''}
+                                ${t.maxPrice ? `<br>Max Price: $${t.maxPrice.toFixed(2)}` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Update countdown timers in transaction history
+                filteredTransactions.forEach(t => {
+                    if (t.status === 'pending') {
+                        const countdownElement = document.getElementById(`history-countdown-${t.id}`);
+                        if (countdownElement) {
+                            updateCountdownDisplay(t.id, t.executionTime - Date.now());
+                        }
+                    }
+                });
+            }
+
+            // Initialize displays
+            updatePortfolioDisplay();
+            updateTransactionHistory();
+            
+            // Fix bid tab switching
+            function fixBidTabSwitching() {
+                console.log('Fixing bid tab switching...');
+                const bidTabsFixed = document.querySelectorAll('.bid-tab');
+                const bidContentsFixed = document.querySelectorAll('.bid-content');
+                
+                bidTabsFixed.forEach(tab => {
+                    // Clone and replace to remove any existing event listeners
+                    const newTab = tab.cloneNode(true);
+                    tab.parentNode.replaceChild(newTab, tab);
+                    
+                    // Add new click handler
+                    newTab.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const tabId = this.getAttribute('data-tab');
+                        console.log('Bid tab clicked:', tabId);
+                        
+                        // Update active state on tabs
+                        bidTabsFixed.forEach(t => {
+                            t.classList.toggle('active', t.getAttribute('data-tab') === tabId);
+                        });
+                        
+                        // Show/hide appropriate content
+                        bidContentsFixed.forEach(content => {
+                            if (content.id === tabId) {
+                                content.classList.add('active');
+                                content.style.display = 'block';
+                            } else {
+                                content.classList.remove('active');
+                                content.style.display = 'none';
+                            }
+                        });
+                    });
+                });
+            }
+            
+            // Call the fix function after a short delay to ensure DOM is fully loaded
+            setTimeout(fixBidTabSwitching, 100);
+        });
+
+        // Countdown timers for Round 3 and Overview
+        const round3CountdownElement = document.getElementById('countdown');
+        const overviewCountdownElement = document.getElementById('overview-countdown');
+
+        if (round3CountdownElement || overviewCountdownElement) {
+            const startTime = new Date().getTime();
+            const round3Duration = 12 * 60 * 60 * 1000; // 12 hours in milliseconds
+            const overviewDuration = 48 * 60 * 60 * 1000; // 48 hours in milliseconds
+
+            function formatTime(remaining) {
+                const hours = Math.floor(remaining / (1000 * 60 * 60));
+                const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+                return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+
+            function updateTimers() {
+                const now = new Date().getTime();
+                const elapsed = now - startTime;
+
+                // Update Round 3 countdown
+                if (round3CountdownElement) {
+                    const round3Remaining = round3Duration - elapsed;
+                    round3CountdownElement.textContent = round3Remaining <= 0 ? "ENDED" : formatTime(round3Remaining);
+                }
+
+                // Update Overview countdown
+                if (overviewCountdownElement) {
+                    const overviewRemaining = overviewDuration - elapsed;
+                    overviewCountdownElement.textContent = overviewRemaining <= 0 ? "ENDED" : formatTime(overviewRemaining);
+                }
+            }
+
+            // Update immediately and then every second
+            updateTimers();
+            setInterval(updateTimers, 1000);
+        }
+
+        // Add this after your existing JavaScript code
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configuration for all rounds
+            const roundsConfig = {
+                round1: {
+                    name: 'Round 1',
+                    color: '#FF5252',
+                    baseSupply: 80000,
+                    reservePrice: 1.0,
+                    clearingPrice: 1.5,
+                    demandPoints: [
+                        { price: 0, quantity: 0 },
+                        { price: 0.5, quantity: 20000 },
+                        { price: 1.0, quantity: 40000 },
+                        { price: 1.5, quantity: 80000 },
+                        { price: 2.0, quantity: 100000 },
+                        { price: 2.5, quantity: 120000 }
+                    ],
+                    totalValue: '$120,000'
+                },
+                round2: {
+                    name: 'Round 2',
+                    color: '#FF9800',
+                    baseSupply: 100000,
+                    reservePrice: 1.25,
+                    clearingPrice: 1.75,
+                    demandPoints: [
+                        { price: 1.75, quantity: 0 },
+                        { price: 1.75, quantity: 300000 }
+                    ],
+                    totalValue: '$152,500'
+                },
+                round3: {
+                    name: 'Round 3',
+                    color: '#4CAF50',
+                    baseSupply: 133000,
+                    reservePrice: 1.5,
+                    clearingPrice: 2.25,
+                    demandPoints: [
+                        { price: 0, quantity: 0 },
+                        { price: 1.0, quantity: 50000 },
+                        { price: 1.5, quantity: 80000 },
+                        { price: 2.0, quantity: 120000 },
+                        { price: 2.25, quantity: 133000 },
+                        { price: 2.5, quantity: 150000 },
+                        { price: 3.0, quantity: 200000 }
+                    ],
+                    totalValue: '$328,700'
+                },
+                round4: {
+                    name: 'Round 4',
+                    color: '#2196F3',
+                    baseSupply: 150000,
+                    reservePrice: 1.75,
+                    clearingPrice: 2.5,
+                    demandPoints: [
+                        { price: 0, quantity: 0 },
+                        { price: 1.0, quantity: 60000 },
+                        { price: 1.75, quantity: 100000 },
+                        { price: 2.5, quantity: 150000 },
+                        { price: 3.0, quantity: 180000 },
+                        { price: 3.5, quantity: 220000 }
+                    ],
+                    totalValue: '$375,000'
+                },
+                round5: {
+                    name: 'Round 5',
+                    color: '#9C27B0',
+                    baseSupply: 175000,
+                    reservePrice: 2.0,
+                    clearingPrice: 2.75,
+                    demandPoints: [
+                        { price: 0, quantity: 0 },
+                        { price: 1.5, quantity: 80000 },
+                        { price: 2.0, quantity: 120000 },
+                        { price: 2.75, quantity: 175000 },
+                        { price: 3.25, quantity: 200000 },
+                        { price: 3.75, quantity: 240000 }
+                    ],
+                    totalValue: '$481,250'
+                },
+                round6: {
+                    name: 'Round 6',
+                    color: '#607D8B',
+                    baseSupply: 200000,
+                    reservePrice: 2.25,
+                    clearingPrice: 3.0,
+                    demandPoints: [
+                        { price: 0, quantity: 0 },
+                        { price: 1.5, quantity: 90000 },
+                        { price: 2.25, quantity: 140000 },
+                        { price: 3.0, quantity: 200000 },
+                        { price: 3.5, quantity: 230000 },
+                        { price: 4.0, quantity: 260000 }
+                    ],
+                    totalValue: '$600,000'
+                }
+            };
+
+            // Current round (default to round 3 as per your example)
+            let currentRound = 'round3';
+            let focusModeActive = false;
+            
+            // Initialize the unified chart
+            function initializeUnifiedChart() {
+                const ctx = document.getElementById('unifiedChart');
+                if (!ctx) return; // Exit if element doesn't exist
+                
+                // Prepare datasets for all rounds
+                const datasets = [];
+                const annotations = {};
+                
+                Object.keys(roundsConfig).forEach((roundKey, index) => {
+                    const round = roundsConfig[roundKey];
+                    const isCurrentRound = roundKey === currentRound;
+                    
+                    // Add demand curve dataset
+                    datasets.push({
+                        label: round.name,
+                        data: round.demandPoints.map(point => ({
+                            x: point.quantity,
+                            y: point.price
+                        })),
+                        borderColor: round.color,
+                        backgroundColor: 'transparent',
+                        borderWidth: isCurrentRound ? 3 : 1.5,
+                        borderDash: isCurrentRound ? [] : [],
+                        tension: roundKey === 'round2' ? 0 : 0.4,
+                        pointRadius: 0,
+                        hidden: false
+                    });
+                    
+                    // Add supply line annotation
+                    annotations[`${roundKey}SupplyLine`] = {
+                        type: 'line',
+                        xMin: round.baseSupply,
+                        xMax: round.baseSupply,
+                        yMin: 0,
+                        yMax: 4.5,
+                        borderColor: round.color,
+                        borderWidth: isCurrentRound ? 2 : 1,
+                        borderDash: [5, 5],
+                        label: {
+                            content: `${round.name} Supply: ${round.baseSupply.toLocaleString()}`,
+                            enabled: isCurrentRound,
+                            position: 'top'
+                        }
+                    };
+                    
+                    // Add clearing point annotation
+                    annotations[`${roundKey}ClearingPoint`] = {
+                        type: 'point',
+                        xValue: round.baseSupply,
+                        yValue: round.clearingPrice,
+                        backgroundColor: round.color,
+                        radius: isCurrentRound ? 6 : 4,
+                        borderWidth: 2,
+                        borderColor: 'white'
+                    };
+                    
+                    // Add reserve price line for current round only
+                    if (isCurrentRound) {
+                        annotations[`${roundKey}ReserveLine`] = {
+                            type: 'line',
+                            yMin: round.reservePrice,
+                            yMax: round.reservePrice,
+                            xMin: 0,
+                            xMax: 300000,
+                            borderColor: 'rgba(255, 215, 0, 0.7)',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            label: {
+                                content: `Reserve Price: $${round.reservePrice.toFixed(2)}`,
+                                enabled: true,
+                                position: 'start'
+                            }
+                        };
+                        
+                        annotations[`${roundKey}ClearingLine`] = {
+                            type: 'line',
+                            yMin: round.clearingPrice,
+                            yMax: round.clearingPrice,
+                            xMin: 0,
+                            xMax: 300000,
+                            borderColor: round.color,
+                            borderWidth: 2,
+                            label: {
+                                content: `Clearing Price: $${round.clearingPrice.toFixed(2)}`,
+                                enabled: true,
+                                position: 'end'
+                            }
+                        };
+                    }
+                });
+                
+                // Create the chart
+                window.unifiedChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        datasets: datasets
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Cumulative Demand (Tokens)'
+                                },
+                                min: 0,
+                                max: 300000,
+                                grid: {
+                                    color: 'rgba(200, 200, 200, 0.3)'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Price ($)'
+                                },
+                                min: 0,
+                                max: 4.5,
+                                grid: {
+                                    color: 'rgba(200, 200, 200, 0.3)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    usePointStyle: true,
+                                    padding: 20
+                                },
+                                onClick: function(e, legendItem, legend) {
+                                    const index = legendItem.datasetIndex;
+                                    const ci = legend.chart;
+                                    const meta = ci.getDatasetMeta(index);
+                                    
+                                    // Toggle visibility
+                                    meta.hidden = !meta.hidden;
+                                    
+                                    // Toggle related annotations
+                                    const roundKey = Object.keys(roundsConfig)[index];
+                                    const annotationsToToggle = [
+                                        `${roundKey}SupplyLine`,
+                                        `${roundKey}ClearingPoint`,
+                                        `${roundKey}ReserveLine`,
+                                        `${roundKey}ClearingLine`
+                                    ];
+                                    
+                                    annotationsToToggle.forEach(key => {
+                                        if (ci.options.plugins.annotation.annotations[key]) {
+                                            ci.options.plugins.annotation.annotations[key].display = !meta.hidden;
+                                        }
+                                    });
+                                    
+                                    ci.update();
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Auction Rounds Comparison',
+                                font: {
+                                    size: 18,
+                                    weight: 'bold'
+                                },
+                                padding: {
+                                    top: 10,
+                                    bottom: 30
+                                }
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                                callbacks: {
+                                    label: function(context) {
+                                        const roundKey = Object.keys(roundsConfig)[context.datasetIndex];
+                                        const round = roundsConfig[roundKey];
+                                        return `${round.name}: $${context.parsed.y.toFixed(2)} at ${context.parsed.x.toLocaleString()} tokens`;
+                                    },
+                                    footer: function(tooltipItems) {
+                                        const roundKey = Object.keys(roundsConfig)[tooltipItems[0].datasetIndex];
+                                        const round = roundsConfig[roundKey];
+                                        return `Total Value: ${round.totalValue}`;
+                                    }
+                                }
+                            },
+                            annotation: {
+                                annotations: annotations
+                            }
+                        },
+                        interaction: {
+                            mode: 'nearest',
+                            axis: 'x',
+                            intersect: false
+                        },
+                        hover: {
+                            mode: 'nearest',
+                            intersect: false
+                        }
+                    }
+                });
+                
+                // Populate metrics panel
+                populateMetricsPanel();
+            }
+            
+            // Function to populate metrics panel
+            function populateMetricsPanel() {
+                const metricsPanel = document.querySelector('.metrics-panel');
+                if (!metricsPanel) return; // Exit if element doesn't exist
+                
+                metricsPanel.innerHTML = '';
+                
+                Object.keys(roundsConfig).forEach(roundKey => {
+                    const round = roundsConfig[roundKey];
+                    const isCurrentRound = roundKey === currentRound;
+                    
+                    const metricCard = document.createElement('div');
+                    metricCard.className = 'metric-card';
+                    metricCard.style.padding = '15px';
+                    metricCard.style.borderRadius = '8px';
+                    metricCard.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+                    metricCard.style.border = isCurrentRound ? `2px solid ${round.color}` : '1px solid #ddd';
+                    
+                    metricCard.innerHTML = `
+                        <h4 style="margin-top: 0; color: ${round.color};">${round.name}</h4>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Supply:</span>
+                            <span>${round.baseSupply.toLocaleString()}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Clearing Price:</span>
+                            <span>$${round.clearingPrice.toFixed(2)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Reserve Price:</span>
+                            <span>$${round.reservePrice.toFixed(2)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-weight: bold;">
+                            <span>Total Value:</span>
+                            <span>${round.totalValue}</span>
+                        </div>
+                    `;
+                    
+                    metricsPanel.appendChild(metricCard);
+                });
+            }
+            
+            // Initialize event listeners for controls
+            function initializeControls() {
+                // Round toggle buttons
+                document.querySelectorAll('.round-toggle').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const roundNumber = this.getAttribute('data-round');
+                        const roundKey = `round${roundNumber}`;
+                        
+                        // Update current round
+                        currentRound = roundKey;
+                        
+                        // Update active state of buttons
+                        document.querySelectorAll('.round-toggle').forEach(btn => {
+                            btn.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                        
+                        // Update chart
+                        updateChartForCurrentRound();
+                    });
+                    
+                    // Add some styling
+                    button.style.padding = '8px 15px';
+                    button.style.backgroundColor = '#f5f5f5';
+                    button.style.border = '1px solid #ddd';
+                    button.style.borderRadius = '4px';
+                    button.style.cursor = 'pointer';
+                });
+                
+                // Focus mode toggle
+                const focusModeToggle = document.getElementById('focusModeToggle');
+                if (focusModeToggle) {
+                    focusModeToggle.addEventListener('click', function() {
+                        focusModeActive = !focusModeActive;
+                        updateChartForCurrentRound();
+                        this.textContent = focusModeActive ? 'Exit Focus Mode' : 'Toggle Focus Mode';
+                    });
+                    
+                    // Add styling to focus mode button
+                    focusModeToggle.style.padding = '8px 15px';
+                    focusModeToggle.style.backgroundColor = '#2196F3';
+                    focusModeToggle.style.color = 'white';
+                    focusModeToggle.style.border = 'none';
+                    focusModeToggle.style.borderRadius = '4px';
+                    focusModeToggle.style.cursor = 'pointer';
+                }
+            }
+            
+            // Update chart based on current round and focus mode
+            function updateChartForCurrentRound() {
+                if (!window.unifiedChart) return;
+                
+                const chart = window.unifiedChart;
+                
+                // Update datasets visibility and style
+                chart.data.datasets.forEach((dataset, index) => {
+                    const roundKey = Object.keys(roundsConfig)[index];
+                    const isCurrentRoundDataset = roundKey === currentRound;
+                    
+                    // In focus mode, only show current round
+                    dataset.hidden = focusModeActive && !isCurrentRoundDataset;
+                    
+                    // Update styling
+                    dataset.borderWidth = isCurrentRoundDataset ? 3 : 1.5;
+                    dataset.borderDash = isCurrentRoundDataset ? [] : [];
+                });
+                
+                // Update annotations
+                Object.keys(roundsConfig).forEach(roundKey => {
+                    const isCurrentRoundAnnotation = roundKey === currentRound;
+                    
+                    // Supply line
+                    const supplyLine = chart.options.plugins.annotation.annotations[`${roundKey}SupplyLine`];
+                    if (supplyLine) {
+                        supplyLine.borderWidth = isCurrentRoundAnnotation ? 2 : 1;
+                        supplyLine.label.enabled = isCurrentRoundAnnotation;
+                        supplyLine.display = !focusModeActive || isCurrentRoundAnnotation;
+                    }
+                    
+                    // Clearing point
+                    const clearingPoint = chart.options.plugins.annotation.annotations[`${roundKey}ClearingPoint`];
+                    if (clearingPoint) {
+                        clearingPoint.radius = isCurrentRoundAnnotation ? 6 : 4;
+                        clearingPoint.display = !focusModeActive || isCurrentRoundAnnotation;
+                    }
+                    
+                    // Reserve and clearing price lines (only for current round)
+                    const reserveLine = chart.options.plugins.annotation.annotations[`${roundKey}ReserveLine`];
+                    const clearingLine = chart.options.plugins.annotation.annotations[`${roundKey}ClearingLine`];
+                    
+                    if (!isCurrentRoundAnnotation) {
+                        // Remove non-current round price lines
+                        if (reserveLine) reserveLine.display = false;
+                        if (clearingLine) clearingLine.display = false;
+                    } else {
+                        // Add current round price lines if they don't exist
+                        if (!reserveLine) {
+                            chart.options.plugins.annotation.annotations[`${roundKey}ReserveLine`] = {
+                                type: 'line',
+                                yMin: roundsConfig[roundKey].reservePrice,
+                                yMax: roundsConfig[roundKey].reservePrice,
+                                xMin: 0,
+                                xMax: 300000,
+                                borderColor: 'rgba(255, 215, 0, 0.7)',
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                label: {
+                                    content: `Reserve Price: $${roundsConfig[roundKey].reservePrice.toFixed(2)}`,
+                                    enabled: true,
+                                    position: 'start'
+                                }
+                            };
+                        } else {
+                            reserveLine.display = true;
+                        }
+                        
+                        if (!clearingLine) {
+                            chart.options.plugins.annotation.annotations[`${roundKey}ClearingLine`] = {
+                                type: 'line',
+                                yMin: roundsConfig[roundKey].clearingPrice,
+                                yMax: roundsConfig[roundKey].clearingPrice,
+                                xMin: 0,
+                                xMax: 300000,
+                                borderColor: roundsConfig[roundKey].color,
+                                borderWidth: 2,
+                                label: {
+                                    content: `Clearing Price: $${roundsConfig[roundKey].clearingPrice.toFixed(2)}`,
+                                    enabled: true,
+                                    position: 'end'
+                                }
+                            };
+                        } else {
+                            clearingLine.display = true;
+                        }
+                    }
+                });
+                
+                // Update chart title
+                chart.options.plugins.title.text = focusModeActive 
+                    ? `${roundsConfig[currentRound].name} Details` 
+                    : 'Auction Rounds Comparison';
+                
+                // Update metrics panel
+                populateMetricsPanel();
+                
+                // Update the chart
+                chart.update();
+            }
+            
+            // Initialize everything when DOM is loaded
+            if (document.getElementById('unifiedChart')) {
+                initializeUnifiedChart();
+                initializeControls();
+                
+                // Add some CSS for the round toggles
+                document.querySelectorAll('.round-toggle.active').forEach(button => {
+                    const roundNumber = button.getAttribute('data-round');
+                    if (roundsConfig[`round${roundNumber}`]) {
+                        button.style.backgroundColor = roundsConfig[`round${roundNumber}`].color;
+                        button.style.color = 'white';
+                        button.style.border = 'none';
+                    }
+                });
+            }
+        });
+
+        // Ensure bid tabs are working by adding a direct initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            // Re-initialize bid tabs to ensure they work
+            const bidTabsInit = document.querySelectorAll('.bid-tab');
+            bidTabsInit.forEach(tab => {
+                // Remove any existing click handlers by cloning and replacing
+                const newTab = tab.cloneNode(true);
+                tab.parentNode.replaceChild(newTab, tab);
+                
+                // Add fresh click handler
+                newTab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tabId = this.getAttribute('data-tab');
+                    console.log('Bid tab clicked:', tabId);
+                    
+                    // Update active state on tabs
+                    document.querySelectorAll('.bid-tab').forEach(t => {
+                        t.classList.toggle('active', t.getAttribute('data-tab') === tabId);
+                    });
+                    
+                    // Show/hide appropriate content
+                    document.querySelectorAll('.bid-content').forEach(content => {
+                        content.classList.toggle('active', content.id === tabId);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

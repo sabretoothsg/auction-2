@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auctions - Exchequer Finance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        /* Essential styles only */
+        :root {
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --background: #F8F9FA;
+            --border-color: #E5E5E5;
+            --link-color: #0066FF;
+            --yellow: #F2C94C;
+            --yellow-light: #FFF3D6;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text-primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 1.75fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .auction-section {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .auction-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .auction-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Component -->
+    <site-header></site-header>
+
+    <main class="container">
+        <h1 class="page-title">Auctions</h1>
+        
+        <div class="content-wrapper">
+            <div class="auction-section">
+                <div class="auction-header">
+                    <h2 class="auction-title">Current Auction</h2>
+                </div>
+                <p>Welcome to the Exchequer Finance auction page.</p>
+            </div>
+            
+            <div class="sidebar">
+                <div class="auction-section">
+                    <h3>Auction Information</h3>
+                    <p>This is a simplified version of the auction page.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Component -->
+    <site-footer></site-footer>
+
+    <!-- Scripts -->
+    <script src="/components/Header.js"></script>
+    <script src="/components/Footer.js"></script>
+    <script src="/countdown.js"></script>
+</body>
+</html> 

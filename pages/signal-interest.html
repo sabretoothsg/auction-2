@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signal Interest - Exchequer Finance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/figma-design.css">
+</head>
+<body class="game-theme">
+    <div class="animated-background">
+        <div class="graph-overlay"></div>
+    </div>
+
+    <!-- Navigation Structure -->
+    <header class="site-header">
+        <nav class="main-nav">
+            <div class="nav-left">
+                <a href="/" class="logo">
+                    <img src="/images/logo.svg" alt="Exchequer Finance">
+                </a>
+                <div class="nav-links">
+                    <a href="/pages/explore.html" class="nav-link">Explore</a>
+                    <a href="/auction.html" class="nav-link">Auctions</a>
+                    <a href="/pages/portfolio.html" class="nav-link">Portfolio</a>
+                    <a href="/pages/governance.html" class="nav-link">Governance</a>
+                    <a href="/pages/docs.html" class="nav-link">Docs</a>
+                </div>
+            </div>
+            <button class="connect-wallet">Connect Wallet</button>
+            <button class="mobile-menu-toggle" aria-label="Toggle Menu">
+                <i class="bi bi-list"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main class="container" style="margin-top: 100px;">
+        <div class="buy-container">
+            <div class="buy-header">
+                <h1 class="page-title">Signal Interest: USDC Treasury Note</h1>
+                <p style="color: var(--text-dim); margin-top: 0.5rem;">Issued by Circle • 7.2% APY • Matures Mar 15, 2024</p>
+            </div>
+            
+            <!-- Note Summary Card -->
+            <div class="modern-card" style="margin-bottom: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+                    <div>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Note Summary</h2>
+                        <p style="color: var(--text-dim);">This note is in pre-offering stage. Signal your interest to get early access.</p>
+                    </div>
+                    <span class="status-badge pre-offering">Pre-Offering</span>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                    <div class="detail-item">
+                        <span class="detail-label">Principal Amount</span>
+                        <span class="detail-value">$25,000</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">APY</span>
+                        <span class="detail-value">7.2%</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Maturity Date</span>
+                        <span class="detail-value">Mar 15, 2024</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Time Left</span>
+                        <span class="detail-value">120 days</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Expected Return</span>
+                        <span class="detail-value">$1,800</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Risk Level</span>
+                        <span class="detail-value">
+                            <span style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: var(--success);">Low</span>
+                                <div style="width: 60px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
+                                    <div style="width: 30%; height: 100%; background: var(--success);"></div>
+                                </div>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Signal Interest Form -->
+            <div class="modern-card">
+                <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem;">Signal Your Interest</h2>
+                
+                <form class="buy-form">
+                    <!-- Interest Level -->
+                    <div class="form-group">
+                        <label>Interest Level</label>
+                        <p style="color: var(--text-dim); margin-bottom: 1rem; font-size: 0.875rem;">
+                            Select how much you're interested in investing when this note becomes available.
+                        </p>
+                        
+                        <div class="interest-options">
+                            <div class="interest-option" data-value="5000">
+                                <div class="option-value">$5,000</div>
+                                <div class="option-label">Minimum</div>
+                            </div>
+                            <div class="interest-option selected" data-value="10000">
+                                <div class="option-value">$10,000</div>
+                                <div class="option-label">Recommended</div>
+                            </div>
+                            <div class="interest-option" data-value="25000">
+                                <div class="option-value">$25,000</div>
+                                <div class="option-label">Maximum</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Custom Amount -->
+                        <div class="form-group" style="margin-top: 1rem;">
+                            <label for="customAmount">Or Enter Custom Amount</label>
+                            <div class="amount-input-wrapper">
+                                <input type="text" id="customAmount" class="form-control" placeholder="Enter amount">
+                                <span class="currency">USD</span>
+                            </div>
+                            <p style="color: var(--text-dim); margin-top: 0.5rem; font-size: 0.75rem;">
+                                Min: $5,000 | Max: $25,000
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Notification Preferences -->
+                    <div class="form-group" style="margin-top: 2rem;">
+                        <label>Notification Preferences</label>
+                        <p style="color: var(--text-dim); margin-bottom: 1rem; font-size: 0.875rem;">
+                            How would you like to be notified when this note becomes available?
+                        </p>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <label class="checkbox-container" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+                                <input type="checkbox" checked>
+                                <span style="color: var(--text-light);">Email Notification</span>
+                            </label>
+                            <label class="checkbox-container" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+                                <input type="checkbox" checked>
+                                <span style="color: var(--text-light);">In-App Notification</span>
+                            </label>
+                            <label class="checkbox-container" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+                                <input type="checkbox">
+                                <span style="color: var(--text-light);">SMS Notification</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Early Access -->
+                    <div style="background: rgba(0, 255, 136, 0.1); border: 1px solid var(--accent); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                            <i class="bi bi-lightning-charge-fill" style="color: var(--accent); font-size: 1.5rem;"></i>
+                            <h3 style="font-size: 1.25rem; color: var(--accent);">Early Access Benefit</h3>
+                        </div>
+                        <p style="color: var(--text-light); margin-bottom: 0.5rem;">
+                            By signaling interest, you'll get:
+                        </p>
+                        <ul style="color: var(--text-dim); padding-left: 1.5rem; margin-bottom: 0;">
+                            <li>24-hour early access before public offering</li>
+                            <li>Reserved allocation based on your interest level</li>
+                            <li>Priority customer support</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Terms -->
+                    <div class="form-group">
+                        <label class="checkbox-container" style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer;">
+                            <input type="checkbox" style="margin-top: 0.25rem;">
+                            <span style="color: var(--text-dim); font-size: 0.875rem;">
+                                I understand that signaling interest is non-binding and does not guarantee allocation. I will be notified when the note becomes available for purchase.
+                            </span>
+                        </label>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                        <button type="submit" class="btn btn-primary" style="flex: 1;">Confirm Interest</button>
+                        <a href="/pages/notes.html" class="btn btn-secondary" style="flex: 1;">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Simplified Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <a href="/docs">Documentation</a>
+                <a href="/faq">FAQ</a>
+                <a href="/support">Support</a>
+            </div>
+            <div class="footer-section">
+                <h3>Community</h3>
+                <a href="https://twitter.com/exchequer" target="_blank">Twitter</a>
+                <a href="https://discord.gg/exchequer" target="_blank">Discord</a>
+                <a href="https://github.com/exchequer" target="_blank">GitHub</a>
+            </div>
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <a href="/terms">Terms of Service</a>
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/disclaimer">Risk Disclaimer</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Exchequer Finance – Building Financial Infrastructure for the AGI Era</p>
+        </div>
+    </footer>
+
+    <script src="/js/ticker.js"></script>
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/mechanics.js"></script>
+    <script>
+        // Interest option selection
+        document.addEventListener('DOMContentLoaded', function() {
+            const interestOptions = document.querySelectorAll('.interest-option');
+            const customAmountInput = document.getElementById('customAmount');
+            
+            // Handle option selection
+            interestOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected class from all options
+                    interestOptions.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    
+                    // Clear custom amount input
+                    customAmountInput.value = '';
+                });
+            });
+            
+            // Handle custom amount input
+            customAmountInput.addEventListener('focus', function() {
+                // Remove selected class from all options
+                interestOptions.forEach(opt => opt.classList.remove('selected'));
+            });
+        });
+    </script>
+</body>
+</html> 

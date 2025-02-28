@@ -3,862 +3,542 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DAI CV 2023 Note - English Auction</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Exchequer: Better than tokens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/figma-design.css">
+    <link rel="stylesheet" href="/css/exchequer-brand.css">
     <style>
         :root {
-            --text-primary: #333333;
-            --text-secondary: #666666;
-            --background: #F8F9FA;
-            --border-color: #E5E5E5;
-            --link-color: #0066FF;
-            --yellow: #F2C94C;
-            --yellow-light: #FFF3D6;
-            --white: #FFFFFF;
+            --text-primary: #F8FAFC;
+            --surface-dark: rgba(30, 41, 59, 0.8);
+            --surface-light: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(255, 255, 255, 0.1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
-
-        body {
-            background: var(--background);
-            color: var(--text-primary);
-        }
-
-        .container {
+        .main-container {
+            padding: 2rem;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding-top: 80px;
         }
 
-        .content-wrapper {
-            display: grid;
-            grid-template-columns: 1.75fr 1fr;
-            gap: 2rem;
-            margin-top: 2rem;
+        .hero-section {
+            margin-bottom: 4rem;
         }
 
-        .top-nav {
-            background: var(--white);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: var(--link-color);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .connect-btn {
-            background: var(--yellow);
-            border: none;
-            padding: 0.5rem 1.5rem;
-            border-radius: 20px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .back-link {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
             color: var(--text-primary);
-            text-decoration: none;
             margin-bottom: 2rem;
-        }
-
-        .auction-section {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 2rem;
-        }
-
-        .auction-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .auction-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .auction-stats {
-            display: flex;
-            gap: 1.5rem;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        .chart-container {
-            height: 400px;
-            margin-bottom: 2rem;
-            position: relative;
-        }
-
-        .chart-container::before {
-            content: "This graph shows the token quantity and reserve price for each auction round.";
-            display: none;
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--text-primary);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            font-size: 0.875rem;
-            white-space: nowrap;
-            z-index: 1000;
-        }
-
-        .chart-container:hover::before {
-            display: block;
-        }
-
-        .clearing-prices {
-            margin-top: 2rem;
-        }
-
-        .clearing-prices h3 {
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-
-        .clearing-prices table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .clearing-prices th,
-        .clearing-prices td {
-            padding: 0.75rem;
-            border-bottom: 1px solid var(--border-color);
-            text-align: left;
-        }
-
-        .clearing-prices th {
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        .buy-section {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 2rem;
-        }
-
-        .buy-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .buy-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .duration-container {
-            margin-bottom: 2rem;
-            position: relative;
-        }
-
-        .duration-container::before {
-            content: "This bar shows how much time remains in the current auction round.";
-            display: none;
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--text-primary);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            font-size: 0.875rem;
-            white-space: nowrap;
-            z-index: 1000;
-        }
-
-        .duration-container:hover::before {
-            display: block;
-        }
-
-        .duration-bar {
-            background: var(--yellow-light);
-            height: 8px;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .duration-progress {
-            background: var(--yellow);
-            width: 30%;
-            height: 100%;
-        }
-
-        .discount-badge {
-            background: var(--yellow-light);
-            color: var(--text-primary);
-            padding: 0.5rem 1rem;
-            border-radius: 16px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            display: inline-block;
-            margin-bottom: 1rem;
-        }
-
-        .reserve-info {
-            background: var(--background);
-            border-radius: 8px;
-            padding: 1rem;
-            margin: 1rem 0;
-            border: 1px solid var(--border-color);
-        }
-
-        .reserve-info p {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .bid-controls {
-            margin-top: 2rem;
-        }
-
-        .bid-tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .bid-tab {
-            padding: 0.75rem 1.5rem;
-            background: none;
-            border: none;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            color: var(--text-secondary);
-        }
-
-        .bid-tab.active {
-            color: var(--text-primary);
-            border-bottom: 2px solid var(--yellow);
-        }
-
-        .input-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-
-        .total-amount {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            padding: 0.75rem;
-            background: var(--background);
-            border-radius: 8px;
-        }
-
-        .set-order-btn {
-            width: 100%;
-            padding: 1rem;
-            background: var(--yellow);
-            border: none;
-            border-radius: 25px;
-            font-weight: 500;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        .reserve-bank {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 2rem;
-            margin-top: 2rem;
-            grid-column: span 2;
-        }
-
-        .reserve-bank-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-        }
-
-        .reserve-bank-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-        }
-
-        .stat-card {
-            background: var(--background);
-            padding: 1.5rem;
-            border-radius: 8px;
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
-        [title] {
             position: relative;
             cursor: help;
         }
 
-        [title]:hover::before {
-            content: attr(title);
+        .hero-title::after {
+            content: "Floor protection isn't sexy until the rug is pulled";
+            position: absolute;
+            top: 100%;
+            left: 0;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: normal;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .hero-title:hover::after {
+            opacity: 1;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            cursor: help;
+        }
+
+        .stat-card::after {
+            content: attr(data-slogan);
+            position: absolute;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            font-size: 0.75rem;
+            transition: bottom 0.3s ease;
+            text-align: center;
+        }
+
+        .stat-card:hover::after {
+            bottom: 0;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .notes-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+        }
+
+        .section-title[data-slogan]::after {
+            content: attr(data-slogan);
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: normal;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .section-title[data-slogan]:hover::after {
+            opacity: 1;
+        }
+
+        .view-all {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .notes-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: var(--surface-dark);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .notes-table th {
+            text-align: left;
+            padding: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.875rem;
+            position: relative;
+        }
+
+        .notes-table th[data-slogan]::after {
+            content: attr(data-slogan);
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .notes-table th[data-slogan]:hover::after {
+            opacity: 1;
+        }
+
+        .notes-table td {
+            padding: 1rem;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .token-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .token-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--surface-light);
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.75rem;
+        }
+
+        .note-type {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            background: var(--surface-light);
+            color: var(--text-primary);
+            font-size: 0.75rem;
+        }
+
+        .protection-value {
+            color: #22C55E;
+        }
+
+        .fee-boost {
+            color: #22C55E;
+        }
+
+        .upside-sharing {
+            color: var(--text-primary);
+        }
+
+        .issue-size {
+            color: #60A5FA;
+        }
+
+        .funding-progress {
+            width: 100px;
+            height: 4px;
+            background: var(--surface-light);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #22C55E;
+        }
+
+        .time-left {
+            color: #F59E0B;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .filter-item {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background: var(--surface-light);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .filter-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .filter-item[data-slogan]::before {
+            content: attr(data-slogan);
             position: absolute;
             bottom: 100%;
             left: 50%;
             transform: translateX(-50%);
-            padding: 0.5rem 1rem;
-            background: var(--text-primary);
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.9);
             color: white;
+            font-size: 0.75rem;
             border-radius: 4px;
-            font-size: 0.875rem;
             white-space: nowrap;
-            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .filter-item[data-slogan]:hover::before {
+            opacity: 1;
+        }
+
+        .watch-explainer {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background: #F59E0B;
+            color: #1a1a1a;
+            text-decoration: none;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            position: relative;
+        }
+
+        .watch-explainer::before {
+            content: "FOMO into safety for once";
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .watch-explainer:hover::before {
+            opacity: 1;
+        }
+
+        .unicorn-image {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 400px;
+            height: auto;
+            z-index: -1;
         }
     </style>
 </head>
-<body>
-    <nav class="top-nav">
-        <div>Logo</div>
-        <div class="nav-links">
-            <a href="#">Buy</a>
-            <a href="#">Portfolio</a>
-            <a href="#">Explore</a>
-            <a href="#">Notes</a>
-        </div>
-        <button class="connect-btn">Connect</button>
-    </nav>
+<body class="game-theme">
+    <div class="animated-background">
+        <div class="checkered-overlay"></div>
+    </div>
 
-    <main class="container">
-        <a href="#" class="back-link">← Back to Explore</a>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
 
-        <div class="content-wrapper">
-            <!-- Left Column -->
-            <section class="auction-section">
-                <div class="auction-header">
-                    <h2 class="auction-title">Auction Tiers</h2>
-                    <div class="auction-stats">
-                        <span>Notes in Tier: -</span>
-                        <span>Tokens Sold: -</span>
-                    </div>
+    <main class="main-container">
+        <section class="hero-section">
+            <h1 class="hero-title">Better than tokens</h1>
+            <div class="stats-grid">
+                <div class="stat-card" data-slogan="While they farm yields, we build flood walls">
+                    <div class="stat-value">$250,456,083</div>
+                    <div class="stat-label">TVL</div>
                 </div>
-                <div class="chart-container">
-                    <canvas id="auctionChart"></canvas>
+                <div class="stat-card" data-slogan="It's not much, but it's honest protection">
+                    <div class="stat-value">63</div>
+                    <div class="stat-label">Notes</div>
+                        </div>
+                <div class="stat-card" data-slogan="We don't go to the moon, we build the landing pad">
+                    <div class="stat-value">$5,003,045,598</div>
+                    <div class="stat-label">Ecosystem Market Cap</div>
                 </div>
-                <div class="clearing-prices">
-                    <h3>Clearing Prices</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Round</th>
-                                <th>Clearing Price</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>$1.20</td>
-                                <td>Completed</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>$1.35</td>
-                                <td>Completed</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>$1.42</td>
-                                <td>Current</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            </div>
+        </section>
+
+        <section class="notes-section">
+            <div class="section-header">
+                <h2 class="section-title" data-slogan="It's not moon, but it's safe harbor">
+                    <i class="bi bi-graph-up"></i>
+                    Selling Notes
+                </h2>
+                <a href="/pages/notes.html" class="view-all">View all</a>
+            </div>
+
+            <div class="filter-bar">
+                <div class="filter-item" data-slogan="When they're catching knives, we're handing out gloves">Underlying</div>
+                <div class="filter-item" data-slogan="We're the airbags for your crypto journey">Note Type</div>
+                <div class="filter-item" data-slogan="It's not lambos, it's lifeboats">Maturity</div>
+                <div class="filter-item" data-slogan="The floor isn't lava, it's where we build foundations">Downside Protection</div>
+                <div class="filter-item" data-slogan="While they chase pumps, we prevent dumps">Fee Boost</div>
+                <div class="filter-item" data-slogan="It ain't glamorous, but neither is losing everything">Upside Sharing</div>
+                <div class="filter-item" data-slogan="Downside protection: Because 'number go up' isn't a strategy">Issue Size</div>
+                <div class="filter-item" data-slogan="It's not much, but it keeps you dry when it rains">Funding Progress</div>
+                <div class="filter-item" data-slogan="We're the seatbelts of DeFi - boring until you crash">Time left</div>
                 </div>
-            </section>
+                
+            <table class="notes-table">
+                <thead>
+                    <tr>
+                        <th>Underlying</th>
+                        <th>Note Type</th>
+                        <th>Maturity</th>
+                        <th>Downside Protection</th>
+                        <th>Fee Boost</th>
+                        <th>Upside Sharing</th>
+                        <th>Issue Size</th>
+                        <th>Funding Progress</th>
+                        <th>Time left</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="token-cell">
+                                <div class="token-icon">XYZ</div>
+                                <span>XYZ</span>
+                        </div>
+                        </td>
+                        <td><span class="note-type">LQ</span></td>
+                        <td>Apr 29, 25</td>
+                        <td class="protection-value">50%</td>
+                        <td class="fee-boost">25%</td>
+                        <td class="upside-sharing">120%</td>
+                        <td class="issue-size">5.00M</td>
+                        <td>
+                            <div class="funding-progress">
+                                <div class="progress-bar" style="width: 64%"></div>
+                        </div>
+                        </td>
+                        <td class="time-left">4H</td>
+                    </tr>
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
 
-            <!-- Demand Curve Section -->
-            <section class="demand-curve-section">
-                <div class="section-header">
-                    <h2 class="section-title">Cumulative Demand</h2>
-                </div>
-                <div class="chart-container">
-                    <canvas id="demandChart"></canvas>
-                </div>
-            </section>
+            <a href="#" class="watch-explainer">
+                <i class="bi bi-play-circle"></i>
+                Watch Explainer
+            </a>
+        </section>
 
-            <!-- Right Column -->
-            <section class="buy-section">
-                <div class="buy-header">
-                    <h2 class="buy-title">Buy note</h2>
-                    <button style="background: none; border: none;">♡</button>
-                </div>
+        <section class="notes-section">
+            <div class="section-header">
+                <h2 class="section-title" data-slogan="Exchequer: Because someone has to be the adult in the room">
+                    <i class="bi bi-calendar-event"></i>
+                    Upcoming Notes
+                </h2>
+                <a href="/pages/notes.html" class="view-all">View all</a>
+            </div>
+            
+            <table class="notes-table">
+                <thead>
+                    <tr>
+                        <th>Underlying</th>
+                        <th>Note Type</th>
+                        <th>Term</th>
+                        <th>Downside Protection</th>
+                        <th>Fee Boost</th>
+                        <th>Upside Sharing</th>
+                        <th>Offering Size</th>
+                        <th>Interest</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="token-cell">
+                                <div class="token-icon">XYZ</div>
+                                <span>XYZ</span>
+                            </div>
+                        </td>
+                        <td><span class="note-type">LQ</span></td>
+                        <td>12 Months</td>
+                        <td class="protection-value">50%</td>
+                        <td class="fee-boost">25%</td>
+                        <td class="upside-sharing">120%</td>
+                        <td class="issue-size">5.0M</td>
+                        <td>
+                            <div class="funding-progress">
+                                <div class="progress-bar" style="width: 40%"></div>
+            </div>
+                        </td>
+                    </tr>
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        </section>
 
-                <div class="discount-badge">
-                    Current Round Discount: 15%
-                </div>
+        <section class="notes-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="bi bi-check-circle"></i>
+                    Sold Notes
+                </h2>
+                <a href="/pages/notes.html" class="view-all">View all</a>
+            </div>
 
-                <div class="duration-container">
-                    <div>Current Tier Duration</div>
-                    <div class="duration-bar">
-                        <div class="duration-progress"></div>
-                    </div>
-                </div>
-
-                <div class="reserve-info">
-                    <p><strong>Current Reserve Price:</strong> $1.25</p>
-                    <p>Note: The reserve price is the minimum price required for a successful bid.</p>
-                    <p>The price you are bidding is the maximum price you are willing to pay, not necessarily the final price you will pay.</p>
-                    <p>Participate early in this round to receive a discount on your final price!</p>
-                </div>
-
-                <div class="bid-controls">
-                    <div class="bid-tabs">
-                        <button class="bid-tab active">Auto Bid</button>
-                        <button class="bid-tab">Manual Bid</button>
-                    </div>
-
-                    <div class="input-group">
-                        <label>Quantity</label>
-                        <input type="number" class="input-field" placeholder="Enter quantity">
-                    </div>
-
-                    <div class="input-group">
-                        <label>Price</label>
-                        <input type="number" class="input-field" id="priceInput" placeholder="Enter price" 
-                               title="This is the maximum price you are willing to pay per token. The actual price you pay may be lower, determined by the clearing price.">
-                    </div>
-
-                    <div class="input-group">
-                        <label>Total Amount</label>
-                        <div class="total-amount" id="totalAmount">$0.00</div>
-                    </div>
-
-                    <button class="set-order-btn" 
-                            title="Click here to submit your bid. You will only pay the clearing price, which may be lower than your maximum bid.">
-                        Set order
-                    </button>
-                </div>
-            </section>
-
-            <!-- Reserve Bank Section -->
-            <section class="reserve-bank">
-                <h2 class="reserve-bank-title">Reserve Bank Status</h2>
-                <div class="reserve-bank-stats">
-                    <div class="stat-card">
-                        <div class="stat-label">Total Tokens in Reserve</div>
-                        <div class="stat-value">53,000</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Speculator Returns</div>
-                        <div class="stat-value">13,000</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Future Round Tokens</div>
-                        <div class="stat-value">40,000</div>
-                    </div>
-                </div>
-            </section>
-        </div>
+            <table class="notes-table">
+                <thead>
+                    <tr>
+                        <th>Underlying</th>
+                        <th>Note Type</th>
+                        <th>Maturity</th>
+                        <th>Downside Protection</th>
+                        <th>Upside Sharing</th>
+                        <th>1Y Fees</th>
+                        <th>Issue Size</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="token-cell">
+                                <div class="token-icon">PEPE</div>
+                                <span>PEPE</span>
+                            </div>
+                        </td>
+                        <td><span class="note-type">LQ</span></td>
+                        <td>Apr 29, 25</td>
+                        <td class="protection-value">10%</td>
+                        <td class="upside-sharing">175%</td>
+                        <td>55%</td>
+                        <td class="issue-size">1.00M</td>
+                    </tr>
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        </section>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <script src="/js/common.js"></script>
     <script>
-        const ctx = document.getElementById('auctionChart').getContext('2d');
-        
-        // Update reserve prices to increase every 2 rounds
-        const reservePrices = [
-            { round: 1, price: 1.00 },
-            { round: 2, price: 1.00 },
-            { round: 3, price: 1.25 },
-            { round: 4, price: 1.25 },
-            { round: 5, price: 1.50 },
-            { round: 6, price: 1.50 }
-        ];
+        // Load header and footer
+        fetch('/components/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+            });
 
-        // Update token quantities and distribution
-        const baseTokenQuantities = [
-            40000,  // Round 1 base
-            60000,  // Round 2 base
-            80000,  // Round 3 base (without Reserve Bank)
-            100000, // Round 4
-            120000, // Round 5
-            100000  // Round 6 base
-        ];
-
-        const speculatorSelling = [-5000, -8000, 0, 0, 0, 0]; // Negative values for visual subtraction
-        const futureTokens = [0, 0, 0, 0, 0, -40000]; // Negative value for visual subtraction
-        const reserveBankTokens = [0, 0, 53000, 0, 0, 0]; // 13000 (speculator) + 40000 (future) in round 3
-
-        const auctionChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['1', '2', '3', '4', '5', '6'],
-                datasets: [
-                    {
-                        label: 'Base Note Quantity',
-                        data: baseTokenQuantities,
-                        backgroundColor: function(context) {
-                            return context.dataIndex < 3 ? '#F2C94C' : 'rgba(242, 201, 76, 0.2)';
-                        },
-                        borderColor: '#F2C94C',
-                        borderWidth: 1,
-                        order: 2
-                    },
-                    {
-                        label: 'Reserve Bank',
-                        data: reserveBankTokens,
-                        backgroundColor: '#4CAF50',
-                        borderColor: '#4CAF50',
-                        borderWidth: 1,
-                        order: 2
-                    },
-                    {
-                        label: 'Speculator Selling',
-                        data: speculatorSelling,
-                        backgroundColor: 'rgba(255, 107, 107, 0.7)',
-                        borderColor: '#FF6B6B',
-                        borderWidth: 1,
-                        order: 1
-                    },
-                    {
-                        label: 'Future Tokens',
-                        data: futureTokens,
-                        backgroundColor: 'rgba(76, 175, 80, 0.7)',
-                        borderColor: '#4CAF50',
-                        borderWidth: 1,
-                        order: 1
-                    },
-                    {
-                        label: 'Reserve Price',
-                        data: reservePrices.map(r => r.price),
-                        type: 'line',
-                        stepped: 'middle',
-                        borderColor: '#FF6B6B',
-                        borderWidth: 2,
-                        pointRadius: 4,
-                        pointStyle: 'circle',
-                        fill: false,
-                        yAxisID: 'y1',
-                        order: 0
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: {
-                    intersect: false,
-                    mode: 'index'
-                },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Auction Tiers with Reserve Prices',
-                        font: {
-                            size: 16,
-                            weight: 'bold'
-                        },
-                        padding: {
-                            bottom: 20
-                        }
-                    },
-                    legend: {
-                        display: true,
-                        position: 'bottom',
-                        labels: {
-                            usePointStyle: true,
-                            padding: 20,
-                            font: {
-                                size: 12
-                            },
-                            filter: function(legendItem) {
-                                // Ensure all datasets are shown in legend
-                                return true;
-                            }
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const label = context.dataset.label;
-                                const value = context.parsed.y;
-                                if (label === 'Reserve Price') {
-                                    return `Reserve Price: $${value.toFixed(2)}`;
-                                }
-                                if (context.dataIndex === 2) {
-                                    if (label === 'Base Note Quantity') {
-                                        return `Base Note Quantity: ${value.toLocaleString()}`;
-                                    }
-                                    if (label === 'Reserve Bank') {
-                                        return `Reserve Bank: ${value.toLocaleString()}`;
-                                    }
-                                }
-                                return `${label}: ${Math.abs(value).toLocaleString()}`;
-                            }
-                        }
-                    },
-                    datalabels: {
-                        color: '#FF6B6B',
-                        font: {
-                            weight: 'bold',
-                            size: 11
-                        },
-                        padding: 6,
-                        backgroundColor: 'white',
-                        borderRadius: 4,
-                        display: function(context) {
-                            return context.datasetIndex === 1; // Only show for reserve price
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        position: 'left',
-                        title: {
-                            display: true,
-                            text: 'Note Quantity',
-                            padding: {
-                                bottom: 10
-                            },
-                            font: {
-                                size: 14,
-                                weight: '500'
-                            }
-                        },
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.1)',
-                            drawOnChartArea: true
-                        },
-                        max: Math.ceil(Math.max(...baseTokenQuantities) * 1.1 / 20000) * 20000
-                    },
-                    y1: {
-                        beginAtZero: true,
-                        position: 'right',
-                        title: {
-                            display: true,
-                            text: 'Reserve Price ($)',
-                            padding: {
-                                bottom: 10
-                            },
-                            font: {
-                                size: 14,
-                                weight: '500'
-                            }
-                        },
-                        grid: {
-                            drawOnChartArea: false
-                        },
-                        min: 0,
-                        max: 2.5,
-                        ticks: {
-                            callback: function(value) {
-                                return '$' + value.toFixed(2);
-                            }
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        title: {
-                            display: true,
-                            text: 'Rounds',
-                            font: {
-                                size: 14,
-                                weight: '500'
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        // Add event listeners for bid calculation
-        const quantityInput = document.querySelector('input[type="number"]');
-        const priceInput = document.getElementById('priceInput');
-        const totalAmountDisplay = document.getElementById('totalAmount');
-
-        function updateTotalAmount() {
-            const quantity = parseFloat(quantityInput.value) || 0;
-            const price = parseFloat(priceInput.value) || 0;
-            const total = quantity * price;
-            totalAmountDisplay.textContent = `$${total.toFixed(2)}`;
-        }
-
-        quantityInput.addEventListener('input', updateTotalAmount);
-        priceInput.addEventListener('input', updateTotalAmount);
-
-        // Create the demand curve chart
-        const demandCtx = document.getElementById('demandChart').getContext('2d');
-
-        // Update demand curve with more realistic data
-        const generateDemandCurve = () => {
-            const basePoints = [
-                { cumulative: 0, price: 2.0 },
-                { cumulative: 40000, price: 1.8 },
-                { cumulative: 80000, price: 1.6 },
-                { cumulative: 120000, price: 1.42 }, // Updated clearing price
-                { cumulative: 160000, price: 1.2 },
-                { cumulative: 200000, price: 1.0 }
-            ];
-            
-            // Add fluctuations between base points
-            const detailedPoints = [];
-            for (let i = 0; i < basePoints.length - 1; i++) {
-                const start = basePoints[i];
-                const end = basePoints[i + 1];
-                detailedPoints.push(start);
-                
-                // Add 3 intermediate points with random variations
-                for (let j = 1; j <= 3; j++) {
-                    const ratio = j / 4;
-                    const x = start.cumulative + (end.cumulative - start.cumulative) * ratio;
-                    const baseY = start.price + (end.price - start.price) * ratio;
-                    const variation = (Math.random() - 0.5) * 0.1; // Random variation ±5%
-                    detailedPoints.push({
-                        cumulative: x,
-                        price: baseY + variation
-                    });
-                }
-            }
-            detailedPoints.push(basePoints[basePoints.length - 1]);
-            return detailedPoints;
-        };
-
-        const demandData = generateDemandCurve();
-
-        const demandChart = new Chart(demandCtx, {
-            type: 'line',
-            data: {
-                labels: demandData.map(d => d.cumulative),
-                datasets: [{
-                    label: 'Demand Curve',
-                    data: demandData.map(d => d.price),
-                    borderColor: '#FF6B6B',
-                    borderWidth: 2,
-                    fill: false,
-                    tension: 0.1 // Slight curve for smoother appearance
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Cumulative Demand for Round 3',
-                        font: {
-                            size: 16,
-                            weight: 'bold'
-                        }
-                    },
-                    annotation: {
-                        annotations: {
-                            supplyLine: {
-                                type: 'line',
-                                xMin: 120000, // Updated supply line
-                                xMax: 120000,
-                                borderColor: '#F2C94C',
-                                borderWidth: 2,
-                                label: {
-                                    content: 'Supply: 120,000',
-                                    enabled: true,
-                                    position: 'top'
-                                }
-                            },
-                            clearingPrice: {
-                                type: 'line',
-                                yMin: 1.42,
-                                yMax: 1.42,
-                                borderColor: '#FF6B6B',
-                                borderWidth: 2,
-                                borderDash: [5, 5],
-                                label: {
-                                    content: 'Current Clearing Price: $1.42',
-                                    enabled: true,
-                                    position: 'left'
-                                }
-                            },
-                            clearingPoint: {
-                                type: 'point',
-                                xValue: 120000,
-                                yValue: 1.42,
-                                backgroundColor: '#FF6B6B',
-                                radius: 6
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Cumulative Demand (Tokens)',
-                            font: {
-                                size: 14,
-                                weight: '500'
-                            }
-                        },
-                        max: 200000 // Extended x-axis
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Price ($)',
-                            font: {
-                                size: 14,
-                                weight: '500'
-                            }
-                        }
-                    }
-                }
-            }
+        fetch('/components/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
         });
     </script>
 </body>

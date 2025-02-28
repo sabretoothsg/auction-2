@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Exchequer Finance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/figma-design.css">
+    <link rel="stylesheet" href="/css/exchequer-brand.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --text-primary: #F8FAFC;
+            --surface-dark: rgba(30, 41, 59, 0.8);
+            --surface-light: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .portfolio-container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            color: var(--text-primary);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .performance-section {
+            background: var(--surface-dark);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .performance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .tab-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .tab {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .tab.active {
+            background: var(--surface-light);
+            color: var(--text-primary);
+        }
+
+        .time-filters {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .time-filter {
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.875rem;
+        }
+
+        .time-filter.active {
+            background: var(--surface-light);
+            color: var(--text-primary);
+        }
+
+        .chart-container {
+            height: 300px;
+            margin-top: 1rem;
+        }
+
+        .notes-section {
+            margin-top: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .notes-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .notes-table th {
+            text-align: left;
+            padding: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.875rem;
+        }
+
+        .notes-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .token-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .token-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--surface-light);
+        }
+
+        .note-type-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            background: var(--surface-light);
+        }
+
+        .protection-bar {
+            width: 100px;
+            height: 4px;
+            background: var(--surface-light);
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .protection-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .value-change {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .value-change.positive {
+            color: var(--success);
+        }
+
+        .value-change.negative {
+            color: var(--error);
+        }
+
+        .view-button {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            background: var(--surface-light);
+            color: var(--text-primary);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .view-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .info-icon {
+            width: 16px;
+            height: 16px;
+            cursor: help;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body class="game-theme">
+    <div class="animated-background">
+        <div class="checkered-overlay"></div>
+    </div>
+
+    <!-- Include Common Header -->
+    <div id="header-placeholder"></div>
+
+    <main class="portfolio-container">
+        <h1 class="page-title" data-slogan-type="portfolio">Portfolio</h1>
+
+        <section class="performance-section">
+            <div class="performance-header">
+                <div class="tab-group">
+                    <div class="tab active" data-slogan-type="general">Value</div>
+                    <div class="tab" data-slogan-type="general">Rewards</div>
+                </div>
+                <div class="time-filters">
+                    <div class="time-filter active" data-slogan-type="general">1H</div>
+                    <div class="time-filter" data-slogan-type="general">1D</div>
+                    <div class="time-filter" data-slogan-type="general">1W</div>
+                    <div class="time-filter" data-slogan-type="general">1M</div>
+                    <div class="time-filter" data-slogan-type="general">1Y</div>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </section>
+
+        <section class="notes-section">
+            <h2 class="section-title" data-slogan-type="portfolio">Live Notes</h2>
+            <table class="notes-table">
+                <thead>
+                    <tr>
+                        <th data-slogan-type="general">Underlying</th>
+                        <th data-slogan-type="general">Note Type</th>
+                        <th data-slogan-type="general">Maturity</th>
+                        <th data-slogan-type="general">Protection Status</th>
+                        <th data-slogan-type="general">1Y Fees</th>
+                        <th data-slogan-type="general">Note Price</th>
+                        <th data-slogan-type="general">Quantity</th>
+                        <th data-slogan-type="general">Value & Change</th>
+                        <th data-slogan-type="general">Claimable Yield</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Example rows will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </section>
+
+        <section class="notes-section">
+            <h2 class="section-title">Redeemable Notes</h2>
+            <table class="notes-table">
+                <thead>
+                    <tr>
+                        <th>Underlying <img src="/images/info-icon.svg" class="info-icon" title="Token underlying the note"></th>
+                        <th>Note Type <img src="/images/info-icon.svg" class="info-icon" title="Type of note"></th>
+                        <th>Maturity <img src="/images/info-icon.svg" class="info-icon" title="Note maturity date"></th>
+                        <th>Protection Status <img src="/images/info-icon.svg" class="info-icon" title="Current protection level"></th>
+                        <th>1Y Fees <img src="/images/info-icon.svg" class="info-icon" title="Annual fees"></th>
+                        <th>Note Price <img src="/images/info-icon.svg" class="info-icon" title="Current note price"></th>
+                        <th>Quantity <img src="/images/info-icon.svg" class="info-icon" title="Number of notes owned"></th>
+                        <th>Value & Change <img src="/images/info-icon.svg" class="info-icon" title="Total value and change"></th>
+                        <th>Claimable Fees</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Example rows will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <!-- Include Common Footer -->
+    <div id="footer-placeholder"></div>
+
+    <script src="/js/common.js"></script>
+    <script>
+        // Load common components
+        fetch('/components/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+            });
+
+        fetch('/components/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            });
+
+        // Initialize performance chart
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+        gradient.addColorStop(0, 'rgba(255, 207, 51, 0.2)');
+        gradient.addColorStop(1, 'rgba(255, 207, 51, 0)');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Apr 1', '5', '10', '15', '20', '25', '30'],
+                datasets: [{
+                    label: 'Portfolio Value',
+                    data: [5000, 5200, 5100, 5300, 5800, 6200, 6500],
+                    borderColor: '#FFCF33',
+                    backgroundColor: gradient,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.5)'
+                        }
+                    },
+                    y: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.5)'
+                        }
+                    }
+                },
+                elements: {
+                    point: {
+                        radius: 0
+                    }
+                }
+            }
+        });
+
+        // Populate tables with example data
+        const liveNotesData = [
+            {
+                token: 'XYZ',
+                type: 'LQ',
+                maturity: 'Apr 10, 25',
+                protection: 5.6,
+                fees: 20,
+                price: 5.35,
+                quantity: 2000,
+                value: 10700,
+                change: 7.0,
+                changeAmount: 708,
+                hasClaimable: true
+            },
+            {
+                token: 'ARB',
+                type: 'LQ',
+                maturity: 'Apr 29, 25',
+                protection: 5.2,
+                fees: 25,
+                price: 5.30,
+                quantity: 20,
+                value: 106,
+                change: 1.2,
+                changeAmount: 1.235,
+                hasClaimable: true
+            },
+            {
+                token: 'OP',
+                type: 'IC',
+                maturity: 'Apr 29, 25',
+                protection: 3.0,
+                fees: 300,
+                price: 2.7,
+                quantity: 50,
+                value: 135,
+                change: -9.1,
+                changeAmount: -12.30,
+                hasClaimable: false
+            }
+        ];
+
+        function createNoteRow(note) {
+            return `
+                <tr>
+                    <td>
+                        <div class="token-cell">
+                            <div class="token-icon">${note.token}</div>
+                            <span>${note.token}</span>
+                        </div>
+                    </td>
+                    <td><span class="note-type-badge">${note.type}</span></td>
+                    <td>${note.maturity}</td>
+                    <td>
+                        <div class="protection-bar">
+                            <div class="protection-fill" style="width: ${(note.protection/10)*100}%"></div>
+                        </div>
+                        <div>${note.protection} USDC</div>
+                    </td>
+                    <td>${note.fees}%</td>
+                    <td>${note.price} Ⓤ</td>
+                    <td>${note.quantity}</td>
+                    <td>
+                        <div class="value-change ${note.change >= 0 ? 'positive' : 'negative'}">
+                            <div>${note.value} Ⓤ</div>
+                            <div>${note.change >= 0 ? '+' : ''}${note.changeAmount}$ (${note.change}%)</div>
+                        </div>
+                    </td>
+                    <td>
+                        ${note.hasClaimable ? 
+                            '<a href="#" class="view-button">View <span class="badge">1</span></a>' : 
+                            '—'
+                        }
+                    </td>
+                </tr>
+            `;
+        }
+
+        document.querySelector('.notes-table tbody').innerHTML = 
+            liveNotesData.map(note => createNoteRow(note)).join('');
+
+        // Add event listeners for tabs and filters
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelector('.tab.active').classList.remove('active');
+                tab.classList.add('active');
+            });
+        });
+
+        document.querySelectorAll('.time-filter').forEach(filter => {
+            filter.addEventListener('click', () => {
+                document.querySelector('.time-filter.active').classList.remove('active');
+                filter.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,18 @@
+{
+  "name": "auction-platform",
+  "version": "1.0.0",
+  "description": "Auction Platform",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest",
+    "test:custom": "node countdown-test.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}

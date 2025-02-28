@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Round English Auction - Exchequer Finance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <style>
+        /* Custom styles for auction2.html */
+        .auction-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .auction-header {
+            margin-bottom: 2rem;
+        }
+        
+        .auction-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .auction-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Tab interface styles */
+        .tab-container {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-weight: 500;
+            white-space: nowrap;
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            background-color: #f8f9fa;
+            transition: all 0.2s ease;
+        }
+        
+        .tab.active {
+            background-color: var(--primary);
+            color: #000;
+            border-color: var(--primary);
+        }
+        
+        .tab.completed {
+            background-color: #e9ecef;
+        }
+        
+        .tab.current {
+            background-color: var(--primary);
+            color: #000;
+        }
+        
+        .tab.future {
+            background-color: #e9ecef;
+            color: #adb5bd;
+            cursor: not-allowed;
+        }
+        
+        .tab-info {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+        }
+        
+        .tab-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .tab-info-item i {
+            font-size: 1rem;
+        }
+        
+        /* Tab content styles */
+        .tab-content {
+            display: none;
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Chart container */
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            margin-bottom: 2rem;
+        }
+        
+        /* Countdown styles */
+        .countdown-container {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .countdown-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .countdown-timer {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        
+        /* Grid layout for components */
+        .auction-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .auction-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+        }
+        
+        .auction-card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* Bid section styles */
+        .bid-tabs {
+            display: flex;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .bid-tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .bid-tab.active {
+            border-bottom: 2px solid var(--primary);
+            color: var(--primary-dark);
+        }
+        
+        .bid-content {
+            display: none;
+        }
+        
+        .bid-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .bid-button {
+            background-color: var(--primary);
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .bid-button:hover {
+            background-color: #e6b800;
+        }
+        
+        /* Transaction styles */
+        .transactions-list {
+            margin-top: 1.5rem;
+        }
+        
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 0.75rem;
+        }
+        
+        .transaction-details {
+            flex: 1;
+        }
+        
+        .transaction-round {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .transaction-main {
+            font-weight: 600;
+        }
+        
+        .transaction-status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .transaction-status.pending {
+            background-color: #ffeeba;
+            color: #856404;
+        }
+        
+        .transaction-status.won {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .transaction-status.lost {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .transaction-actions {
+            margin-left: 1rem;
+        }
+        
+        .cancel-button {
+            background: none;
+            border: 1px solid #dc3545;
+            color: #dc3545;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        /* Portfolio styles */
+        .portfolio-summary {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        .portfolio-summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .portfolio-summary-label {
+            font-weight: 500;
+        }
+        
+        .portfolio-pnl {
+            font-weight: 600;
+        }
+        
+        .portfolio-pnl.positive {
+            color: #28a745;
+        }
+        
+        .portfolio-pnl.negative {
+            color: #dc3545;
+        }
+        
+        /* Chart Legend */
+        .chart-legend {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            margin-right: 0.5rem;
+        }
+        
+        .legend-text {
+            font-size: 0.9rem;
+        }
+        
+        /* Icons */
+        .icon {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 4px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .auction-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Component -->
+    <site-header></site-header>
+
+    <main class="auction-container">
+        <div class="auction-header">
+            <h1 class="auction-title">Multi-Round English Auction</h1>
+            <p class="auction-subtitle">A 6-round auction with 12 hours per round. Buy and sell tokens between rounds.</p>
+        </div>
+        
+        <!-- Tabbed Interface for Round Navigation -->
+        <div class="tab-container">
+            <div class="tabs">
+                <!-- Auction Overview Tab -->
+                <div class="tab" data-tab="overview">
+                    Auction Overview
+                    <div class="tab-info">
+                        <div class="tab-info-item" title="Average clearing price across all rounds">
+                            <i class="icon">💰</i> $1.51
+                        </div>
+                        <div class="tab-info-item" title="Total money raised">
+                            <i class="icon">💵</i> $906,000
+                        </div>
+                        <div class="tab-info-item" title="Total tokens to be sold">
+                            <i class="icon">🪙</i> 600,000
+                        </div>
+                        <div class="tab-info-item" title="Tokens remaining">
+                            <i class="icon">⏳</i> 388,000
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Round 1 Tab (Completed) -->
+                <div class="tab completed" data-tab="round1">
+                    Round 1 (Completed)
+                    <div class="tab-info">
+                        <div class="tab-info-item" title="Reserve price">
+                            <i class="icon">🔍</i> $1.00
+                        </div>
+                        <div class="tab-info-item" title="Clearing price">
+                            <i class="icon">💲</i> $1.33
+                        </div>
+                        <div class="tab-info-item" title="Tokens available">
+                            <i class="icon">🪙</i> 100,000
+                        </div>
+                        <div class="tab-info-item" title="Round duration">
+                            <i class="icon">⏱️</i> 12h
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Round 2 Tab (Completed) -->
+                <div class="tab completed" data-tab="round2">
+                    Round 2 (Completed)
+                    <div class="tab-info">
+                        <div class="tab-info-item" title="Reserve price">
+                            <i class="icon">🔍</i> $1.00
+                        </div>
+                        <div class="tab-info-item" title="Clearing price">
+                            <i class="icon">💲</i> $1.45
+                        </div>
+                        <div class="tab-info-item" title="Tokens available">
+                            <i class="icon">🪙</i> 112,000
+                        </div>
+                        <div class="tab-info-item" title="Round duration">
+                            <i class="icon">⏱️</i> 12h
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Round 3 Tab (Current) -->
+                <div class="tab current active" data-tab="round3">
+                    Round 3 (Current)
+                    <div class="tab-info">
+                        <div class="tab-info-item" title="Reserve price">
+                            <i class="icon">🔍</i> $1.25
+                        </div>
+                        <div class="tab-info-item" title="Current price">
+                            <i class="icon">💲</i> $1.75
+                        </div>
+                        <div class="tab-info-item" title="Tokens available">
+                            <i class="icon">🪙</i> 112,000
+                        </div>
+                        <div class="tab-info-item" title="Round duration">
+                            <i class="icon">⏱️</i> 12h
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Round 4 Tab (Future) -->
+                <div class="tab future" data-tab="round4">
+                    Round 4 (Upcoming)
+                    <div class="tab-info">
+                        <div class="tab-info-item" title="Reserve price">
+                            <i class="icon">🔍</i> $1.25
+                        </div>
+                        <div class="tab-info-item" title="Clearing price">
+                            <i class="icon">💲</i> TBD
+                        </div>
+                        <div class="tab-info-item" title="Tokens available">
+                            <i class="icon">🪙</i> 100,000
+                        </div>
+                        <div class="tab-info-item" title="Round duration">
+                            <i class="icon">⏱️</i> 12h
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Round 5 Tab (Future) -->
+                <div class="tab future" data-tab="round5">
+                    Round 5 (Upcoming)
+                    <div class="tab-info">
+                        <div class="tab-info-item" title="Reserve price">
+                            <i class="icon">🔍</i> $1.50
+                        </div>
+                        <div class="tab-info-item" title="Clearing price">
+                            <i class="icon">💲</i> TBD
+                        </div>
+                        <div class="tab-info-item" title="Tokens available">
+                            <i class="icon">🪙</i> 100,000
+                        </div>
+                        <div class="tab-info-item" title="Round duration">
+                            <i class="icon">⏱️</i> 12h
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Round 6 Tab (Future) -->
+                <div class="tab future" data-tab="round6">
+                    Round 6 (Upcoming)
+                    <div class="tab-info">
+                        <div class="tab-info-item" title="Reserve price">
+                            <i class="icon">🔍</i> $1.50
+                        </div>
+                        <div class="tab-info-item" title="Clearing price">
+                            <i class="icon">💲</i> TBD
+                        </div>
+                        <div class="tab-info-item" title="Tokens available">
+                            <i class="icon">🪙</i> 100,000
+                        </div>
+                        <div class="tab-info-item" title="Round duration">
+                            <i class="icon">⏱️</i> 12h
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Countdown Timer for current round -->
+        <div class="countdown-container">
+            <h3 class="countdown-title">Round 3 Ends In:</h3>
+            <div class="countdown-timer" id="round-countdown">07:45:32</div>
+        </div>
+        
+        <!-- Tab Contents for Each Round -->
+        <div class="tab-content active" id="round3-content">
+            <h2>Round 3 Demand Graph</h2>
+            <div class="chart-container">
+                <canvas id="round3Chart"></canvas>
+            </div>
+            <div class="chart-legend">
+                <h4>Legend:</h4>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgba(0, 123, 255, 0.5);"></div>
+                    <div class="legend-text">Normal: Token quantity allocated for this round</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgba(255, 193, 7, 0.5);"></div>
+                    <div class="legend-text">Prior Round: Additional supply from resold tokens</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgba(40, 167, 69, 0.5);"></div>
+                    <div class="legend-text">Future Round: Additional supply from future rounds</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgba(220, 53, 69, 0.5);"></div>
+                    <div class="legend-text">Not Cleared: Bids below clearing price not settled</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="round2-content">
+            <h2>Round 2 Demand Graph</h2>
+            <div class="chart-container">
+                <canvas id="round2Chart"></canvas>
+            </div>
+            <div class="chart-legend">
+                <h4>Legend:</h4>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgba(0, 123, 255, 0.5);"></div>
+                    <div class="legend-text">Normal: Token quantity allocated for this round</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgba(255, 193, 7, 0.5);"></div>
+                    <div class="legend-text">Prior Round: Additional supply from resold tokens</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgba(40, 167, 69, 0.5);"></div>
+                    <div class="legend-text">Future Round: Additional supply from future rounds</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgba(220, 53, 69, 0.5);"></div>
+                    <div class="legend-text">Not Cleared: Bids below clearing price not settled</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="round1-content">
+            <h2>Round 1 Demand Graph</h2>
+            <div class="chart-container">
+                <canvas id="round1Chart"></canvas>
+            </div>
+            <div class="chart-legend">
+                <h4>Legend:</h4>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgba(0, 123, 255, 0.5);"></div>
+                    <div class="legend-text">Normal: Token quantity allocated for this round</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgba(255, 193, 7, 0.5);"></div>
+                    <div class="legend-text">Prior Round: Additional supply from resold tokens</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgba(40, 167, 69, 0.5);"></div>
+                    <div class="legend-text">Future Round: Additional supply from future rounds</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgba(220, 53, 69, 0.5);"></div>
+                    <div class="legend-text">Not Cleared: Bids below clearing price not settled</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="overview-content">
+            <h2>Auction Overview</h2>
+            <div class="countdown-container">
+                <h3 class="countdown-title">Auction Ends In:</h3>
+                <div class="countdown-timer" id="auction-countdown">47:45:32</div>
+            </div>
+            <div class="chart-container">
+                <canvas id="overviewChart"></canvas>
+            </div>
+            <div class="chart-legend">
+                <h4>Legend:</h4>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgba(75, 192, 192, 1);"></div>
+                    <div class="legend-text">Round 3 (Current): Solid line</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgba(153, 102, 255, 0.7);"></div>
+                    <div class="legend-text">Round 2: Dashed line</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgba(255, 159, 64, 0.7);"></div>
+                    <div class="legend-text">Round 1: Dashed line</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgba(54, 162, 235, 0.4);"></div>
+                    <div class="legend-text">Future Rounds (4-6): Dashed lines (faded)</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgba(0, 123, 255, 0.5);"></div>
+                    <div class="legend-text">Base Supply</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgba(255, 193, 7, 0.5);"></div>
+                    <div class="legend-text">Reserve Bank Supply</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: rgba(40, 167, 69, 0.5);"></div>
+                    <div class="legend-text">Borrowed from Future Rounds</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bid and Portfolio Grid Layout -->
+        <div class="auction-grid">
+            <!-- Bid for Notes Section -->
+            <div class="auction-card">
+                <div class="auction-card-title">
+                    <span>Bid for Notes</span>
+                    <span class="reserve-price">Current Reserve Price: $1.25</span>
+                </div>
+                
+                <p class="bid-instructions">Everyone in the same round pays the same clearing price. Early bids get discounts.</p>
+                
+                <!-- Bid Tabs -->
+                <div class="bid-tabs">
+                    <div class="bid-tab active" data-bid-tab="simple">Simple Bid</div>
+                    <div class="bid-tab" data-bid-tab="advanced">Advanced Bid</div>
+                </div>
+                
+                <!-- Simple Bid Content -->
+                <div class="bid-content active" id="simple-bid">
+                    <form id="simpleBidForm">
+                        <div class="form-group">
+                            <label for="bidAmount" class="form-label">Total Bid Amount (USDC)</label>
+                            <input type="number" id="bidAmount" class="form-input" placeholder="Enter amount" min="1" step="1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="maxPrice" class="form-label">Maximum Price Per Token ($)</label>
+                            <input type="number" id="maxPrice" class="form-input" placeholder="Enter max price" min="1.25" step="0.01" value="1.75">
+                        </div>
+                        
+                        <div class="early-bid-discount">
+                            <h4>Early Bid Discount Calculator</h4>
+                            <p>By bidding now, you save approximately <span class="discount-amount">5%</span> compared to later bids.</p>
+                            <p>Estimated tokens at current price: <span id="estimatedTokens">0</span></p>
+                        </div>
+                        
+                        <button type="submit" class="bid-button">Place Bid</button>
+                    </form>
+                    
+                    <div id="simpleBidsList" class="transactions-list">
+                        <!-- Simple bids will appear here -->
+                    </div>
+                </div>
+                
+                <!-- Advanced Bid Content -->
+                <div class="bid-content" id="advanced-bid">
+                    <form id="advancedBidForm">
+                        <div class="form-group">
+                            <label for="bidPrice" class="form-label">Price Per Token ($)</label>
+                            <input type="number" id="bidPrice" class="form-input" placeholder="Enter price" min="1.25" step="0.01" value="1.75">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bidQuantity" class="form-label">Quantity of Tokens</label>
+                            <input type="number" id="bidQuantity" class="form-input" placeholder="Enter quantity" min="1" step="1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bidRound" class="form-label">Round</label>
+                            <select id="bidRound" class="form-input">
+                                <option value="3" selected>Round 3 (Current)</option>
+                                <option value="4">Round 4</option>
+                                <option value="5">Round 5</option>
+                                <option value="6">Round 6</option>
+                            </select>
+                        </div>
+                        
+                        <div class="advanced-bid-info">
+                            <p>Total Bid Amount: $<span id="totalBidAmount">0.00</span></p>
+                        </div>
+                        
+                        <button type="submit" class="bid-button">Place Advanced Bid</button>
+                    </form>
+                </div>
+                
+                <!-- Transaction History -->
+                <div class="transaction-history">
+                    <h3>Transaction History</h3>
+                    <div id="transactionsList" class="transactions-list">
+                        <!-- Dummy Transaction for Round 1 (Won) -->
+                        <div class="transaction-item" data-id="tx1">
+                            <div class="transaction-details">
+                                <div class="transaction-round">Round 1</div>
+                                <div class="transaction-main">1,000 tokens at $1.33</div>
+                                <div class="transaction-total">Total: $1,330.00</div>
+                            </div>
+                            <div class="transaction-status won">WON</div>
+                        </div>
+                        
+                        <!-- Dummy Transaction for Round 2 (Won) -->
+                        <div class="transaction-item" data-id="tx2">
+                            <div class="transaction-details">
+                                <div class="transaction-round">Round 2</div>
+                                <div class="transaction-main">2,000 tokens at $1.45</div>
+                                <div class="transaction-total">Total: $2,900.00</div>
+                            </div>
+                            <div class="transaction-status won">WON</div>
+                        </div>
+                        
+                        <!-- Pending Transaction for Round 3 -->
+                        <div class="transaction-item" data-id="tx3">
+                            <div class="transaction-details">
+                                <div class="transaction-round">Round 3</div>
+                                <div class="transaction-main">1,500 tokens at current price $1.75</div>
+                                <div class="transaction-total">Total: $2,625.00</div>
+                                <div class="execution-time" id="countdown-tx3">05:32:18</div>
+                            </div>
+                            <div class="transaction-status pending">PENDING</div>
+                            <div class="transaction-actions">
+                                <button class="cancel-button">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Portfolio Section -->
+            <div class="auction-card">
+                <div class="auction-card-title">Portfolio</div>
+                
+                <!-- Portfolio Summary -->
+                <div class="portfolio-summary">
+                    <div class="portfolio-summary-item">
+                        <div class="portfolio-summary-label">Total Tokens Won:</div>
+                        <div class="portfolio-summary-value">3,000</div>
+                    </div>
+                    <div class="portfolio-summary-item">
+                        <div class="portfolio-summary-label">Average Purchase Price:</div>
+                        <div class="portfolio-summary-value">$1.41</div>
+                    </div>
+                    <div class="portfolio-summary-item">
+                        <div class="portfolio-summary-label">Current Value (at $1.75):</div>
+                        <div class="portfolio-summary-value">$5,250.00</div>
+                    </div>
+                    <div class="portfolio-summary-item">
+                        <div class="portfolio-summary-label">Profit/Loss:</div>
+                        <div class="portfolio-pnl positive">+$1,020.00 (+24.1%)</div>
+                    </div>
+                </div>
+                
+                <!-- Sell Interface -->
+                <div class="sell-interface">
+                    <h3>Sell Tokens</h3>
+                    
+                    <form id="sellForm">
+                        <div class="form-group">
+                            <label for="sellAmount" class="form-label">Amount to Sell</label>
+                            <input type="number" id="sellAmount" class="form-input" placeholder="Enter amount" min="1" max="3000" step="1">
+                        </div>
+                        
+                        <div class="sell-estimate">
+                            <p>Estimated proceeds at current price ($1.75): $<span id="sellProceeds">0.00</span></p>
+                            <p>Probability of successful sale: <span id="sellProbability">95%</span></p>
+                        </div>
+                        
+                        <button type="submit" class="bid-button">Sell Tokens</button>
+                    </form>
+                </div>
+                
+                <!-- Sell Transactions -->
+                <div class="sell-transactions">
+                    <h3>Sell Transactions</h3>
+                    <div id="sellTransactionsList" class="transactions-list">
+                        <!-- Pending Sell Transaction -->
+                        <div class="transaction-item" data-id="sell1">
+                            <div class="transaction-details">
+                                <div class="transaction-round">Round 3 - Sell</div>
+                                <div class="transaction-main">500 tokens at $1.75</div>
+                                <div class="transaction-total">Expected proceeds: $875.00</div>
+                                <div class="execution-time" id="countdown-sell1">02:15:43</div>
+                            </div>
+                            <div class="transaction-status pending">PENDING</div>
+                            <div class="transaction-actions">
+                                <button class="cancel-button">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Component -->
+    <site-footer></site-footer>
+
+    <!-- JavaScript -->
+    <script src="/components/Header.js"></script>
+    <script src="/components/Footer.js"></script>
+    <script src="/countdown.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab navigation
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    if (this.classList.contains('future')) return; // Prevent clicking on future rounds
+                    
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide all tab contents
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Show the corresponding tab content
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-content`).classList.add('active');
+                });
+            });
+            
+            // Bid tabs navigation
+            const bidTabs = document.querySelectorAll('.bid-tab');
+            const bidContents = document.querySelectorAll('.bid-content');
+            
+            bidTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    bidTabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide all tab contents
+                    bidContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Show the corresponding tab content
+                    const tabId = this.getAttribute('data-bid-tab');
+                    document.getElementById(`${tabId}-bid`).classList.add('active');
+                });
+            });
+            
+            // Simple bid form handling
+            const simpleBidForm = document.getElementById('simpleBidForm');
+            const bidAmount = document.getElementById('bidAmount');
+            const maxPrice = document.getElementById('maxPrice');
+            const estimatedTokens = document.getElementById('estimatedTokens');
+            
+            if (bidAmount && maxPrice && estimatedTokens) {
+                const updateEstimatedTokens = function() {
+                    const amount = parseFloat(bidAmount.value) || 0;
+                    const price = parseFloat(maxPrice.value) || 1.75;
+                    estimatedTokens.textContent = Math.floor(amount / price).toLocaleString();
+                };
+                
+                bidAmount.addEventListener('input', updateEstimatedTokens);
+                maxPrice.addEventListener('input', updateEstimatedTokens);
+                
+                simpleBidForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const amount = parseFloat(bidAmount.value);
+                    const price = parseFloat(maxPrice.value);
+                    
+                    if (!amount || !price) {
+                        alert('Please enter valid values for amount and price.');
+                        return;
+                    }
+                    
+                    const quantity = Math.floor(amount / price);
+                    
+                    // Create a new transaction
+                    const transaction = {
+                        id: 'tx' + Date.now(),
+                        round: 3,
+                        quantity: quantity,
+                        price: price,
+                        total: amount,
+                        status: 'pending',
+                        executionTime: Date.now() + 4 * 60 * 60 * 1000 // 4 hours from now
+                    };
+                    
+                    // Add to transactions list
+                    const transactionsList = document.getElementById('transactionsList');
+                    const transactionElement = document.createElement('div');
+                    transactionElement.className = 'transaction-item';
+                    transactionElement.setAttribute('data-id', transaction.id);
+                    transactionElement.innerHTML = `
+                        <div class="transaction-details">
+                            <div class="transaction-round">Round ${transaction.round}</div>
+                            <div class="transaction-main">${transaction.quantity.toLocaleString()} tokens at current price $${transaction.price.toFixed(2)}</div>
+                            <div class="transaction-total">Total: $${transaction.total.toFixed(2)}</div>
+                            <div class="execution-time" id="countdown-${transaction.id}">Processing...</div>
+                        </div>
+                        <div class="transaction-status pending">PENDING</div>
+                        <div class="transaction-actions">
+                            <button class="cancel-button">Cancel</button>
+                        </div>
+                    `;
+                    
+                    transactionsList.prepend(transactionElement);
+                    
+                    // Add cancel functionality
+                    transactionElement.querySelector('.cancel-button').addEventListener('click', function() {
+                        transactionElement.remove();
+                    });
+                    
+                    // Start countdown
+                    updateCountdown(transaction);
+                    
+                    // Reset form
+                    simpleBidForm.reset();
+                    estimatedTokens.textContent = '0';
+                });
+            }
+            
+            // Advanced bid form handling
+            const advancedBidForm = document.getElementById('advancedBidForm');
+            const bidPrice = document.getElementById('bidPrice');
+            const bidQuantity = document.getElementById('bidQuantity');
+            const bidRound = document.getElementById('bidRound');
+            const totalBidAmount = document.getElementById('totalBidAmount');
+            
+            if (bidPrice && bidQuantity && totalBidAmount) {
+                const updateTotalBid = function() {
+                    const price = parseFloat(bidPrice.value) || 0;
+                    const quantity = parseFloat(bidQuantity.value) || 0;
+                    totalBidAmount.textContent = (price * quantity).toFixed(2);
+                };
+                
+                bidPrice.addEventListener('input', updateTotalBid);
+                bidQuantity.addEventListener('input', updateTotalBid);
+                
+                advancedBidForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const price = parseFloat(bidPrice.value);
+                    const quantity = parseFloat(bidQuantity.value);
+                    const round = parseInt(bidRound.value);
+                    
+                    if (!price || !quantity || !round) {
+                        alert('Please enter valid values for price, quantity, and round.');
+                        return;
+                    }
+                    
+                    // Create a new transaction
+                    const transaction = {
+                        id: 'adv' + Date.now(),
+                        round: round,
+                        quantity: quantity,
+                        price: price,
+                        total: price * quantity,
+                        status: 'pending',
+                        executionTime: Date.now() + 4 * 60 * 60 * 1000 // 4 hours from now
+                    };
+                    
+                    // Add to transactions list
+                    const transactionsList = document.getElementById('transactionsList');
+                    const transactionElement = document.createElement('div');
+                    transactionElement.className = 'transaction-item';
+                    transactionElement.setAttribute('data-id', transaction.id);
+                    transactionElement.innerHTML = `
+                        <div class="transaction-details">
+                            <div class="transaction-round">Round ${transaction.round}</div>
+                            <div class="transaction-main">${transaction.quantity.toLocaleString()} tokens at $${transaction.price.toFixed(2)}</div>
+                            <div class="transaction-total">Total: $${transaction.total.toFixed(2)}</div>
+                            <div class="execution-time" id="countdown-${transaction.id}">Processing...</div>
+                        </div>
+                        <div class="transaction-status pending">PENDING</div>
+                        <div class="transaction-actions">
+                            <button class="cancel-button">Cancel</button>
+                        </div>
+                    `;
+                    
+                    transactionsList.prepend(transactionElement);
+                    
+                    // Add cancel functionality
+                    transactionElement.querySelector('.cancel-button').addEventListener('click', function() {
+                        transactionElement.remove();
+                    });
+                    
+                    // Start countdown
+                    updateCountdown(transaction);
+                    
+                    // Reset form
+                    advancedBidForm.reset();
+                    totalBidAmount.textContent = '0.00';
+                });
+            }
+            
+            // Sell form handling
+            const sellForm = document.getElementById('sellForm');
+            const sellAmount = document.getElementById('sellAmount');
+            const sellProceeds = document.getElementById('sellProceeds');
+            
+            if (sellAmount && sellProceeds) {
+                sellAmount.addEventListener('input', function() {
+                    const amount = parseFloat(sellAmount.value) || 0;
+                    sellProceeds.textContent = (amount * 1.75).toFixed(2);
+                });
+                
+                sellForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const amount = parseFloat(sellAmount.value);
+                    
+                    if (!amount) {
+                        alert('Please enter a valid amount to sell.');
+                        return;
+                    }
+                    
+                    // Create a new sell transaction
+                    const transaction = {
+                        id: 'sell' + Date.now(),
+                        round: 3,
+                        quantity: amount,
+                        price: 1.75,
+                        total: amount * 1.75,
+                        status: 'pending',
+                        executionTime: Date.now() + 2 * 60 * 60 * 1000 // 2 hours from now
+                    };
+                    
+                    // Add to sell transactions list
+                    const sellTransactionsList = document.getElementById('sellTransactionsList');
+                    const transactionElement = document.createElement('div');
+                    transactionElement.className = 'transaction-item';
+                    transactionElement.setAttribute('data-id', transaction.id);
+                    transactionElement.innerHTML = `
+                        <div class="transaction-details">
+                            <div class="transaction-round">Round ${transaction.round} - Sell</div>
+                            <div class="transaction-main">${transaction.quantity.toLocaleString()} tokens at $${transaction.price.toFixed(2)}</div>
+                            <div class="transaction-total">Expected proceeds: $${transaction.total.toFixed(2)}</div>
+                            <div class="execution-time" id="countdown-${transaction.id}">Processing...</div>
+                        </div>
+                        <div class="transaction-status pending">PENDING</div>
+                        <div class="transaction-actions">
+                            <button class="cancel-button">Cancel</button>
+                        </div>
+                    `;
+                    
+                    sellTransactionsList.prepend(transactionElement);
+                    
+                    // Add cancel functionality
+                    transactionElement.querySelector('.cancel-button').addEventListener('click', function() {
+                        transactionElement.remove();
+                    });
+                    
+                    // Start countdown
+                    updateCountdown(transaction);
+                    
+                    // Reset form
+                    sellForm.reset();
+                    sellProceeds.textContent = '0.00';
+                });
+            }
+            
+            // Initialize charts
+            initializeCharts();
+            
+            // Start updating existing countdowns
+            const existingTransactions = [
+                { id: 'tx3', executionTime: Date.now() + 5 * 60 * 60 * 1000 + 32 * 60 * 1000 + 18 * 1000, status: 'pending' },
+                { id: 'sell1', executionTime: Date.now() + 2 * 60 * 60 * 1000 + 15 * 60 * 1000 + 43 * 1000, status: 'pending' }
+            ];
+            
+            existingTransactions.forEach(transaction => {
+                updateCountdown(transaction);
+            });
+            
+            // Update round and auction countdowns
+            updateRoundCountdown();
+            updateAuctionCountdown();
+        });
+        
+        // Round countdown
+        function updateRoundCountdown() {
+            const countdownElement = document.getElementById('round-countdown');
+            
+            if (!countdownElement) return;
+            
+            // 7 hours, 45 minutes, and 32 seconds remaining
+            let hours = 7;
+            let minutes = 45;
+            let seconds = 32;
+            
+            const interval = setInterval(() => {
+                seconds--;
+                
+                if (seconds < 0) {
+                    seconds = 59;
+                    minutes--;
+                }
+                
+                if (minutes < 0) {
+                    minutes = 59;
+                    hours--;
+                }
+                
+                if (hours < 0) {
+                    clearInterval(interval);
+                    countdownElement.textContent = "Round Ended";
+                    return;
+                }
+                
+                countdownElement.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }, 1000);
+        }
+        
+        // Auction countdown
+        function updateAuctionCountdown() {
+            const countdownElement = document.getElementById('auction-countdown');
+            
+            if (!countdownElement) return;
+            
+            // 47 hours, 45 minutes, and 32 seconds remaining
+            let hours = 47;
+            let minutes = 45;
+            let seconds = 32;
+            
+            const interval = setInterval(() => {
+                seconds--;
+                
+                if (seconds < 0) {
+                    seconds = 59;
+                    minutes--;
+                }
+                
+                if (minutes < 0) {
+                    minutes = 59;
+                    hours--;
+                }
+                
+                if (hours < 0) {
+                    clearInterval(interval);
+                    countdownElement.textContent = "Auction Ended";
+                    return;
+                }
+                
+                countdownElement.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }, 1000);
+        }
+        
+        // Initialize charts
+        function initializeCharts() {
+            // Chart configuration for Round 3
+            const round3Chart = document.getElementById('round3Chart');
+            if (round3Chart) {
+                new Chart(round3Chart, {
+                    type: 'line',
+                    data: {
+                        labels: Array.from({length: 30}, (_, i) => i * 10000),
+                        datasets: [{
+                            label: 'Demand Curve',
+                            data: [3.00, 2.80, 2.60, 2.40, 2.20, 2.00, 1.90, 1.85, 1.80, 1.75, 1.70, 1.65, 1.60, 1.55, 1.50, 1.45, 1.40, 1.35, 1.30, 1.25, 1.20, 1.15, 1.10, 1.05, 1.00, 0.95, 0.90, 0.85, 0.80, 0.75],
+                            borderColor: 'rgb(220, 53, 69)',
+                            borderWidth: 3,
+                            tension: 0.1,
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Cumulative Demand (Tokens)'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Price ($)'
+                                },
+                                min: 0,
+                                max: 3
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Chart configuration for Round 2
+            const round2Chart = document.getElementById('round2Chart');
+            if (round2Chart) {
+                new Chart(round2Chart, {
+                    type: 'line',
+                    data: {
+                        labels: Array.from({length: 30}, (_, i) => i * 10000),
+                        datasets: [{
+                            label: 'Demand Curve',
+                            data: [2.80, 2.60, 2.40, 2.20, 2.00, 1.90, 1.80, 1.70, 1.60, 1.55, 1.50, 1.48, 1.45, 1.43, 1.40, 1.37, 1.35, 1.32, 1.30, 1.25, 1.20, 1.15, 1.10, 1.05, 1.00, 0.95, 0.90, 0.85, 0.80, 0.75],
+                            borderColor: 'rgb(220, 53, 69)',
+                            borderWidth: 3,
+                            tension: 0.1,
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Cumulative Demand (Tokens)'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Price ($)'
+                                },
+                                min: 0,
+                                max: 3
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Chart configuration for Round 1
+            const round1Chart = document.getElementById('round1Chart');
+            if (round1Chart) {
+                new Chart(round1Chart, {
+                    type: 'line',
+                    data: {
+                        labels: Array.from({length: 30}, (_, i) => i * 10000),
+                        datasets: [{
+                            label: 'Demand Curve',
+                            data: [2.50, 2.30, 2.10, 1.95, 1.80, 1.70, 1.60, 1.50, 1.45, 1.40, 1.35, 1.33, 1.30, 1.28, 1.25, 1.22, 1.20, 1.17, 1.15, 1.12, 1.10, 1.05, 1.00, 0.95, 0.90, 0.85, 0.80, 0.75, 0.70, 0.65],
+                            borderColor: 'rgb(220, 53, 69)',
+                            borderWidth: 3,
+                            tension: 0.1,
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Cumulative Demand (Tokens)'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Price ($)'
+                                },
+                                min: 0,
+                                max: 3
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Chart configuration for Overview
+            const overviewChart = document.getElementById('overviewChart');
+            if (overviewChart) {
+                new Chart(overviewChart, {
+                    type: 'line',
+                    data: {
+                        labels: Array.from({length: 30}, (_, i) => i * 10000),
+                        datasets: [
+                            {
+                                label: 'Round 3 (Current)',
+                                data: [3.00, 2.80, 2.60, 2.40, 2.20, 2.00, 1.90, 1.85, 1.80, 1.75, 1.70, 1.65, 1.60, 1.55, 1.50, 1.45, 1.40, 1.35, 1.30, 1.25, 1.20, 1.15, 1.10, 1.05, 1.00, 0.95, 0.90, 0.85, 0.80, 0.75],
+                                borderColor: 'rgb(75, 192, 192)',
+                                borderWidth: 3,
+                                tension: 0.1,
+                                fill: false
+                            },
+                            {
+                                label: 'Round 2',
+                                data: [2.80, 2.60, 2.40, 2.20, 2.00, 1.90, 1.80, 1.70, 1.60, 1.55, 1.50, 1.48, 1.45, 1.43, 1.40, 1.37, 1.35, 1.32, 1.30, 1.25, 1.20, 1.15, 1.10, 1.05, 1.00, 0.95, 0.90, 0.85, 0.80, 0.75],
+                                borderColor: 'rgb(153, 102, 255)',
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                tension: 0.1,
+                                fill: false
+                            },
+                            {
+                                label: 'Round 1',
+                                data: [2.50, 2.30, 2.10, 1.95, 1.80, 1.70, 1.60, 1.50, 1.45, 1.40, 1.35, 1.33, 1.30, 1.28, 1.25, 1.22, 1.20, 1.17, 1.15, 1.12, 1.10, 1.05, 1.00, 0.95, 0.90, 0.85, 0.80, 0.75, 0.70, 0.65],
+                                borderColor: 'rgb(255, 159, 64)',
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                tension: 0.1,
+                                fill: false
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Cumulative Demand (Tokens)'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Price ($)'
+                                },
+                                min: 0,
+                                max: 3
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html> 

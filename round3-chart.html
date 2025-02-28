@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Round 3 Chart Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .chart-container {
+            width: 800px;
+            height: 500px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Round 3 Chart Test</h1>
+    <div class="chart-container">
+        <canvas id="round3Chart"></canvas>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, creating chart...');
+            
+            const ctx = document.getElementById('round3Chart');
+            if (!ctx) {
+                console.error('Chart canvas not found');
+                return;
+            }
+            
+            console.log('Canvas found, creating chart...');
+            
+            // Round 3 data
+            const data = {
+                datasets: [{
+                    label: 'Round 3',
+                    data: [
+                        {x: 0, y: 0},
+                        {x: 50000, y: 1.0},
+                        {x: 80000, y: 1.5},
+                        {x: 120000, y: 2.0},
+                        {x: 133000, y: 2.25},
+                        {x: 150000, y: 2.5},
+                        {x: 200000, y: 3.0}
+                    ],
+                    borderColor: '#4CAF50',
+                    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                    borderWidth: 3,
+                    fill: false,
+                    tension: 0.4
+                }]
+            };
+            
+            try {
+                const chart = new Chart(ctx, {
+                    type: 'scatter',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        showLine: true,
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                position: 'bottom',
+                                title: {
+                                    display: true,
+                                    text: 'Tokens'
+                                },
+                                min: 0,
+                                max: 250000
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Price ($)'
+                                },
+                                min: 0,
+                                max: 4
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Round 3 Auction',
+                                font: {
+                                    size: 18
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                console.log('Chart created successfully');
+            } catch (error) {
+                console.error('Error creating chart:', error);
+            }
+        });
+    </script>
+</body>
+</html> 

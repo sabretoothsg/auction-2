@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Notes | Exchequer Finance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            background: #0a0b1e;
+            color: #fff;
+        }
+
+        .notes-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            padding-top: 100px; /* Add padding to account for fixed header */
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            position: relative; /* Ensure proper stacking context */
+            z-index: 1; /* Ensure button is above other content */
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .create-note-btn {
+            background: #F2C94C;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            color: #1A1A1A;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            z-index: 2;
+        }
+
+        .create-note-btn:hover {
+            background: #E6BE45;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tab {
+            padding: 0.5rem 0;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .tab.active {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #fff;
+        }
+
+        .notes-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .notes-table th {
+            text-align: left;
+            padding: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+        }
+
+        .notes-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-badge.selling {
+            background: rgba(21, 128, 61, 0.2);
+            color: #4ade80;
+        }
+
+        .status-badge.sold {
+            background: rgba(234, 179, 8, 0.2);
+            color: #fde047;
+        }
+
+        .status-badge.matured {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .status-badge::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        .status-badge.selling::before {
+            background: #4ade80;
+        }
+
+        .status-badge.sold::before {
+            background: #fde047;
+        }
+
+        .status-badge.matured::before {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .action-link {
+            color: #60a5fa;
+            text-decoration: none;
+            margin-right: 1rem;
+        }
+
+        .action-link:hover {
+            text-decoration: underline;
+        }
+
+        .note-type {
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+        }
+
+        .extend-offer {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            margin-right: 1rem;
+        }
+
+        .extend-offer:hover {
+            color: #fff;
+        }
+
+        .how-it-works {
+            margin-top: 4rem;
+        }
+
+        .how-it-works h2 {
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 2rem;
+        }
+
+        .video-placeholder {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: #0a0b1e;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 800px;
+            width: 90%;
+            position: relative;
+            color: #fff;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .modal-close:hover {
+            color: #fff;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .modal-subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 2rem;
+            font-size: 14px;
+        }
+
+        .note-types-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .note-type-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .note-type-card:hover {
+            border-color: #F2C94C;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .note-type-title {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .note-type-description {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .note-type-link {
+            color: #60a5fa;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .note-type-link:hover {
+            text-decoration: underline;
+        }
+
+        .select-button {
+            background: #F2C94C;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            color: #1A1A1A;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+
+        .select-button:hover {
+            background: #E6BE45;
+        }
+
+        @media (max-width: 768px) {
+            .note-types-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <main class="notes-container">
+        <div class="page-header">
+            <h1 class="page-title">Project Notes</h1>
+            <button class="create-note-btn" onclick="window.openNoteTypeModal()">Create new Note</button>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active">Active</div>
+            <div class="tab">Archived</div>
+        </div>
+
+        <table class="notes-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>XYZ Jan 10, 2025 LQ Note</td>
+                    <td class="note-type">LQ</td>
+                    <td><span class="status-badge selling">SELLING</span></td>
+                    <td>
+                        <a href="#" class="action-link">Whitelist</a>
+                        <a href="#" class="action-link">Details</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>XYZ Oct 10, 2024 LQ Note</td>
+                    <td class="note-type">LQ</td>
+                    <td><span class="status-badge sold">SOLD</span></td>
+                    <td>
+                        <a href="#" class="action-link">Whitelist</a>
+                        <a href="#" class="action-link">Details</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>XYZ Apr 10, 2025 LQ Note</td>
+                    <td class="note-type">LQ</td>
+                    <td><span class="status-badge matured">MATURED</span></td>
+                    <td>
+                        <a href="#" class="extend-offer">Extend Offer</a>
+                        <a href="#" class="action-link">Withdraw Funds</a>
+                        <a href="#" class="action-link">Details</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <section class="how-it-works">
+            <h2>How Exchequer works</h2>
+            <div class="video-placeholder">
+                <p>Video placeholder - Implementation not required</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Note Type Selection Modal -->
+    <div class="modal-overlay" id="noteTypeModal">
+        <div class="modal">
+            <button class="modal-close" id="closeModal">×</button>
+            <h2 class="modal-title">Select your Note type</h2>
+            <p class="modal-subtitle">Once a note type is selected it can not be changed anymore but you can always delete your Note draft and restart.</p>
+            
+            <div class="note-types-grid">
+                <div class="note-type-card">
+                    <h3 class="note-type-title">Liquidity Note</h3>
+                    <p class="note-type-description">Increase on-chain DEX liquidity TVL by protecting LPs downside risk.</p>
+                    <a href="https://exchequer.gitbook.io/exchequer-finance-docs/note-types/liquidity-note" class="note-type-link" target="_blank">
+                        Read docs <i class="bi bi-box-arrow-up-right"></i>
+                    </a>
+                    <button class="select-button" data-note-type="liquidity">Select</button>
+                </div>
+                
+                <div class="note-type-card">
+                    <h3 class="note-type-title">Convertible Note</h3>
+                    <p class="note-type-description">Raise funds for on-chain projects by protecting their long-term investors downside.</p>
+                    <a href="https://exchequer.gitbook.io/exchequer-finance-docs/note-types/convertible-note" class="note-type-link" target="_blank">
+                        Read docs <i class="bi bi-box-arrow-up-right"></i>
+                    </a>
+                    <button class="select-button" data-note-type="convertible">Select</button>
+                </div>
+                
+                <div class="note-type-card">
+                    <h3 class="note-type-title">Incentive Note</h3>
+                    <p class="note-type-description">Incentivise on-chain actions by users.</p>
+                    <a href="https://exchequer.gitbook.io/exchequer-finance-docs/note-types/incentive-note" class="note-type-link" target="_blank">
+                        Read docs <i class="bi bi-box-arrow-up-right"></i>
+                    </a>
+                    <button class="select-button" data-note-type="incentive">Select</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/common.js"></script>
+</body>
+</html> 

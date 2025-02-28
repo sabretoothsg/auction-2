@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Governance - Exchequer Finance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .governance-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .proposals-section {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .proposal-card {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .proposal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .proposal-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .proposal-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .proposal-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: var(--yellow-light);
+            color: var(--yellow);
+        }
+
+        .status-passed {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .proposal-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .vote-progress {
+            background: var(--background);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--background-dark);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+        }
+
+        .vote-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .vote-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab {
+            padding: 1rem 0;
+            color: var(--text-secondary);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .tab.active {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary);
+        }
+    </style>
+</head>
+<body class="game-theme">
+    <h1>Governance</h1>
+    <p>Coming soon...</p>
+
+    <site-header></site-header>
+
+    <main class="container">
+        <h1 class="page-title">Governance</h1>
+
+        <div class="governance-stats">
+            <div class="stat-card">
+                <div class="stat-label">Total Voting Power</div>
+                <div class="stat-value">2.5M EXQ</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Active Proposals</div>
+                <div class="stat-value">3</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Your Voting Power</div>
+                <div class="stat-value">0 EXQ</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Participation Rate</div>
+                <div class="stat-value">65.4%</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active">Active Proposals</div>
+            <div class="tab">Past Proposals</div>
+            <div class="tab">My Votes</div>
+        </div>
+
+        <section class="proposals-section">
+            <div class="section-header">
+                <h2>Active Proposals</h2>
+                <button class="btn btn-primary">Create Proposal</button>
+            </div>
+
+            <div class="proposal-card">
+                <div class="proposal-header">
+                    <div>
+                        <h3 class="proposal-title">EXP-1: Increase Note Duration Options</h3>
+                        <div class="proposal-meta">
+                            <span>By: 0x1234...5678</span>
+                            <span>Ends in 2 days</span>
+                        </div>
+                    </div>
+                    <span class="proposal-status status-active">Active</span>
+                </div>
+                <p class="proposal-description">
+                    Add 180-day and 365-day duration options for notes to provide more flexibility for long-term holders.
+                </p>
+                <div class="vote-progress">
+                    <div class="vote-stats">
+                        <span>Current Votes: 1.2M EXQ</span>
+                        <span>75% Yes / 25% No</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%"></div>
+                    </div>
+                </div>
+                <div class="vote-buttons">
+                    <button class="btn btn-primary">Vote Yes</button>
+                    <button class="btn btn-secondary">Vote No</button>
+                </div>
+            </div>
+
+            <div class="proposal-card">
+                <div class="proposal-header">
+                    <div>
+                        <h3 class="proposal-title">EXP-2: Add USDT Support</h3>
+                        <div class="proposal-meta">
+                            <span>By: 0x9876...4321</span>
+                            <span>Ends in 5 days</span>
+                        </div>
+                    </div>
+                    <span class="proposal-status status-active">Active</span>
+                </div>
+                <p class="proposal-description">
+                    Add support for USDT as a supported asset type for notes to expand market reach.
+                </p>
+                <div class="vote-progress">
+                    <div class="vote-stats">
+                        <span>Current Votes: 800K EXQ</span>
+                        <span>60% Yes / 40% No</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 60%"></div>
+                    </div>
+                </div>
+                <div class="vote-buttons">
+                    <button class="btn btn-primary">Vote Yes</button>
+                    <button class="btn btn-secondary">Vote No</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <site-footer></site-footer>
+
+    <script src="/components/Header.js"></script>
+    <script src="/components/Footer.js"></script>
+</body>
+</html> 

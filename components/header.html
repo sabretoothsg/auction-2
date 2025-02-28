@@ -1,0 +1,57 @@
+<!-- Common Header Component -->
+<header class="site-header">
+    <nav class="main-nav">
+        <div class="nav-left">
+            <a href="/" class="logo">
+                <img src="/images/logo.svg" alt="Exchequer Finance">
+            </a>
+            <div class="nav-links">
+                <a href="/pages/buy.html" class="nav-link">Buy</a>
+                <a href="/pages/portfolio.html" class="nav-link">Portfolio</a>
+                <a href="/pages/explore.html" class="nav-link">Explore</a>
+                <a href="/pages/notes.html" class="nav-link">Notes</a>
+            </div>
+        </div>
+        <div class="nav-right">
+            <button class="connect-wallet">0x7651...65x6</button>
+        </div>
+    </nav>
+</header>
+
+<!-- Note Type Selection Modal -->
+<div class="modal-overlay" id="noteTypeModal" style="display: none;">
+    <div class="modal">
+        <button class="modal-close" id="closeModal">×</button>
+        <h2 class="modal-title">Select your Note type</h2>
+        <p class="modal-subtitle">Once a note type is selected it can not be changed anymore but you can always delete your Note draft and restart.</p>
+        
+        <div class="note-types-grid">
+            <div class="note-type-card">
+                <h3 class="note-type-title">Liquidity Note</h3>
+                <p class="note-type-description">Increase on-chain DEX liquidity TVL by protecting LPs downside risk.</p>
+                <a href="https://exchequer.gitbook.io/exchequer-finance-docs/note-types/liquidity-note" class="note-type-link" target="_blank">
+                    Read docs <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+                <button class="select-button" data-note-type="liquidity">Select</button>
+            </div>
+            
+            <div class="note-type-card">
+                <h3 class="note-type-title">Convertible Note</h3>
+                <p class="note-type-description">Raise funds for on-chain projects by protecting their long-term investors downside.</p>
+                <a href="https://exchequer.gitbook.io/exchequer-finance-docs/note-types/convertible-note" class="note-type-link" target="_blank">
+                    Read docs <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+                <button class="select-button" data-note-type="convertible">Select</button>
+            </div>
+            
+            <div class="note-type-card">
+                <h3 class="note-type-title">Incentive Note</h3>
+                <p class="note-type-description">Incentivise on-chain actions by users.</p>
+                <a href="https://exchequer.gitbook.io/exchequer-finance-docs/note-types/incentive-note" class="note-type-link" target="_blank">
+                    Read docs <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+                <button class="select-button" data-note-type="incentive">Select</button>
+            </div>
+        </div>
+    </div>
+</div> 

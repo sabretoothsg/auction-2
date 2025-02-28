@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore - Exchequer Finance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .notes-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .notes-table th,
+        .notes-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .notes-table th {
+            background: var(--background);
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .notes-table tr:hover {
+            background: var(--background);
+        }
+
+        .note-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: var(--yellow-light);
+            color: var(--yellow);
+        }
+
+        .status-completed {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background: var(--white);
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+    </style>
+</head>
+<body class="game-theme">
+    <h1>Explore Exchequer Finance</h1>
+    <p>Coming soon...</p>
+
+    <site-header></site-header>
+
+    <main class="container">
+        <h1 class="page-title">Explore Notes</h1>
+
+        <section class="market-stats">
+            <div class="stat-card">
+                <div class="stat-label">Total Value Locked</div>
+                <div class="stat-value">$24.5M</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">24h Volume</div>
+                <div class="stat-value">$1.2M</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Active Notes</div>
+                <div class="stat-value">127</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Average APY</div>
+                <div class="stat-value">12.4%</div>
+            </div>
+        </section>
+
+        <section class="filters">
+            <button class="filter-btn active">All Notes</button>
+            <button class="filter-btn">Active Auctions</button>
+            <button class="filter-btn">Completed</button>
+            <button class="filter-btn">My Notes</button>
+        </section>
+
+        <section class="notes-list">
+            <table class="notes-table">
+                <thead>
+                    <tr>
+                        <th>Note ID</th>
+                        <th>Asset</th>
+                        <th>Amount</th>
+                        <th>Current Price</th>
+                        <th>APY</th>
+                        <th>Maturity</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#1234</td>
+                        <td>DAI</td>
+                        <td>100,000</td>
+                        <td>$1.42</td>
+                        <td>12.5%</td>
+                        <td>30 days</td>
+                        <td><span class="note-status status-active">Active</span></td>
+                        <td><a href="/pages/auction.html" class="btn btn-primary">Bid Now</a></td>
+                    </tr>
+                    <tr>
+                        <td>#1233</td>
+                        <td>USDC</td>
+                        <td>250,000</td>
+                        <td>$1.38</td>
+                        <td>11.8%</td>
+                        <td>60 days</td>
+                        <td><span class="note-status status-active">Active</span></td>
+                        <td><a href="/pages/auction.html" class="btn btn-primary">Bid Now</a></td>
+                    </tr>
+                    <tr>
+                        <td>#1232</td>
+                        <td>ETH</td>
+                        <td>50</td>
+                        <td>$1.45</td>
+                        <td>13.2%</td>
+                        <td>90 days</td>
+                        <td><span class="note-status status-completed">Completed</span></td>
+                        <td><button class="btn btn-secondary" disabled>Completed</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <site-footer></site-footer>
+
+    <script src="/components/Header.js"></script>
+    <script src="/components/Footer.js"></script>
+</body>
+</html> 

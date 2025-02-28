@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Exchequer Finance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-categories {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background: var(--white);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .category-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .faq-section {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .faq-answer {
+            margin-top: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            display: none;
+        }
+
+        .faq-answer.active {
+            display: block;
+        }
+
+        .search-box {
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .highlight {
+            background: var(--yellow-light);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .related-links {
+            margin-top: 1rem;
+        }
+
+        .related-links a {
+            color: var(--primary);
+            text-decoration: none;
+            margin-right: 1rem;
+        }
+
+        .related-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <site-header></site-header>
+
+    <main class="container">
+        <div class="faq-container">
+            <h1 class="page-title">Frequently Asked Questions</h1>
+
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search FAQ...">
+            </div>
+
+            <div class="faq-categories">
+                <button class="category-btn active">All</button>
+                <button class="category-btn">Getting Started</button>
+                <button class="category-btn">Notes</button>
+                <button class="category-btn">Auctions</button>
+                <button class="category-btn">Governance</button>
+                <button class="category-btn">Technical</button>
+            </div>
+
+            <section class="faq-section">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What is Exchequer Finance?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer active">
+                        <p>
+                            Exchequer Finance is a decentralized fixed income protocol that enables users to access predictable yields
+                            through note trading. The protocol uses an innovative auction mechanism to ensure fair price discovery
+                            and optimal market efficiency.
+                        </p>
+                        <div class="related-links">
+                            <a href="/docs.html">Read Documentation</a>
+                            <a href="/pages/explore.html">Explore Notes</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How do auctions work?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>
+                            Auctions in Exchequer Finance use a Dutch auction mechanism where the price starts high and gradually
+                            decreases until all tokens are sold or the reserve price is reached. Each auction runs in rounds,
+                            typically 24 hours each.
+                        </p>
+                        <div class="highlight">
+                            Key auction features:
+                            <ul>
+                                <li>Multiple rounds with decreasing prices</li>
+                                <li>Fair price discovery through market demand</li>
+                                <li>Minimum bid size requirements</li>
+                                <li>Maximum discount caps</li>
+                            </ul>
+                        </div>
+                        <div class="related-links">
+                            <a href="/pages/auction.html">View Active Auctions</a>
+                            <a href="/docs.html#auctions">Auction Documentation</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What tokens are supported?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>
+                            Currently, Exchequer Finance supports the following tokens:
+                        </p>
+                        <ul>
+                            <li>DAI</li>
+                            <li>USDC</li>
+                            <li>WETH</li>
+                            <li>WBTC</li>
+                        </ul>
+                        <p>
+                            More tokens will be added through governance proposals.
+                        </p>
+                        <div class="related-links">
+                            <a href="/pages/governance.html">View Governance</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <site-footer></site-footer>
+
+    <script src="/components/Header.js"></script>
+    <script src="/components/Footer.js"></script>
+    <script>
+        // Simple FAQ toggle functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const isActive = answer.classList.contains('active');
+                
+                // Close all answers
+                document.querySelectorAll('.faq-answer').forEach(a => {
+                    a.classList.remove('active');
+                });
+                document.querySelectorAll('.faq-question span:last-child').forEach(s => {
+                    s.textContent = '+';
+                });
+
+                // Toggle clicked answer
+                if (!isActive) {
+                    answer.classList.add('active');
+                    question.querySelector('span:last-child').textContent = '−';
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
