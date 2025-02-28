@@ -1217,14 +1217,53 @@
                     type: 'line',
                     data: {
                         labels: Array.from({length: 30}, (_, i) => i * 10000),
-                        datasets: [{
-                            label: 'Demand Curve',
-                            data: [3.00, 2.80, 2.60, 2.40, 2.20, 2.00, 1.90, 1.85, 1.80, 1.75, 1.70, 1.65, 1.60, 1.55, 1.50, 1.45, 1.40, 1.35, 1.30, 1.25, 1.20, 1.15, 1.10, 1.05, 1.00, 0.95, 0.90, 0.85, 0.80, 0.75],
-                            borderColor: 'rgb(220, 53, 69)',
-                            borderWidth: 3,
-                            tension: 0.1,
-                            fill: false
-                        }]
+                        datasets: [
+                            // Normal allocation
+                            {
+                                label: 'Normal',
+                                data: generateAreaData(3.00, 2.00, 0, 6),
+                                backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                                borderWidth: 0,
+                                fill: true,
+                                pointRadius: 0
+                            },
+                            // Prior Round allocation
+                            {
+                                label: 'Prior Round',
+                                data: generateAreaData(2.00, 1.85, 6, 8),
+                                backgroundColor: 'rgba(255, 193, 7, 0.5)',
+                                borderWidth: 0,
+                                fill: true,
+                                pointRadius: 0
+                            },
+                            // Future Round allocation
+                            {
+                                label: 'Future Round',
+                                data: generateAreaData(1.85, 1.75, 8, 10),
+                                backgroundColor: 'rgba(40, 167, 69, 0.5)',
+                                borderWidth: 0,
+                                fill: true,
+                                pointRadius: 0
+                            },
+                            // Not Cleared allocation
+                            {
+                                label: 'Not Cleared',
+                                data: generateAreaData(1.75, 0.75, 10, 30),
+                                backgroundColor: 'rgba(220, 53, 69, 0.5)',
+                                borderWidth: 0,
+                                fill: true,
+                                pointRadius: 0
+                            },
+                            // Demand Curve line
+                            {
+                                label: 'Demand Curve',
+                                data: [3.00, 2.80, 2.60, 2.40, 2.20, 2.00, 1.90, 1.85, 1.80, 1.75, 1.70, 1.65, 1.60, 1.55, 1.50, 1.45, 1.40, 1.35, 1.30, 1.25, 1.20, 1.15, 1.10, 1.05, 1.00, 0.95, 0.90, 0.85, 0.80, 0.75],
+                                borderColor: 'rgb(220, 53, 69)',
+                                borderWidth: 3,
+                                tension: 0.1,
+                                fill: false
+                            }
+                        ]
                     },
                     options: {
                         responsive: true,
@@ -1234,7 +1273,8 @@
                                 title: {
                                     display: true,
                                     text: 'Cumulative Demand (Tokens)'
-                                }
+                                },
+                                stacked: true
                             },
                             y: {
                                 title: {
@@ -1242,7 +1282,8 @@
                                     text: 'Price ($)'
                                 },
                                 min: 0,
-                                max: 3
+                                max: 3,
+                                stacked: false
                             }
                         },
                         plugins: {
@@ -1282,14 +1323,53 @@
                     type: 'line',
                     data: {
                         labels: Array.from({length: 30}, (_, i) => i * 10000),
-                        datasets: [{
-                            label: 'Demand Curve',
-                            data: [2.80, 2.60, 2.40, 2.20, 2.00, 1.90, 1.80, 1.70, 1.60, 1.55, 1.50, 1.48, 1.45, 1.43, 1.40, 1.37, 1.35, 1.32, 1.30, 1.25, 1.20, 1.15, 1.10, 1.05, 1.00, 0.95, 0.90, 0.85, 0.80, 0.75],
-                            borderColor: 'rgb(220, 53, 69)',
-                            borderWidth: 3,
-                            tension: 0.1,
-                            fill: false
-                        }]
+                        datasets: [
+                            // Normal allocation
+                            {
+                                label: 'Normal',
+                                data: generateAreaData(2.80, 1.80, 0, 7),
+                                backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                                borderWidth: 0,
+                                fill: true,
+                                pointRadius: 0
+                            },
+                            // Prior Round allocation
+                            {
+                                label: 'Prior Round',
+                                data: generateAreaData(1.80, 1.60, 7, 9),
+                                backgroundColor: 'rgba(255, 193, 7, 0.5)',
+                                borderWidth: 0,
+                                fill: true,
+                                pointRadius: 0
+                            },
+                            // Future Round allocation
+                            {
+                                label: 'Future Round',
+                                data: generateAreaData(1.60, 1.45, 9, 12),
+                                backgroundColor: 'rgba(40, 167, 69, 0.5)',
+                                borderWidth: 0,
+                                fill: true,
+                                pointRadius: 0
+                            },
+                            // Not Cleared allocation
+                            {
+                                label: 'Not Cleared',
+                                data: generateAreaData(1.45, 0.75, 12, 30),
+                                backgroundColor: 'rgba(220, 53, 69, 0.5)',
+                                borderWidth: 0,
+                                fill: true,
+                                pointRadius: 0
+                            },
+                            // Demand Curve line
+                            {
+                                label: 'Demand Curve',
+                                data: [2.80, 2.60, 2.40, 2.20, 2.00, 1.90, 1.80, 1.70, 1.60, 1.55, 1.50, 1.48, 1.45, 1.43, 1.40, 1.37, 1.35, 1.32, 1.30, 1.25, 1.20, 1.15, 1.10, 1.05, 1.00, 0.95, 0.90, 0.85, 0.80, 0.75],
+                                borderColor: 'rgb(220, 53, 69)',
+                                borderWidth: 3,
+                                tension: 0.1,
+                                fill: false
+                            }
+                        ]
                     },
                     options: {
                         responsive: true,
@@ -1299,7 +1379,8 @@
                                 title: {
                                     display: true,
                                     text: 'Cumulative Demand (Tokens)'
-                                }
+                                },
+                                stacked: true
                             },
                             y: {
                                 title: {
@@ -1307,7 +1388,8 @@
                                     text: 'Price ($)'
                                 },
                                 min: 0,
-                                max: 3
+                                max: 3,
+                                stacked: false
                             }
                         },
                         plugins: {
@@ -1347,14 +1429,53 @@
                     type: 'line',
                     data: {
                         labels: Array.from({length: 30}, (_, i) => i * 10000),
-                        datasets: [{
-                            label: 'Demand Curve',
-                            data: [2.50, 2.30, 2.10, 1.95, 1.80, 1.70, 1.60, 1.50, 1.45, 1.40, 1.35, 1.33, 1.30, 1.28, 1.25, 1.22, 1.20, 1.17, 1.15, 1.12, 1.10, 1.05, 1.00, 0.95, 0.90, 0.85, 0.80, 0.75, 0.70, 0.65],
-                            borderColor: 'rgb(220, 53, 69)',
-                            borderWidth: 3,
-                            tension: 0.1,
-                            fill: false
-                        }]
+                        datasets: [
+                            // Normal allocation
+                            {
+                                label: 'Normal',
+                                data: generateAreaData(2.50, 1.60, 0, 7),
+                                backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                                borderWidth: 0,
+                                fill: true,
+                                pointRadius: 0
+                            },
+                            // Prior Round allocation
+                            {
+                                label: 'Prior Round',
+                                data: generateAreaData(1.60, 1.45, 7, 9),
+                                backgroundColor: 'rgba(255, 193, 7, 0.5)',
+                                borderWidth: 0,
+                                fill: true,
+                                pointRadius: 0
+                            },
+                            // Future Round allocation
+                            {
+                                label: 'Future Round',
+                                data: generateAreaData(1.45, 1.33, 9, 11),
+                                backgroundColor: 'rgba(40, 167, 69, 0.5)',
+                                borderWidth: 0,
+                                fill: true,
+                                pointRadius: 0
+                            },
+                            // Not Cleared allocation
+                            {
+                                label: 'Not Cleared',
+                                data: generateAreaData(1.33, 0.65, 11, 30),
+                                backgroundColor: 'rgba(220, 53, 69, 0.5)',
+                                borderWidth: 0,
+                                fill: true,
+                                pointRadius: 0
+                            },
+                            // Demand Curve line
+                            {
+                                label: 'Demand Curve',
+                                data: [2.50, 2.30, 2.10, 1.95, 1.80, 1.70, 1.60, 1.50, 1.45, 1.40, 1.35, 1.33, 1.30, 1.28, 1.25, 1.22, 1.20, 1.17, 1.15, 1.12, 1.10, 1.05, 1.00, 0.95, 0.90, 0.85, 0.80, 0.75, 0.70, 0.65],
+                                borderColor: 'rgb(220, 53, 69)',
+                                borderWidth: 3,
+                                tension: 0.1,
+                                fill: false
+                            }
+                        ]
                     },
                     options: {
                         responsive: true,
@@ -1364,7 +1485,8 @@
                                 title: {
                                     display: true,
                                     text: 'Cumulative Demand (Tokens)'
-                                }
+                                },
+                                stacked: true
                             },
                             y: {
                                 title: {
@@ -1372,7 +1494,8 @@
                                     text: 'Price ($)'
                                 },
                                 min: 0,
-                                max: 3
+                                max: 3,
+                                stacked: false
                             }
                         },
                         plugins: {
@@ -1463,6 +1586,26 @@
                     }
                 });
             }
+        }
+        
+        // Helper function to generate data for shaded areas
+        function generateAreaData(startValue, endValue, startIndex, endIndex) {
+            const data = Array(30).fill(null);
+            
+            // Fill in the values between startIndex and endIndex
+            for (let i = startIndex; i <= endIndex; i++) {
+                if (i === startIndex) {
+                    data[i] = startValue;
+                } else if (i === endIndex) {
+                    data[i] = endValue;
+                } else {
+                    // Linear interpolation between start and end values
+                    const ratio = (i - startIndex) / (endIndex - startIndex);
+                    data[i] = startValue - (startValue - endValue) * ratio;
+                }
+            }
+            
+            return data;
         }
     </script>
 </body>
