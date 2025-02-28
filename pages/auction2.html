@@ -126,8 +126,9 @@
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            padding: 1.5rem;
+            padding: 1.25rem;
             align-self: start;
+            font-size: 0.9rem; /* Reduced font size for entire bid section */
         }
         
         /* Chart container */
@@ -173,9 +174,9 @@
         }
         
         .auction-card-title {
-            font-size: 1.25rem;
+            font-size: 1.1rem; /* Reduced from 1.25rem */
             font-weight: 600;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem; /* Reduced from 1rem */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -184,14 +185,15 @@
         /* Bid section styles */
         .bid-tabs {
             display: flex;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem; /* Reduced from 1rem */
             border-bottom: 1px solid var(--border-color);
         }
         
         .bid-tab {
-            padding: 0.5rem 1rem;
+            padding: 0.4rem 0.75rem; /* Reduced from 0.5rem 1rem */
             cursor: pointer;
             font-weight: 500;
+            font-size: 0.85rem; /* Added smaller font size */
         }
         
         .bid-tab.active {
@@ -208,21 +210,22 @@
         }
         
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem; /* Reduced from 1rem */
         }
         
         .form-label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem; /* Reduced from 0.5rem */
             font-weight: 500;
+            font-size: 0.85rem; /* Added smaller font size */
         }
         
         .form-input {
             width: 100%;
-            padding: 0.75rem;
+            padding: 0.6rem; /* Reduced from 0.75rem */
             border: 1px solid var(--border-color);
             border-radius: 4px;
-            font-size: 1rem;
+            font-size: 0.9rem; /* Reduced from 1rem */
         }
         
         .bid-button {
@@ -230,8 +233,9 @@
             color: #000;
             border: none;
             border-radius: 4px;
-            padding: 0.75rem 1.5rem;
+            padding: 0.6rem 1.25rem; /* Reduced from 0.75rem 1.5rem */
             font-weight: 600;
+            font-size: 0.9rem; /* Added smaller font size */
             cursor: pointer;
             transition: background-color 0.2s ease;
         }
@@ -240,40 +244,78 @@
             background-color: #e6b800;
         }
         
-        /* Transaction styles */
+        /* Bid instructions */
+        .bid-instructions {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        /* Early bid discount */
+        .early-bid-discount {
+            font-size: 0.8rem;
+            background-color: #f8f9fa;
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin-bottom: 0.75rem;
+        }
+
+        .early-bid-discount h4 {
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        /* Transaction styles - COMPACT REDESIGN */
         .transactions-list {
-            margin-top: 1.5rem;
+            margin-top: 1rem;
         }
         
         .transaction-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem;
+            padding: 0.5rem 0.75rem; /* Reduced padding */
             border: 1px solid var(--border-color);
             border-radius: 4px;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem; /* Reduced margin */
+            font-size: 0.8rem; /* Smaller font size */
         }
         
         .transaction-details {
             flex: 1;
+            display: flex; /* Make items display in a row */
+            align-items: center;
+            gap: 0.5rem;
         }
         
         .transaction-round {
             font-weight: 500;
-            font-size: 0.9rem;
             color: var(--text-secondary);
+            white-space: nowrap;
         }
         
         .transaction-main {
             font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .transaction-total {
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .execution-time {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
         }
         
         .transaction-status {
-            padding: 0.25rem 0.5rem;
+            padding: 0.15rem 0.35rem; /* Reduced padding */
             border-radius: 4px;
-            font-size: 0.8rem;
+            font-size: 0.7rem; /* Reduced font size */
             font-weight: 500;
+            margin-left: 0.5rem;
+            white-space: nowrap;
         }
         
         .transaction-status.pending {
@@ -292,17 +334,26 @@
         }
         
         .transaction-actions {
-            margin-left: 1rem;
+            margin-left: 0.5rem;
         }
         
         .cancel-button {
             background: none;
-            border: 1px solid #dc3545;
+            border: none;
             color: #dc3545;
-            padding: 0.25rem 0.5rem;
+            padding: 0.15rem 0.25rem;
             border-radius: 4px;
             cursor: pointer;
             font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cancel-button:before {
+            content: "×"; /* Using × as a cancel icon */
+            font-size: 1.1rem;
+            font-weight: bold;
         }
         
         /* Portfolio styles */
@@ -333,6 +384,12 @@
         
         .portfolio-pnl.negative {
             color: #dc3545;
+        }
+        
+        /* Transaction History header */
+        .transaction-history h3 {
+            font-size: 0.95rem;
+            margin: 1rem 0 0.5rem;
         }
         
         /* Auction Summary styles */
@@ -440,6 +497,40 @@
             0% { opacity: 1; }
             50% { opacity: 0.5; }
             100% { opacity: 1; }
+        }
+
+        /* New compact style for transaction icon status */
+        .transaction-status.pending:before {
+            content: "⏳";
+            margin-right: 2px;
+        }
+        
+        .transaction-status.won:before {
+            content: "✓";
+            margin-right: 2px;
+        }
+        
+        .transaction-status.lost:before {
+            content: "✗";
+            margin-right: 2px;
+        }
+
+        /* Advanced bid info */
+        .advanced-bid-info {
+            font-size: 0.8rem;
+            margin: 0.5rem 0;
+        }
+
+        /* Sell section */
+        .sell-interface h3, 
+        .sell-transactions h3 {
+            font-size: 0.95rem;
+            margin: 1rem 0 0.5rem;
+        }
+
+        .sell-estimate {
+            font-size: 0.8rem;
+            margin: 0.5rem 0;
         }
     </style>
 </head>
@@ -709,7 +800,7 @@
                                 <div class="transaction-details">
                                     <div class="transaction-round">Round 1</div>
                                     <div class="transaction-main">1,000 tokens at $1.33</div>
-                                    <div class="transaction-total">Total: $1,330.00</div>
+                                    <div class="transaction-total">$1,330.00</div>
                                 </div>
                                 <div class="transaction-status won">WON</div>
                             </div>
@@ -719,7 +810,7 @@
                                 <div class="transaction-details">
                                     <div class="transaction-round">Round 2</div>
                                     <div class="transaction-main">2,000 tokens at $1.45</div>
-                                    <div class="transaction-total">Total: $2,900.00</div>
+                                    <div class="transaction-total">$2,900.00</div>
                                 </div>
                                 <div class="transaction-status won">WON</div>
                             </div>
@@ -728,13 +819,13 @@
                             <div class="transaction-item" data-id="tx3">
                                 <div class="transaction-details">
                                     <div class="transaction-round">Round 3</div>
-                                    <div class="transaction-main">1,500 tokens at current price $1.75</div>
-                                    <div class="transaction-total">Total: $2,625.00</div>
+                                    <div class="transaction-main">1,500 tokens at $1.75</div>
+                                    <div class="transaction-total">$2,625.00</div>
                                     <div class="execution-time" id="countdown-tx3">05:32:18</div>
                                 </div>
                                 <div class="transaction-status pending">PENDING</div>
                                 <div class="transaction-actions">
-                                    <button class="cancel-button">Cancel</button>
+                                    <button class="cancel-button" title="Cancel transaction"></button>
                                 </div>
                             </div>
                         </div>
@@ -790,7 +881,7 @@
                                 <div class="transaction-details">
                                     <div class="transaction-round">Round 2</div>
                                     <div class="transaction-main">2,000 tokens at $1.45</div>
-                                    <div class="transaction-total">Total: $2,900.00</div>
+                                    <div class="transaction-total">$2,900.00</div>
                                 </div>
                                 <div class="transaction-status won">WON</div>
                             </div>
@@ -847,7 +938,7 @@
                                 <div class="transaction-details">
                                     <div class="transaction-round">Round 1</div>
                                     <div class="transaction-main">1,000 tokens at $1.33</div>
-                                    <div class="transaction-total">Total: $1,330.00</div>
+                                    <div class="transaction-total">$1,330.00</div>
                                 </div>
                                 <div class="transaction-status won">WON</div>
                             </div>
@@ -972,12 +1063,12 @@
                             <div class="transaction-details">
                                 <div class="transaction-round">Round 3 - Sell</div>
                                 <div class="transaction-main">500 tokens at $1.75</div>
-                                <div class="transaction-total">Expected proceeds: $875.00</div>
+                                <div class="transaction-total">$875.00</div>
                                 <div class="execution-time" id="countdown-sell1">02:15:43</div>
                             </div>
                             <div class="transaction-status pending">PENDING</div>
                             <div class="transaction-actions">
-                                <button class="cancel-button">Cancel</button>
+                                <button class="cancel-button" title="Cancel transaction"></button>
                             </div>
                         </div>
                     </div>
@@ -1087,13 +1178,13 @@
                     transactionElement.innerHTML = `
                         <div class="transaction-details">
                             <div class="transaction-round">Round ${transaction.round}</div>
-                            <div class="transaction-main">${transaction.quantity.toLocaleString()} tokens at current price $${transaction.price.toFixed(2)}</div>
-                            <div class="transaction-total">Total: $${transaction.total.toFixed(2)}</div>
+                            <div class="transaction-main">${transaction.quantity.toLocaleString()} tokens at $${transaction.price.toFixed(2)}</div>
+                            <div class="transaction-total">$${transaction.total.toFixed(2)}</div>
                             <div class="execution-time" id="countdown-${transaction.id}">Processing...</div>
                         </div>
                         <div class="transaction-status pending">PENDING</div>
                         <div class="transaction-actions">
-                            <button class="cancel-button">Cancel</button>
+                            <button class="cancel-button" title="Cancel transaction"></button>
                         </div>
                     `;
                     
@@ -1162,12 +1253,12 @@
                         <div class="transaction-details">
                             <div class="transaction-round">Round ${transaction.round}</div>
                             <div class="transaction-main">${transaction.quantity.toLocaleString()} tokens at $${transaction.price.toFixed(2)}</div>
-                            <div class="transaction-total">Total: $${transaction.total.toFixed(2)}</div>
+                            <div class="transaction-total">$${transaction.total.toFixed(2)}</div>
                             <div class="execution-time" id="countdown-${transaction.id}">Processing...</div>
                         </div>
                         <div class="transaction-status pending">PENDING</div>
                         <div class="transaction-actions">
-                            <button class="cancel-button">Cancel</button>
+                            <button class="cancel-button" title="Cancel transaction"></button>
                         </div>
                     `;
                     
@@ -1228,12 +1319,12 @@
                         <div class="transaction-details">
                             <div class="transaction-round">Round ${transaction.round} - Sell</div>
                             <div class="transaction-main">${transaction.quantity.toLocaleString()} tokens at $${transaction.price.toFixed(2)}</div>
-                            <div class="transaction-total">Expected proceeds: $${transaction.total.toFixed(2)}</div>
+                            <div class="transaction-total">$${transaction.total.toFixed(2)}</div>
                             <div class="execution-time" id="countdown-${transaction.id}">Processing...</div>
                         </div>
                         <div class="transaction-status pending">PENDING</div>
                         <div class="transaction-actions">
-                            <button class="cancel-button">Cancel</button>
+                            <button class="cancel-button" title="Cancel transaction"></button>
                         </div>
                     `;
                     
