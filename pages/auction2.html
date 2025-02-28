@@ -46,7 +46,7 @@
         }
         
         .tab {
-            padding: 0.75rem 1.25rem;
+            padding: 0.6rem 1rem;
             border-radius: 8px 8px 0 0;
             cursor: pointer;
             font-weight: 500;
@@ -55,6 +55,15 @@
             border-bottom: none;
             background-color: #f8f9fa;
             transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            min-width: 120px; /* Reduced minimum width for more compact tabs */
+        }
+        
+        .tab .status-icon {
+            margin-left: 5px;
+            display: inline-flex;
+            vertical-align: middle;
         }
         
         .tab.active {
@@ -83,18 +92,21 @@
             flex-wrap: wrap;
             gap: 0.5rem;
             margin-top: 0.5rem;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
         
         .tab-info-item {
             display: flex;
             align-items: center;
-            gap: 0.25rem;
-            width: calc(50% - 0.25rem); /* Two items per row with gap consideration */
+            gap: 2px;
+            width: calc(50% - 0.375rem);
+            overflow: hidden;
+            white-space: nowrap;
         }
         
         .tab-info-item i {
             font-size: 1rem;
+            flex-shrink: 0;
         }
         
         /* Tab content styles */
@@ -447,11 +459,13 @@
         
         /* Icons */
         .icon {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
             display: inline-block;
             vertical-align: middle;
-            margin-right: 4px;
+            margin-right: 6px;
+            flex-shrink: 0;
+            text-align: center;
         }
         
         /* Responsive adjustments */
@@ -475,7 +489,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            margin-left: 4px;
+            margin-left: 0;
             font-size: 0.85rem;
             font-weight: bold;
         }
@@ -544,6 +558,15 @@
             font-size: 0.95rem;
             margin: 0 0 0.75rem;
         }
+
+        /* Add a wrapper for the tab title and icon */
+        .tab-title-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 4px;
+            gap: 0;
+        }
     </style>
 </head>
 <body>
@@ -561,26 +584,28 @@
             <div class="tabs">
                 <!-- Auction Overview Tab -->
                 <div class="tab" data-tab="overview">
-                    Auction Overview
+                    <div class="tab-title-container">Auction Overview</div>
                     <div class="tab-info">
                         <div class="tab-info-item" title="Average clearing price across all rounds">
                             <i class="icon">💰</i> $1.51
                         </div>
                         <div class="tab-info-item" title="Total money raised">
-                            <i class="icon">💵</i> $906,000
+                            <i class="icon">💵</i> $906k
                         </div>
                         <div class="tab-info-item" title="Total tokens to be sold">
-                            <i class="icon">🪙</i> 600,000
+                            <i class="icon">🪙</i> 600k
                         </div>
                         <div class="tab-info-item" title="Tokens remaining">
-                            <i class="icon">⏳</i> 388,000
+                            <i class="icon">⏳</i> 388k
                         </div>
                     </div>
                 </div>
                 
                 <!-- Round 1 Tab (Completed) -->
                 <div class="tab completed" data-tab="round1">
-                    Round 1 <span class="status-icon" title="Completed">✓</span>
+                    <div class="tab-title-container">
+                        Round 1<span class="status-icon" title="Completed">✓</span>
+                    </div>
                     <div class="tab-info">
                         <div class="tab-info-item" title="Reserve price">
                             <i class="icon">🔍</i> $1.00
@@ -589,7 +614,7 @@
                             <i class="icon">💲</i> $1.33
                         </div>
                         <div class="tab-info-item" title="Tokens available">
-                            <i class="icon">🪙</i> 100,000
+                            <i class="icon">🪙</i> 100k
                         </div>
                         <div class="tab-info-item" title="Round duration">
                             <i class="icon">⏱️</i> 12h
@@ -599,7 +624,9 @@
                 
                 <!-- Round 2 Tab (Completed) -->
                 <div class="tab completed" data-tab="round2">
-                    Round 2 <span class="status-icon" title="Completed">✓</span>
+                    <div class="tab-title-container">
+                        Round 2<span class="status-icon" title="Completed">✓</span>
+                    </div>
                     <div class="tab-info">
                         <div class="tab-info-item" title="Reserve price">
                             <i class="icon">🔍</i> $1.00
@@ -608,7 +635,7 @@
                             <i class="icon">💲</i> $1.45
                         </div>
                         <div class="tab-info-item" title="Tokens available">
-                            <i class="icon">🪙</i> 112,000
+                            <i class="icon">🪙</i> 112k
                         </div>
                         <div class="tab-info-item" title="Round duration">
                             <i class="icon">⏱️</i> 12h
@@ -618,7 +645,9 @@
                 
                 <!-- Round 3 Tab (Current) -->
                 <div class="tab current active" data-tab="round3">
-                    Round 3 <span class="status-icon" title="Current Round">▶</span>
+                    <div class="tab-title-container">
+                        Round 3<span class="status-icon" title="Current Round">▶</span>
+                    </div>
                     <div class="tab-info">
                         <div class="tab-info-item" title="Reserve price">
                             <i class="icon">🔍</i> $1.25
@@ -627,7 +656,7 @@
                             <i class="icon">💲</i> $1.75
                         </div>
                         <div class="tab-info-item" title="Tokens available">
-                            <i class="icon">🪙</i> 112,000
+                            <i class="icon">🪙</i> 112k
                         </div>
                         <div class="tab-info-item" title="Round duration">
                             <i class="icon">⏱️</i> 12h
@@ -637,7 +666,9 @@
                 
                 <!-- Round 4 Tab (Future) -->
                 <div class="tab future" data-tab="round4">
-                    Round 4 <span class="status-icon" title="Upcoming Round">⏱</span>
+                    <div class="tab-title-container">
+                        Round 4<span class="status-icon" title="Upcoming Round">⏱</span>
+                    </div>
                     <div class="tab-info">
                         <div class="tab-info-item" title="Reserve price">
                             <i class="icon">🔍</i> $1.25
@@ -646,7 +677,7 @@
                             <i class="icon">💲</i> TBD
                         </div>
                         <div class="tab-info-item" title="Tokens available">
-                            <i class="icon">🪙</i> 100,000
+                            <i class="icon">🪙</i> 100k
                         </div>
                         <div class="tab-info-item" title="Round duration">
                             <i class="icon">⏱️</i> 12h
@@ -656,7 +687,9 @@
                 
                 <!-- Round 5 Tab (Future) -->
                 <div class="tab future" data-tab="round5">
-                    Round 5 <span class="status-icon" title="Upcoming Round">⏱</span>
+                    <div class="tab-title-container">
+                        Round 5<span class="status-icon" title="Upcoming Round">⏱</span>
+                    </div>
                     <div class="tab-info">
                         <div class="tab-info-item" title="Reserve price">
                             <i class="icon">🔍</i> $1.50
@@ -665,7 +698,7 @@
                             <i class="icon">💲</i> TBD
                         </div>
                         <div class="tab-info-item" title="Tokens available">
-                            <i class="icon">🪙</i> 100,000
+                            <i class="icon">🪙</i> 100k
                         </div>
                         <div class="tab-info-item" title="Round duration">
                             <i class="icon">⏱️</i> 12h
@@ -675,7 +708,9 @@
                 
                 <!-- Round 6 Tab (Future) -->
                 <div class="tab future" data-tab="round6">
-                    Round 6 <span class="status-icon" title="Upcoming Round">⏱</span>
+                    <div class="tab-title-container">
+                        Round 6<span class="status-icon" title="Upcoming Round">⏱</span>
+                    </div>
                     <div class="tab-info">
                         <div class="tab-info-item" title="Reserve price">
                             <i class="icon">🔍</i> $1.50
@@ -684,7 +719,7 @@
                             <i class="icon">💲</i> TBD
                         </div>
                         <div class="tab-info-item" title="Tokens available">
-                            <i class="icon">🪙</i> 100,000
+                            <i class="icon">🪙</i> 100k
                         </div>
                         <div class="tab-info-item" title="Round duration">
                             <i class="icon">⏱️</i> 12h
@@ -825,8 +860,8 @@
                             <div class="transaction-item" data-id="tx1">
                                 <div class="transaction-details">
                                     <div class="transaction-round">Round 1</div>
-                                    <div class="transaction-main">1,000 tokens at $1.33</div>
-                                    <div class="transaction-total">$1,330.00</div>
+                                    <div class="transaction-main">1k tokens at $1.33</div>
+                                    <div class="transaction-total">$1.33k</div>
                                 </div>
                                 <div class="transaction-status won">WON</div>
                             </div>
@@ -835,8 +870,8 @@
                             <div class="transaction-item" data-id="tx2">
                                 <div class="transaction-details">
                                     <div class="transaction-round">Round 2</div>
-                                    <div class="transaction-main">2,000 tokens at $1.45</div>
-                                    <div class="transaction-total">$2,900.00</div>
+                                    <div class="transaction-main">2k tokens at $1.45</div>
+                                    <div class="transaction-total">$2.90k</div>
                                 </div>
                                 <div class="transaction-status won">WON</div>
                             </div>
@@ -845,8 +880,8 @@
                             <div class="transaction-item" data-id="tx3">
                                 <div class="transaction-details">
                                     <div class="transaction-round">Round 3</div>
-                                    <div class="transaction-main">1,500 tokens at $1.75</div>
-                                    <div class="transaction-total">$2,625.00</div>
+                                    <div class="transaction-main">1.5k tokens at $1.75</div>
+                                    <div class="transaction-total">$2.63k</div>
                                     <div class="execution-time" id="countdown-tx3">05:32:18</div>
                                 </div>
                                 <div class="transaction-status pending">PENDING</div>
@@ -906,8 +941,8 @@
                             <div class="transaction-item" data-id="tx2">
                                 <div class="transaction-details">
                                     <div class="transaction-round">Round 2</div>
-                                    <div class="transaction-main">2,000 tokens at $1.45</div>
-                                    <div class="transaction-total">$2,900.00</div>
+                                    <div class="transaction-main">2k tokens at $1.45</div>
+                                    <div class="transaction-total">$2.90k</div>
                                 </div>
                                 <div class="transaction-status won">WON</div>
                             </div>
@@ -963,8 +998,8 @@
                             <div class="transaction-item" data-id="tx1">
                                 <div class="transaction-details">
                                     <div class="transaction-round">Round 1</div>
-                                    <div class="transaction-main">1,000 tokens at $1.33</div>
-                                    <div class="transaction-total">$1,330.00</div>
+                                    <div class="transaction-main">1k tokens at $1.33</div>
+                                    <div class="transaction-total">$1.33k</div>
                                 </div>
                                 <div class="transaction-status won">WON</div>
                             </div>
@@ -1012,11 +1047,11 @@
                     <div class="auction-summary">
                         <div class="summary-item">
                             <div class="summary-label">Total Tokens:</div>
-                            <div class="summary-value">600,000</div>
+                            <div class="summary-value">600k</div>
                         </div>
                         <div class="summary-item">
                             <div class="summary-label">Tokens Sold:</div>
-                            <div class="summary-value">212,000</div>
+                            <div class="summary-value">212k</div>
                         </div>
                         <div class="summary-item">
                             <div class="summary-label">Avg. Price:</div>
@@ -1024,11 +1059,11 @@
                         </div>
                         <div class="summary-item">
                             <div class="summary-label">Total Raised:</div>
-                            <div class="summary-value">$906,000</div>
+                            <div class="summary-value">$906k</div>
                         </div>
                         <div class="summary-item">
                             <div class="summary-label">Your Tokens:</div>
-                            <div class="summary-value">3,000</div>
+                            <div class="summary-value">3k</div>
                         </div>
                     </div>
                 </div>
@@ -1045,7 +1080,7 @@
                 <div class="portfolio-summary">
                     <div class="portfolio-summary-item">
                         <div class="portfolio-summary-label">Total Tokens Won:</div>
-                        <div class="portfolio-summary-value">3,000</div>
+                        <div class="portfolio-summary-value">3k</div>
                     </div>
                     <div class="portfolio-summary-item">
                         <div class="portfolio-summary-label">Average Purchase Price:</div>
@@ -1053,11 +1088,11 @@
                     </div>
                     <div class="portfolio-summary-item">
                         <div class="portfolio-summary-label">Current Value (at $1.75):</div>
-                        <div class="portfolio-summary-value">$5,250.00</div>
+                        <div class="portfolio-summary-value">$5.25k</div>
                     </div>
                     <div class="portfolio-summary-item">
                         <div class="portfolio-summary-label">Profit/Loss:</div>
-                        <div class="portfolio-pnl positive">+$1,020.00 (+24.1%)</div>
+                        <div class="portfolio-pnl positive">+$1.02k (+24.1%)</div>
                     </div>
                 </div>
             </div>
@@ -1127,11 +1162,27 @@
                 const updateEstimatedTokens = function() {
                     const amount = parseFloat(bidAmount.value) || 0;
                     const price = parseFloat(maxPrice.value) || 1.75;
-                    estimatedTokens.textContent = Math.floor(amount / price).toLocaleString();
+                    estimatedTokens.textContent = formatNumber(Math.floor(amount / price));
                 };
                 
                 bidAmount.addEventListener('input', updateEstimatedTokens);
                 maxPrice.addEventListener('input', updateEstimatedTokens);
+                
+                // Add a new function to format numbers with k notation
+                function formatNumber(num) {
+                    if (num >= 1000) {
+                        return (num >= 10000 ? Math.floor(num / 1000) : (num / 1000).toFixed(1)) + 'k';
+                    }
+                    return num.toString();
+                }
+                
+                // Add a function to format currency with k notation
+                function formatCurrency(num) {
+                    if (num >= 1000) {
+                        return '$' + (num >= 10000 ? Math.floor(num / 1000) : (num / 1000).toFixed(2)) + 'k';
+                    }
+                    return '$' + num.toFixed(2);
+                }
                 
                 simpleBidForm.addEventListener('submit', function(e) {
                     e.preventDefault();
@@ -1165,8 +1216,8 @@
                     transactionElement.innerHTML = `
                         <div class="transaction-details">
                             <div class="transaction-round">Round ${transaction.round}</div>
-                            <div class="transaction-main">${transaction.quantity.toLocaleString()} tokens at $${transaction.price.toFixed(2)}</div>
-                            <div class="transaction-total">$${transaction.total.toFixed(2)}</div>
+                            <div class="transaction-main">${formatNumber(transaction.quantity)} tokens at $${transaction.price.toFixed(2)}</div>
+                            <div class="transaction-total">${formatCurrency(transaction.total)}</div>
                             <div class="execution-time" id="countdown-${transaction.id}">Processing...</div>
                         </div>
                         <div class="transaction-status pending">PENDING</div>
@@ -1202,7 +1253,7 @@
                 const updateTotalBid = function() {
                     const price = parseFloat(bidPrice.value) || 0;
                     const quantity = parseFloat(bidQuantity.value) || 0;
-                    totalBidAmount.textContent = (price * quantity).toFixed(2);
+                    totalBidAmount.textContent = formatCurrency(price * quantity).replace('$', '');
                 };
                 
                 bidPrice.addEventListener('input', updateTotalBid);
@@ -1239,8 +1290,8 @@
                     transactionElement.innerHTML = `
                         <div class="transaction-details">
                             <div class="transaction-round">Round ${transaction.round}</div>
-                            <div class="transaction-main">${transaction.quantity.toLocaleString()} tokens at $${transaction.price.toFixed(2)}</div>
-                            <div class="transaction-total">$${transaction.total.toFixed(2)}</div>
+                            <div class="transaction-main">${formatNumber(transaction.quantity)} tokens at $${transaction.price.toFixed(2)}</div>
+                            <div class="transaction-total">${formatCurrency(transaction.total)}</div>
                             <div class="execution-time" id="countdown-${transaction.id}">Processing...</div>
                         </div>
                         <div class="transaction-status pending">PENDING</div>
@@ -1273,7 +1324,7 @@
             if (sellAmount && sellProceeds) {
                 sellAmount.addEventListener('input', function() {
                     const amount = parseFloat(sellAmount.value) || 0;
-                    sellProceeds.textContent = (amount * 1.75).toFixed(2);
+                    sellProceeds.textContent = formatCurrency(amount * 1.75).replace('$', '');
                 });
                 
                 sellForm.addEventListener('submit', function(e) {
@@ -1305,8 +1356,8 @@
                     transactionElement.innerHTML = `
                         <div class="transaction-details">
                             <div class="transaction-round">Round ${transaction.round} - Sell</div>
-                            <div class="transaction-main">${transaction.quantity.toLocaleString()} tokens at $${transaction.price.toFixed(2)}</div>
-                            <div class="transaction-total">$${transaction.total.toFixed(2)}</div>
+                            <div class="transaction-main">${formatNumber(transaction.quantity)} tokens at $${transaction.price.toFixed(2)}</div>
+                            <div class="transaction-total">${formatCurrency(transaction.total)}</div>
                             <div class="execution-time" id="countdown-${transaction.id}">Processing...</div>
                         </div>
                         <div class="transaction-status pending">PENDING</div>
