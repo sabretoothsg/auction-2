@@ -80,7 +80,8 @@
         
         .tab-info {
             display: flex;
-            gap: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
             margin-top: 0.5rem;
             font-size: 0.85rem;
         }
@@ -89,6 +90,7 @@
             display: flex;
             align-items: center;
             gap: 0.25rem;
+            width: calc(50% - 0.25rem); /* Two items per row with gap consideration */
         }
         
         .tab-info-item i {
@@ -353,6 +355,35 @@
                 grid-template-columns: 1fr;
             }
         }
+        
+        /* Status icon styles */
+        .status-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        
+        .tab.completed .status-icon {
+            color: #28a745;
+        }
+        
+        .tab.current .status-icon {
+            color: #000;
+            animation: pulse 2s infinite;
+        }
+        
+        .tab.future .status-icon {
+            color: #6c757d;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -389,7 +420,7 @@
                 
                 <!-- Round 1 Tab (Completed) -->
                 <div class="tab completed" data-tab="round1">
-                    Round 1 (Completed)
+                    Round 1 <span class="status-icon" title="Completed">✓</span>
                     <div class="tab-info">
                         <div class="tab-info-item" title="Reserve price">
                             <i class="icon">🔍</i> $1.00
@@ -408,7 +439,7 @@
                 
                 <!-- Round 2 Tab (Completed) -->
                 <div class="tab completed" data-tab="round2">
-                    Round 2 (Completed)
+                    Round 2 <span class="status-icon" title="Completed">✓</span>
                     <div class="tab-info">
                         <div class="tab-info-item" title="Reserve price">
                             <i class="icon">🔍</i> $1.00
@@ -427,7 +458,7 @@
                 
                 <!-- Round 3 Tab (Current) -->
                 <div class="tab current active" data-tab="round3">
-                    Round 3 (Current)
+                    Round 3 <span class="status-icon" title="Current Round">▶</span>
                     <div class="tab-info">
                         <div class="tab-info-item" title="Reserve price">
                             <i class="icon">🔍</i> $1.25
@@ -446,7 +477,7 @@
                 
                 <!-- Round 4 Tab (Future) -->
                 <div class="tab future" data-tab="round4">
-                    Round 4 (Upcoming)
+                    Round 4 <span class="status-icon" title="Upcoming Round">⏱</span>
                     <div class="tab-info">
                         <div class="tab-info-item" title="Reserve price">
                             <i class="icon">🔍</i> $1.25
@@ -465,7 +496,7 @@
                 
                 <!-- Round 5 Tab (Future) -->
                 <div class="tab future" data-tab="round5">
-                    Round 5 (Upcoming)
+                    Round 5 <span class="status-icon" title="Upcoming Round">⏱</span>
                     <div class="tab-info">
                         <div class="tab-info-item" title="Reserve price">
                             <i class="icon">🔍</i> $1.50
@@ -484,7 +515,7 @@
                 
                 <!-- Round 6 Tab (Future) -->
                 <div class="tab future" data-tab="round6">
-                    Round 6 (Upcoming)
+                    Round 6 <span class="status-icon" title="Upcoming Round">⏱</span>
                     <div class="tab-info">
                         <div class="tab-info-item" title="Reserve price">
                             <i class="icon">🔍</i> $1.50
