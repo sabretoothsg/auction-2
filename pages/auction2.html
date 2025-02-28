@@ -153,19 +153,44 @@
         /* Countdown styles */
         .countdown-container {
             background-color: #f8f9fa;
-            padding: 1rem;
+            padding: 0.5rem;
             border-radius: 8px;
-            margin-bottom: 1.5rem;
             text-align: center;
+        }
+        
+        /* Countdown and Portfolio Row layout */
+        .countdown-portfolio-row {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            align-items: center;
+        }
+        
+        .countdown-portfolio-row .countdown-container {
+            flex: 1;
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .countdown-portfolio-row .portfolio-card {
+            flex: 2;
+            background-color: #f8f9fa;
+            padding: 0.5rem;
+            border-radius: 8px;
         }
         
         .countdown-title {
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0;
+            font-size: 0.9rem;
+            white-space: nowrap;
         }
         
         .countdown-timer {
-            font-size: 1.75rem;
+            font-size: 1.25rem;
             font-weight: 700;
             color: var(--primary-dark);
         }
@@ -186,12 +211,9 @@
         }
         
         .auction-card-title {
-            font-size: 1.1rem; /* Reduced from 1.25rem */
+            font-size: 0.9rem;
             font-weight: 600;
-            margin-bottom: 0.75rem; /* Reduced from 1rem */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            margin-bottom: 0.25rem;
         }
         
         /* Bid section styles */
@@ -371,22 +393,31 @@
         /* Portfolio styles */
         .portfolio-summary {
             background-color: #f8f9fa;
-            padding: 1rem;
+            padding: 0.25rem 0.5rem;
             border-radius: 4px;
-            margin-bottom: 1rem;
+            margin-bottom: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 0.25rem;
+            row-gap: 0.1rem;
         }
         
         .portfolio-summary-item {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0;
+            width: 48%;
         }
         
         .portfolio-summary-label {
-            font-weight: 500;
+            font-size: 0.75rem;
+            white-space: nowrap;
         }
         
-        .portfolio-pnl {
+        .portfolio-summary-value, .portfolio-pnl {
+            font-size: 0.85rem;
             font-weight: 600;
         }
         
@@ -472,6 +503,24 @@
         @media (max-width: 768px) {
             .auction-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .countdown-portfolio-row {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .countdown-portfolio-row .countdown-container,
+            .countdown-portfolio-row .portfolio-card {
+                width: 100%;
+            }
+            
+            .portfolio-summary {
+                flex-direction: column;
+            }
+            
+            .portfolio-summary-item {
+                width: 100%;
             }
             
             .graph-bid-container {
@@ -821,10 +870,36 @@
             </div>
         </div>
         
-        <!-- Countdown Timer for current round -->
-        <div class="countdown-container">
-            <h3 class="countdown-title">Round 3 Ends In:</h3>
-            <div class="countdown-timer" id="round-countdown">07:45:32</div>
+        <!-- Countdown and Portfolio Row -->
+        <div class="countdown-portfolio-row">
+            <!-- Countdown Timer for current round -->
+            <div class="countdown-container">
+                <h3 class="countdown-title">Round 3 Ends In:</h3>
+                <div class="countdown-timer" id="round-countdown">07:45:08</div>
+            </div>
+            
+            <!-- Portfolio Summary Card -->
+            <div class="portfolio-card">
+                <div class="auction-card-title">Portfolio</div>
+                <div class="portfolio-summary">
+                    <div class="portfolio-summary-item">
+                        <div class="portfolio-summary-label">Total Tokens:</div>
+                        <div class="portfolio-summary-value">3k</div>
+                    </div>
+                    <div class="portfolio-summary-item">
+                        <div class="portfolio-summary-label">Avg Price:</div>
+                        <div class="portfolio-summary-value">$1.41</div>
+                    </div>
+                    <div class="portfolio-summary-item">
+                        <div class="portfolio-summary-label">Value ($1.75):</div>
+                        <div class="portfolio-summary-value">$5.25k</div>
+                    </div>
+                    <div class="portfolio-summary-item">
+                        <div class="portfolio-summary-label">Profit/Loss:</div>
+                        <div class="portfolio-pnl positive">+$1.02k (+24.1%)</div>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <!-- Tab Contents for Each Round -->
@@ -1188,30 +1263,7 @@
         
         <!-- Bid and Portfolio Grid Layout -->
         <div class="auction-grid">
-            <!-- Portfolio Section -->
-            <div class="auction-card">
-                <div class="auction-card-title">Portfolio</div>
-                
-                <!-- Portfolio Summary -->
-                <div class="portfolio-summary">
-                    <div class="portfolio-summary-item">
-                        <div class="portfolio-summary-label">Total Tokens Won:</div>
-                        <div class="portfolio-summary-value">3k</div>
-                    </div>
-                    <div class="portfolio-summary-item">
-                        <div class="portfolio-summary-label">Average Purchase Price:</div>
-                        <div class="portfolio-summary-value">$1.41</div>
-                    </div>
-                    <div class="portfolio-summary-item">
-                        <div class="portfolio-summary-label">Current Value (at $1.75):</div>
-                        <div class="portfolio-summary-value">$5.25k</div>
-                    </div>
-                    <div class="portfolio-summary-item">
-                        <div class="portfolio-summary-label">Profit/Loss:</div>
-                        <div class="portfolio-pnl positive">+$1.02k (+24.1%)</div>
-                    </div>
-                </div>
-            </div>
+            <!-- Place for additional content -->
         </div>
     </main>
 
