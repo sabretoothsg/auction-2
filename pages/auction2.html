@@ -725,6 +725,76 @@
             margin-bottom: 4px;
             gap: 0;
         }
+
+        /* Round information styles */
+        .round-info-section {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .round-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .round-info-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .round-status {
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .round-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .round-info-item {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .info-item-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+        }
+
+        .info-item-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .info-item-change {
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+        }
+
+        .info-item-change.positive {
+            color: #28a745;
+        }
+
+        .info-item-change.negative {
+            color: #dc3545;
+        }
     </style>
 </head>
 <body>
@@ -1105,6 +1175,33 @@
         </div>
         
         <div class="tab-content" id="round2-content">
+            <div class="round-info-section">
+                <div class="round-info-header">
+                    <h2 class="round-info-title">Round 2 Summary</h2>
+                    <span class="round-status">Completed</span>
+                </div>
+                <div class="round-info-grid">
+                    <div class="round-info-item">
+                        <div class="info-item-label">Final Clearing Price</div>
+                        <div class="info-item-value">$1.85</div>
+                        <div class="info-item-change positive">+12.3% from Round 1</div>
+                    </div>
+                    <div class="round-info-item">
+                        <div class="info-item-label">Total Volume</div>
+                        <div class="info-item-value">2,500,000 EXCQ</div>
+                        <div class="info-item-change positive">+15.8% from Round 1</div>
+                    </div>
+                    <div class="round-info-item">
+                        <div class="info-item-label">Number of Participants</div>
+                        <div class="info-item-value">156</div>
+                        <div class="info-item-change positive">+24 from Round 1</div>
+                    </div>
+                    <div class="round-info-item">
+                        <div class="info-item-label">Total Bids</div>
+                        <div class="info-item-value">312</div>
+                    </div>
+                </div>
+            </div>
             <h2>Round 2 Demand Graph</h2>
             <div class="graph-bid-container">
                 <div class="graph-section">
@@ -1162,6 +1259,30 @@
         </div>
         
         <div class="tab-content" id="round1-content">
+            <div class="round-info-section">
+                <div class="round-info-header">
+                    <h2 class="round-info-title">Round 1 Summary</h2>
+                    <span class="round-status">Completed</span>
+                </div>
+                <div class="round-info-grid">
+                    <div class="round-info-item">
+                        <div class="info-item-label">Final Clearing Price</div>
+                        <div class="info-item-value">$1.65</div>
+                    </div>
+                    <div class="round-info-item">
+                        <div class="info-item-label">Total Volume</div>
+                        <div class="info-item-value">2,160,000 EXCQ</div>
+                    </div>
+                    <div class="round-info-item">
+                        <div class="info-item-label">Number of Participants</div>
+                        <div class="info-item-value">132</div>
+                    </div>
+                    <div class="round-info-item">
+                        <div class="info-item-label">Total Bids</div>
+                        <div class="info-item-value">285</div>
+                    </div>
+                </div>
+            </div>
             <h2>Round 1 Demand Graph</h2>
             <div class="graph-bid-container">
                 <div class="graph-section">
