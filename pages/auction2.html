@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Round English Auction - Exchequer Finance</title>
+    <title>EXCQ Protected Note Auction - 150% Yield Boost | 50% Protection | Mar 4-6</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -30,6 +30,23 @@
         .auction-subtitle {
             font-size: 1.1rem;
             color: var(--text-secondary);
+        }
+        
+        .rules-link {
+            display: inline-block;
+            margin-top: 0.75rem;
+            padding: 0.5rem 1rem;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease;
+        }
+        
+        .rules-link:hover {
+            background-color: #e9ecef;
         }
         
         /* Tab interface styles */
@@ -716,8 +733,9 @@
 
     <main class="auction-container">
         <div class="auction-header">
-            <h1 class="auction-title">Multi-Round English Auction</h1>
-            <p class="auction-subtitle">A 6-round auction with 12 hours per round. Buy and sell tokens between rounds.</p>
+            <h1 class="auction-title">EXCQ Protected Note Auction - 150% Yield Boost | 50% Protection | Mar 4-6</h1>
+            <p class="auction-subtitle">Participate in our latest auction for protected yield-boosted notes</p>
+            <a href="/pages/auction-rules.html" class="rules-link">📋 View Auction Rules</a>
         </div>
         
         <!-- Tabbed Interface for Round Navigation -->
@@ -1988,6 +2006,7 @@
                                 pointRadius: 10,
                                 pointStyle: 'star',
                                 showLine: false,
+                                hidden: false,
                                 pointHoverRadius: 12
                             }
                         ]
