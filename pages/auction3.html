@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXCQ Protected Note Auction - 150% Yield Boost | 50% Protection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <style>
+        /* Main layout structure */
+        .auction-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .auction-header {
+            margin-bottom: 1.5rem;
+        }
+        
+        .auction-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .auction-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Three-panel layout */
+        .auction-panels {
+            display: flex;
+            gap: 1.5rem;
+            min-height: 700px;
+        }
+        
+        /* Left Panel (30% width) */
+        .left-panel {
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        /* Center Panel (50% width) */
+        .center-panel {
+            flex: 5;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        /* Right Panel (20% width) */
+        .right-panel {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        /* Panel card styling */
+        .panel-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.25rem;
+        }
+        
+        .panel-card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* User Portfolio */
+        .portfolio-card {
+            margin-bottom: 0;
+        }
+        
+        .portfolio-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        
+        .portfolio-summary-item {
+            width: calc(50% - 0.375rem);
+            padding: 0.5rem;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+        }
+        
+        .portfolio-summary-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .portfolio-summary-value {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .portfolio-pnl {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .portfolio-pnl.positive {
+            color: #28a745;
+        }
+        
+        .portfolio-pnl.negative {
+            color: #dc3545;
+        }
+        
+        /* Protection threshold visualization */
+        .protection-container {
+            margin-top: 1rem;
+        }
+        
+        .protection-bar, .protection-meter {
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            margin: 0.75rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .protection-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 4px;
+            width: 50%; /* Set to 50% threshold from requirements */
+        }
+        
+        .protection-threshold {
+            position: absolute;
+            left: 50%;
+            top: -12px;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .protection-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+        
+        .quick-action-btn {
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            background-color: #f8f9fa;
+            border: 1px solid var(--border-color);
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        
+        .quick-action-btn:hover {
+            background-color: #e9ecef;
+        }
+        
+        .quick-action-btn .icon {
+            margin: 0;
+        }
+        
+        /* Auction Progress Timeline */
+        .timeline-container {
+            padding: 1.5rem 0 0.5rem;
+        }
+        
+        .timeline {
+            position: relative;
+            display: flex;
+            margin: 1.5rem 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #e9ecef;
+            z-index: 0;
+        }
+        
+        .timeline-step {
+            position: relative;
+            flex: 1;
+            text-align: center;
+            z-index: 1;
+        }
+        
+        .timeline-point {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            margin: 0 auto 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        
+        .timeline-point.completed {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: #000;
+        }
+        
+        .timeline-point.active {
+            background-color: #fff;
+            border-color: var(--primary);
+            color: var(--primary-dark);
+            animation: pulse 2s infinite;
+        }
+        
+        .timeline-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .timeline-sublabel {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 0.2rem;
+        }
+        
+        /* Active Round Details */
+        .price-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .price-item {
+            background-color: #f8f9fa;
+            padding: 0.75rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .price-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .price-value {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        /* Chart container */
+        .chart-container {
+            width: 100%;
+            height: 250px;
+            margin: 1rem 0;
+        }
+        
+        /* Bid volume heatmap */
+        .heatmap-container {
+            margin-top: 1.5rem;
+        }
+        
+        .heatmap-legend {
+            display: flex;
+            justify-content: space-between;
+            margin: 0.5rem 0;
+        }
+        
+        .heatmap-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .heatmap-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+        
+        /* Countdown clock */
+        .countdown-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .countdown-timer {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            letter-spacing: 2px;
+        }
+        
+        /* Transaction History */
+        .transaction-list {
+            overflow-y: auto;
+            max-height: 400px;
+        }
+        
+        .transaction-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+        
+        .transaction-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .transaction-price {
+            font-weight: 600;
+        }
+        
+        .transaction-meta {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        .transaction-amount {
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        /* Transaction filter styles */
+        .transaction-filter {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .filter-btn {
+            padding: 0.4rem 0.75rem;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            border: 1px solid var(--border-color);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .filter-btn.active {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: #000;
+        }
+        
+        /* Compliance Disclosures */
+        .compliance-toggle {
+            margin-top: 1rem;
+        }
+        
+        .compliance-title {
+            cursor: pointer;
+            padding: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 500;
+        }
+        
+        .compliance-content {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        /* Bid form styles */
+        .bid-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+        
+        .bid-tab {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .bid-tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .auction-panels {
+                flex-direction: column;
+            }
+            
+            .left-panel, .center-panel, .right-panel {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .price-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .portfolio-summary-item {
+                width: 100%;
+            }
+        }
+        
+        /* Icons */
+        .icon {
+            width: 18px;
+            height: 18px;
+            display: inline-block;
+        }
+        
+        /* Animation for active timeline point */
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(var(--primary-rgb), 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Component -->
+    <site-header></site-header>
+
+    <main class="auction-container">
+        <div class="auction-header">
+            <h1 class="auction-title">EXCQ Protected Note Auction - 150% Yield Boost | 50% Protection</h1>
+            <p class="auction-subtitle">Make time-sensitive bidding decisions with our streamlined auction interface</p>
+        </div>
+        
+        <!-- Three-panel layout structure -->
+        <div class="auction-panels">
+            <!-- Left Panel (30% width) -->
+            <section class="left-panel">
+                <!-- User Portfolio -->
+                <div class="panel-card">
+                    <div class="panel-card-title">
+                        <span>Your Portfolio</span>
+                    </div>
+                    <div class="portfolio-summary">
+                        <div class="portfolio-summary-item">
+                            <div class="portfolio-summary-label">Total Tokens</div>
+                            <div class="portfolio-summary-value">3,000</div>
+                        </div>
+                        <div class="portfolio-summary-item">
+                            <div class="portfolio-summary-label">Average Price</div>
+                            <div class="portfolio-summary-value">$1.41</div>
+                        </div>
+                        <div class="portfolio-summary-item">
+                            <div class="portfolio-summary-label">Current Value</div>
+                            <div class="portfolio-summary-value">$4,350</div>
+                        </div>
+                        <div class="portfolio-summary-item">
+                            <div class="portfolio-summary-label">Profit/Loss</div>
+                            <div class="portfolio-pnl positive">+$1,120 (+34.7%)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Protection Status -->
+                <div class="panel-card">
+                    <div class="panel-card-title">
+                        <span>Protection Status</span>
+                    </div>
+                    <div class="protection-status">
+                        <div class="protection-bar">
+                            <div class="protection-fill"></div>
+                            <div class="protection-threshold">50% Protection</div>
+                        </div>
+                        <div class="protection-labels">
+                            <span>$0.00</span>
+                            <span>$3.00</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Center Panel (50% width) -->
+            <section class="center-panel">
+                <!-- Auction Progress Timeline -->
+                <div class="panel-card">
+                    <div class="panel-card-title">
+                        <span>Auction Progress Timeline</span>
+                    </div>
+                    <div class="timeline-container">
+                        <div class="timeline">
+                            <div class="timeline-step" data-round="1">
+                                <div class="timeline-point completed">1</div>
+                                <div class="timeline-label">Round 1</div>
+                                <div class="timeline-sublabel">$1.33</div>
+                            </div>
+                            <div class="timeline-step" data-round="2">
+                                <div class="timeline-point completed">2</div>
+                                <div class="timeline-label">Round 2</div>
+                                <div class="timeline-sublabel">$1.85</div>
+                            </div>
+                            <div class="timeline-step" data-round="3">
+                                <div class="timeline-point active">3</div>
+                                <div class="timeline-label">Round 3</div>
+                                <div class="timeline-sublabel">Active</div>
+                            </div>
+                            <div class="timeline-step" data-round="4">
+                                <div class="timeline-point">4</div>
+                                <div class="timeline-label">Round 4</div>
+                                <div class="timeline-sublabel">Upcoming</div>
+                            </div>
+                            <div class="timeline-step" data-round="5">
+                                <div class="timeline-point">5</div>
+                                <div class="timeline-label">Round 5</div>
+                                <div class="timeline-sublabel">Upcoming</div>
+                            </div>
+                            <div class="timeline-step" data-round="6">
+                                <div class="timeline-point">6</div>
+                                <div class="timeline-label">Round 6</div>
+                                <div class="timeline-sublabel">Upcoming</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Participation Options -->
+                <div class="panel-card">
+                    <div class="panel-card-title">
+                        <span>Participation Options</span>
+                    </div>
+                    
+                    <!-- Tab Navigation -->
+                    <div class="bid-tabs">
+                        <div class="bid-tab active" data-tab="simple-bid">Simple Bid</div>
+                        <div class="bid-tab" data-tab="advanced-bid">Advanced Bid</div>
+                        <div class="bid-tab" data-tab="sell-tokens">Sell Tokens</div>
+                    </div>
+                    
+                    <!-- Simple Bid Content -->
+                    <div class="tab-content active" id="simple-bid-content">
+                        <!-- Early Bid Discount Alert -->
+                        <div class="early-bid-discount" style="background-color: rgba(246, 209, 49, 0.2); border-left: 3px solid var(--primary); padding: 0.75rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600; margin-bottom: 0.25rem;">Early Bid Discount: 5%</div>
+                                <div style="font-size: 0.8rem;">Place your bid within <span id="simple-discount-timer" style="font-weight: 600;">03:45:12</span> to receive the discount</div>
+                            </div>
+                            <div style="font-weight: 700; font-size: 1.1rem;">Save up to $125</div>
+                        </div>
+                        
+                        <div class="bid-form">
+                            <div class="form-group">
+                                <label>Bid Amount ($)</label>
+                                <input type="number" id="simple-bid-amount" placeholder="Enter amount">
+                            </div>
+                            <div class="form-group">
+                                <label>Maximum Price per Token ($)</label>
+                                <input type="number" id="simple-max-price" value="1.60">
+                            </div>
+                            
+                            <!-- Estimated Tokens Box -->
+                            <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Estimated Tokens</span>
+                                    <span id="simple-estimated-tokens">0</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Early Bid Discount</span>
+                                    <span id="simple-discount">$0.00</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-weight: 600; padding-top: 0.5rem; border-top: 1px solid var(--border-color);">
+                                    <span>Total Bid</span>
+                                    <span id="simple-total">$0.00</span>
+                                </div>
+                            </div>
+                            
+                            <button class="submit-btn" id="simple-bid-submit">Place Bid</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Advanced Bid Content -->
+                    <div class="tab-content" id="advanced-bid-content">
+                        <!-- Early Bid Discount Alert -->
+                        <div class="early-bid-discount" style="background-color: rgba(246, 209, 49, 0.2); border-left: 3px solid var(--primary); padding: 0.75rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600; margin-bottom: 0.25rem;">Early Bid Discount: 5%</div>
+                                <div style="font-size: 0.8rem;">Place your bid within <span id="advanced-discount-timer" style="font-weight: 600;">03:45:12</span> to receive the discount</div>
+                            </div>
+                            <div style="font-weight: 700; font-size: 1.1rem;">Save up to $125</div>
+                        </div>
+                        
+                        <div class="bid-form">
+                            <div class="form-group">
+                                <label>Token Amount</label>
+                                <input type="number" id="advanced-token-amount" placeholder="Enter token amount">
+                            </div>
+                            <div class="form-group">
+                                <label>Price Range ($)</label>
+                                <div class="price-range">
+                                    <input type="number" id="min-price" placeholder="Min">
+                                    <input type="number" id="max-price" placeholder="Max">
+                                </div>
+                            </div>
+                            
+                            <!-- Estimated Tokens Box -->
+                            <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Total Bid Amount</span>
+                                    <span id="adv-total-amount">$0.00</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Early Bid Discount</span>
+                                    <span id="adv-discount">$0.00</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Success Probability</span>
+                                    <span id="adv-probability">N/A</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-weight: 600; padding-top: 0.5rem; border-top: 1px solid var(--border-color);">
+                                    <span>Final Amount</span>
+                                    <span id="adv-final-amount">$0.00</span>
+                                </div>
+                            </div>
+                            
+                            <button class="submit-btn" id="advanced-bid-submit">Place Advanced Bid</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Sell Tokens Content -->
+                    <div class="tab-content" id="sell-tokens-content">
+                        <div class="bid-form">
+                            <div class="form-group">
+                                <label>Token Amount to Sell</label>
+                                <input type="number" id="sell-token-amount" placeholder="Enter amount to sell">
+                            </div>
+                            <div class="form-group">
+                                <label>Minimum Price per Token ($)</label>
+                                <input type="number" id="sell-min-price" value="1.40">
+                            </div>
+                            <button class="submit-btn" id="sell-tokens-submit">Sell Tokens</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel (20% width) -->
+            <section class="right-panel">
+                <!-- Transaction History -->
+                <div class="panel-card">
+                    <div class="panel-card-title">
+                        <span>Transaction History</span>
+                        <span>312 bids total</span>
+                    </div>
+                    
+                    <!-- Transaction filters -->
+                    <div class="transaction-filter">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="my-bids">My Bids</button>
+                        <button class="filter-btn" data-filter="recent">Recent</button>
+                        <button class="filter-btn" data-filter="won">Won</button>
+                    </div>
+                    
+                    <!-- Transaction list -->
+                    <div class="transaction-list" id="transaction-list">
+                        <!-- Transactions will be dynamically populated -->
+                    </div>
+                </div>
+                
+                <!-- Compliance Disclosures -->
+                <div class="panel-card">
+                    <div class="compliance-toggle">
+                        <div class="compliance-title">
+                            <span>Compliance Disclosures</span>
+                            <span>+</span>
+                        </div>
+                        <div class="compliance-content" style="display: none;">
+                            <p>This auction is conducted in accordance with regulatory requirements. Participation implies acceptance of terms and conditions. All transactions are recorded on-chain for transparency.</p>
+                            <p>Protected notes carry specific risks and are not suitable for all investors. Please review the full documentation before participating.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer Component -->
+    <site-footer></site-footer>
+
+    <!-- Scripts -->
+    <script src="/components/Header.js"></script>
+    <script src="/components/Footer.js"></script>
+    <script src="/countdown.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize transaction history
+            const transactions = {
+                all: [
+                    { price: 1.53, user: 'User0x81...4e', time: '2 min ago', amount: 1200 },
+                    { price: 1.49, user: 'User0x72...3a', time: '5 min ago', amount: 850 },
+                    { price: 1.62, user: 'User0x44...8b', time: '8 min ago', amount: 2000 },
+                    { price: 1.47, user: 'User0x93...5f', time: '12 min ago', amount: 750 },
+                    { price: 1.51, user: 'You', time: '18 min ago', amount: 1000 },
+                    { price: 1.44, user: 'User0x67...2c', time: '22 min ago', amount: 3200 }
+                ],
+                'my-bids': [
+                    { price: 1.51, user: 'You', time: '18 min ago', amount: 1000 },
+                    { price: 1.48, user: 'You', time: '1 hour ago', amount: 500 },
+                    { price: 1.45, user: 'You', time: '2 hours ago', amount: 750 }
+                ],
+                recent: [
+                    { price: 1.53, user: 'User0x81...4e', time: '2 min ago', amount: 1200 },
+                    { price: 1.49, user: 'User0x72...3a', time: '5 min ago', amount: 850 },
+                    { price: 1.62, user: 'User0x44...8b', time: '8 min ago', amount: 2000 }
+                ],
+                won: [
+                    { price: 1.45, user: 'You', time: '2 hours ago', amount: 750 },
+                    { price: 1.42, user: 'User0x55...9c', time: '3 hours ago', amount: 1500 }
+                ]
+            };
+
+            function updateTransactionList(filter) {
+                const transactionList = document.getElementById('transaction-list');
+                transactionList.innerHTML = '';
+                
+                transactions[filter].forEach(tx => {
+                    const txElement = document.createElement('div');
+                    txElement.className = 'transaction-item';
+                    txElement.innerHTML = `
+                        <div class="transaction-details">
+                            <div class="transaction-price">$${tx.price.toFixed(2)}</div>
+                            <div class="transaction-meta">${tx.user} - ${tx.time}</div>
+                        </div>
+                        <div class="transaction-amount">${tx.amount} tokens</div>
+                    `;
+                    transactionList.appendChild(txElement);
+                });
+            }
+
+            // Transaction filter buttons
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    updateTransactionList(btn.dataset.filter);
+                });
+            });
+
+            // Initialize with 'all' transactions
+            updateTransactionList('all');
+
+            // Bid tabs functionality
+            const bidTabs = document.querySelectorAll('.bid-tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            bidTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    bidTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    const tabId = tab.getAttribute('data-tab');
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === `${tabId}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+
+            // Timeline round selection
+            const timelineSteps = document.querySelectorAll('.timeline-step');
+            timelineSteps.forEach(step => {
+                step.addEventListener('click', () => {
+                    const round = parseInt(step.getAttribute('data-round'));
+                    // Update round details graph here
+                    console.log(`Showing details for round ${round}`);
+                });
+            });
+
+            // Bid submission handlers
+            document.getElementById('simple-bid-submit').addEventListener('click', function() {
+                const amount = document.getElementById('simple-bid-amount').value;
+                const maxPrice = document.getElementById('simple-max-price').value;
+                
+                // Add new transaction to history
+                transactions.all.unshift({
+                    price: parseFloat(maxPrice),
+                    user: 'You',
+                    time: 'Just now',
+                    amount: Math.floor(amount / maxPrice)
+                });
+                transactions['my-bids'].unshift(transactions.all[0]);
+                transactions.recent.unshift(transactions.all[0]);
+                
+                // Update current view
+                const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+                updateTransactionList(activeFilter);
+            });
+
+            document.getElementById('advanced-bid-submit').addEventListener('click', function() {
+                const tokenAmount = document.getElementById('advanced-token-amount').value;
+                const minPrice = document.getElementById('min-price').value;
+                const maxPrice = document.getElementById('max-price').value;
+                
+                transactions.all.unshift({
+                    price: parseFloat(maxPrice),
+                    user: 'You',
+                    time: 'Just now',
+                    amount: parseInt(tokenAmount)
+                });
+                transactions['my-bids'].unshift(transactions.all[0]);
+                transactions.recent.unshift(transactions.all[0]);
+                
+                const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+                updateTransactionList(activeFilter);
+            });
+
+            document.getElementById('sell-tokens-submit').addEventListener('click', function() {
+                const tokenAmount = document.getElementById('sell-token-amount').value;
+                const minPrice = document.getElementById('sell-min-price').value;
+                
+                transactions.all.unshift({
+                    price: parseFloat(minPrice),
+                    user: 'You',
+                    time: 'Just now',
+                    amount: parseInt(tokenAmount)
+                });
+                transactions['my-bids'].unshift(transactions.all[0]);
+                transactions.recent.unshift(transactions.all[0]);
+                
+                const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+                updateTransactionList(activeFilter);
+            });
+
+            // Initialize Chart.js graphs for each round
+            function initializeRoundGraphs() {
+                // Helper function to generate data for shaded areas
+                function generateAreaData(startValue, endValue, startIndex, endIndex) {
+                    const data = Array(30).fill(null);
+                    
+                    // Fill in the values between startIndex and endIndex
+                    for (let i = startIndex; i <= endIndex; i++) {
+                        if (i === startIndex) {
+                            data[i] = startValue;
+                        } else if (i === endIndex) {
+                            data[i] = endValue;
+                        } else {
+                            // Linear interpolation between start and end values
+                            const ratio = (i - startIndex) / (endIndex - startIndex);
+                            data[i] = startValue - (startValue - endValue) * ratio;
+                        }
+                    }
+                    
+                    return data;
+                }
+                
+                // Round 3 demand graph from auction2.html - exact copy
+                const round3Data = {
+                    labels: Array.from({length: 30}, (_, i) => i * 10000),
+                    datasets: [
+                        // Normal allocation
+                        {
+                            label: 'Normal',
+                            data: generateAreaData(3.00, 2.00, 0, 6),
+                            backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                            borderWidth: 0,
+                            fill: true,
+                            pointRadius: 0
+                        },
+                        // Prior Round allocation
+                        {
+                            label: 'Prior Round',
+                            data: generateAreaData(2.00, 1.85, 6, 8),
+                            backgroundColor: 'rgba(255, 193, 7, 0.5)',
+                            borderWidth: 0,
+                            fill: true,
+                            pointRadius: 0
+                        },
+                        // Future Round allocation
+                        {
+                            label: 'Future Round',
+                            data: generateAreaData(1.85, 1.75, 8, 10),
+                            backgroundColor: 'rgba(40, 167, 69, 0.5)',
+                            borderWidth: 0,
+                            fill: true,
+                            pointRadius: 0
+                        },
+                        // Not Cleared allocation
+                        {
+                            label: 'Not Cleared',
+                            data: generateAreaData(1.75, 0.75, 10, 30),
+                            backgroundColor: 'rgba(220, 53, 69, 0.5)',
+                            borderWidth: 0,
+                            fill: true,
+                            pointRadius: 0
+                        },
+                        // Demand Curve line
+                        {
+                            label: 'Demand Curve',
+                            data: [3.00, 2.80, 2.60, 2.40, 2.20, 2.00, 1.90, 1.85, 1.80, 1.75, 1.70, 1.65, 1.60, 1.55, 1.50, 1.45, 1.40, 1.35, 1.30, 1.25, 1.20, 1.15, 1.10, 1.05, 1.00, 0.95, 0.90, 0.85, 0.80, 0.75],
+                            borderColor: 'rgb(220, 53, 69)',
+                            borderWidth: 3,
+                            tension: 0.1,
+                            fill: false
+                        },
+                        // Add key point markers for Round 3
+                        {
+                            label: 'Round 3 Key Points',
+                            data: [
+                                { x: 90000, y: 1.75 },   // Current clearing price at 90,000 tokens
+                                { x: 150000, y: 1.50 }   // Reserve price at 150,000 tokens 
+                            ],
+                            backgroundColor: 'rgb(75, 192, 192)',
+                            borderColor: '#ffffff',
+                            borderWidth: 2,
+                            pointRadius: 10,
+                            pointStyle: 'rectRot',
+                            showLine: false,
+                            pointHoverRadius: 12
+                        }
+                    ]
+                };
+
+                // Round 1 graph
+                const round1Data = {
+                    labels: Array.from({length: 30}, (_, i) => i * 10000),
+                    datasets: [
+                        // Normal allocation
+                        {
+                            label: 'Normal',
+                            data: generateAreaData(2.50, 1.60, 0, 7),
+                            backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                            borderWidth: 0,
+                            fill: true,
+                            pointRadius: 0
+                        },
+                        // Prior Round allocation
+                        {
+                            label: 'Prior Round',
+                            data: generateAreaData(1.60, 1.45, 7, 9),
+                            backgroundColor: 'rgba(255, 193, 7, 0.5)',
+                            borderWidth: 0,
+                            fill: true,
+                            pointRadius: 0
+                        },
+                        // Future Round allocation
+                        {
+                            label: 'Future Round',
+                            data: generateAreaData(1.45, 1.33, 9, 11),
+                            backgroundColor: 'rgba(40, 167, 69, 0.5)',
+                            borderWidth: 0,
+                            fill: true,
+                            pointRadius: 0
+                        },
+                        // Not Cleared allocation
+                        {
+                            label: 'Not Cleared',
+                            data: generateAreaData(1.33, 0.65, 11, 30),
+                            backgroundColor: 'rgba(220, 53, 69, 0.5)',
+                            borderWidth: 0,
+                            fill: true,
+                            pointRadius: 0
+                        },
+                        // Demand Curve line
+                        {
+                            label: 'Demand Curve',
+                            data: [2.50, 2.30, 2.10, 1.95, 1.80, 1.70, 1.60, 1.50, 1.45, 1.40, 1.35, 1.33, 1.30, 1.28, 1.25, 1.22, 1.20, 1.17, 1.15, 1.12, 1.10, 1.05, 1.00, 0.95, 0.90, 0.85, 0.80, 0.75, 0.70, 0.65],
+                            borderColor: 'rgb(220, 53, 69)',
+                            borderWidth: 3,
+                            tension: 0.1,
+                            fill: false
+                        },
+                        // Add key point markers for Round 1
+                        {
+                            label: 'Round 1 Key Points',
+                            data: [
+                                { x: 110000, y: 1.33 },  // Clearing price at 110,000 tokens
+                                { x: 220000, y: 1.00 }   // Reserve price at 220,000 tokens
+                            ],
+                            backgroundColor: 'rgb(255, 159, 64)',
+                            borderColor: '#ffffff',
+                            borderWidth: 2,
+                            pointRadius: 10,
+                            pointStyle: 'star',
+                            showLine: false,
+                            hidden: false,
+                            pointHoverRadius: 12
+                        }
+                    ]
+                };
+
+                const chartOptions = {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Cumulative Demand (Tokens)'
+                            },
+                            type: 'linear',
+                            position: 'bottom',
+                            min: 0,
+                            max: 290000
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Price ($)'
+                            },
+                            min: 0,
+                            max: 3
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        annotation: {
+                            annotations: {
+                                clearingPriceLine: {
+                                    type: 'line',
+                                    yMin: 1.75,
+                                    yMax: 1.75,
+                                    borderColor: 'rgb(0, 128, 0)',
+                                    borderWidth: 2,
+                                    borderDash: [5, 5],
+                                    label: {
+                                        enabled: true,
+                                        content: 'Current Price: $1.75',
+                                        position: 'end',
+                                        backgroundColor: 'rgb(0, 128, 0)',
+                                        font: {
+                                            weight: 'bold'
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+
+                // Create chart container dynamically
+                const centerPanel = document.querySelector('.center-panel');
+                const chartCard = document.createElement('div');
+                chartCard.className = 'panel-card';
+                chartCard.innerHTML = `
+                    <div class="panel-card-title">
+                        <span>Round Details</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="roundChart"></canvas>
+                    </div>
+                `;
+                centerPanel.appendChild(chartCard);
+
+                // Initialize the chart
+                const ctx = document.getElementById('roundChart').getContext('2d');
+                const roundChart = new Chart(ctx, {
+                    type: 'line',
+                    data: round3Data,
+                    options: chartOptions
+                });
+                
+                // Update chart when timeline steps are clicked
+                timelineSteps.forEach(step => {
+                    step.addEventListener('click', () => {
+                        const round = parseInt(step.getAttribute('data-round'));
+                        let chartData;
+                        
+                        switch(round) {
+                            case 1:
+                                chartData = round1Data;
+                                break;
+                            case 3:
+                                chartData = round3Data;
+                                break;
+                            default:
+                                // Use a placeholder data for other rounds
+                                chartData = {
+                                    labels: Array.from({length: 30}, (_, i) => i * 10000),
+                                    datasets: [
+                                        // Normal allocation
+                                        {
+                                            label: 'Normal',
+                                            data: generateAreaData(3.00, 2.00, 0, 6),
+                                            backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                                            borderWidth: 0,
+                                            fill: true,
+                                            pointRadius: 0
+                                        },
+                                        // Prior Round allocation
+                                        {
+                                            label: 'Prior Round',
+                                            data: generateAreaData(2.00, 1.85, 6, 8),
+                                            backgroundColor: 'rgba(255, 193, 7, 0.5)',
+                                            borderWidth: 0,
+                                            fill: true,
+                                            pointRadius: 0
+                                        },
+                                        // Future Round allocation
+                                        {
+                                            label: 'Future Round',
+                                            data: generateAreaData(1.85, 1.75, 8, 10),
+                                            backgroundColor: 'rgba(40, 167, 69, 0.5)',
+                                            borderWidth: 0,
+                                            fill: true,
+                                            pointRadius: 0
+                                        },
+                                        // Not Cleared allocation
+                                        {
+                                            label: 'Not Cleared',
+                                            data: generateAreaData(1.75, 0.75, 10, 30),
+                                            backgroundColor: 'rgba(220, 53, 69, 0.5)',
+                                            borderWidth: 0,
+                                            fill: true,
+                                            pointRadius: 0
+                                        },
+                                        // Demand Curve line
+                                        {
+                                            label: 'Demand Curve',
+                                            data: [3.00, 2.80, 2.60, 2.40, 2.20, 2.00, 1.90, 1.85, 1.80, 1.75, 1.70, 1.65, 1.60, 1.55, 1.50, 1.45, 1.40, 1.35, 1.30, 1.25, 1.20, 1.15, 1.10, 1.05, 1.00, 0.95, 0.90, 0.85, 0.80, 0.75],
+                                            borderColor: 'rgb(220, 53, 69)',
+                                            borderWidth: 3,
+                                            tension: 0.1,
+                                            fill: false
+                                        },
+                                        // Add key point markers
+                                        {
+                                            label: `Round ${round} Key Points`,
+                                            data: [
+                                                { x: 90000, y: 1.75 },
+                                                { x: 150000, y: 1.50 }
+                                            ],
+                                            backgroundColor: `rgb(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255})`,
+                                            borderColor: '#ffffff',
+                                            borderWidth: 2,
+                                            pointRadius: 10,
+                                            pointStyle: 'rectRot',
+                                            showLine: false,
+                                            pointHoverRadius: 12
+                                        }
+                                    ]
+                                };
+                        }
+                        
+                        roundChart.data = chartData;
+                        roundChart.update();
+                    });
+                });
+            }
+
+            // Call the function to initialize graphs
+            initializeRoundGraphs();
+            
+            // Simple bid calculations
+            const simpleBidAmount = document.getElementById('simple-bid-amount');
+            const simpleMaxPrice = document.getElementById('simple-max-price');
+            const simpleEstimatedTokens = document.getElementById('simple-estimated-tokens');
+            const simpleDiscount = document.getElementById('simple-discount');
+            const simpleTotal = document.getElementById('simple-total');
+            
+            function updateSimpleBidCalculations() {
+                const bidAmount = parseFloat(simpleBidAmount.value) || 0;
+                const maxPrice = parseFloat(simpleMaxPrice.value) || 0;
+                
+                if (bidAmount > 0 && maxPrice > 0) {
+                    const estimatedTokens = Math.floor(bidAmount / maxPrice);
+                    const discountAmount = bidAmount * 0.05; // 5% early bid discount
+                    
+                    simpleEstimatedTokens.textContent = estimatedTokens.toLocaleString();
+                    simpleDiscount.textContent = `$${discountAmount.toFixed(2)}`;
+                    simpleTotal.textContent = `$${bidAmount.toFixed(2)}`;
+                } else {
+                    simpleEstimatedTokens.textContent = '0';
+                    simpleDiscount.textContent = '$0.00';
+                    simpleTotal.textContent = '$0.00';
+                }
+            }
+            
+            simpleBidAmount.addEventListener('input', updateSimpleBidCalculations);
+            simpleMaxPrice.addEventListener('input', updateSimpleBidCalculations);
+            
+            // Advanced bid calculations
+            const advancedTokenAmount = document.getElementById('advanced-token-amount');
+            const minPrice = document.getElementById('min-price');
+            const maxPrice = document.getElementById('max-price');
+            const advTotalAmount = document.getElementById('adv-total-amount');
+            const advDiscount = document.getElementById('adv-discount');
+            const advProbability = document.getElementById('adv-probability');
+            const advFinalAmount = document.getElementById('adv-final-amount');
+            
+            function updateAdvancedBidCalculations() {
+                const tokenAmount = parseInt(advancedTokenAmount.value) || 0;
+                const maxPriceValue = parseFloat(maxPrice.value) || 0;
+                
+                if (tokenAmount > 0 && maxPriceValue > 0) {
+                    const totalAmount = maxPriceValue * tokenAmount;
+                    const discountAmount = totalAmount * 0.05; // 5% early bid discount
+                    const finalAmount = totalAmount - discountAmount;
+                    
+                    // Calculate probability based on price (simple algorithm for demo)
+                    let probability = "High";
+                    if (maxPriceValue >= 1.55) {
+                        probability = "Very High (95%)";
+                    } else if (maxPriceValue >= 1.45) {
+                        probability = "High (80%)";
+                    } else if (maxPriceValue >= 1.35) {
+                        probability = "Medium (60%)";
+                    } else {
+                        probability = "Low (30%)";
+                    }
+                    
+                    advTotalAmount.textContent = `$${totalAmount.toFixed(2)}`;
+                    advDiscount.textContent = `$${discountAmount.toFixed(2)}`;
+                    advProbability.textContent = probability;
+                    advFinalAmount.textContent = `$${finalAmount.toFixed(2)}`;
+                } else {
+                    advTotalAmount.textContent = '$0.00';
+                    advDiscount.textContent = '$0.00';
+                    advProbability.textContent = 'N/A';
+                    advFinalAmount.textContent = '$0.00';
+                }
+            }
+            
+            advancedTokenAmount.addEventListener('input', updateAdvancedBidCalculations);
+            minPrice.addEventListener('input', updateAdvancedBidCalculations);
+            maxPrice.addEventListener('input', updateAdvancedBidCalculations);
+            
+            // Initialize calculations
+            updateSimpleBidCalculations();
+            updateAdvancedBidCalculations();
+            
+            // Compliance disclosure toggle
+            const complianceTitle = document.querySelector('.compliance-title');
+            const complianceContent = document.querySelector('.compliance-content');
+            
+            complianceTitle.addEventListener('click', function() {
+                const isVisible = complianceContent.style.display !== 'none';
+                complianceContent.style.display = isVisible ? 'none' : 'block';
+                complianceTitle.querySelector('span:last-child').textContent = isVisible ? '+' : '-';
+            });
+        });
+    </script>
+</body>
+</html> 
