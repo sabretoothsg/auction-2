@@ -1424,7 +1424,15 @@
                     },
                     plugins: {
                         legend: {
-                            display: false
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20,
+                                font: {
+                                    size: 12
+                                }
+                            }
                         },
                         annotation: {
                             annotations: {
@@ -1446,6 +1454,29 @@
                                     }
                                 }
                             }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Round 3 Cumulative Demand Curve',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            },
+                            padding: {
+                                top: 10,
+                                bottom: 20
+                            }
+                        },
+                        subtitle: {
+                            display: true,
+                            text: 'Token allocation and price distribution across demand tiers',
+                            font: {
+                                size: 14,
+                                style: 'italic'
+                            },
+                            padding: {
+                                bottom: 10
+                            }
                         }
                     }
                 };
@@ -1456,10 +1487,16 @@
                 chartCard.className = 'panel-card';
                 chartCard.innerHTML = `
                     <div class="panel-card-title">
-                        <span>Round Details</span>
+                        <span>Cumulative Demand Analysis</span>
+                        <span class="chart-subtitle" style="font-size: 0.8rem; font-weight: normal; color: var(--text-secondary);">Price distribution based on token demand</span>
                     </div>
-                    <div class="chart-container">
+                    <div class="chart-container" style="position: relative; height: 400px; margin-top: 10px;">
                         <canvas id="roundChart"></canvas>
+                    </div>
+                    <div class="chart-description" style="margin-top: 15px; font-size: 0.9rem; color: var(--text-secondary);">
+                        This graph shows the cumulative demand curve for the current auction round. 
+                        The colored areas represent different allocation tiers, and the curve indicates 
+                        price sensitivity at various demand levels.
                     </div>
                 `;
                 centerPanel.appendChild(chartCard);
@@ -1477,6 +1514,9 @@
                     step.addEventListener('click', () => {
                         const round = parseInt(step.getAttribute('data-round'));
                         let chartData;
+                        
+                        // Update chart title based on selected round
+                        chartOptions.plugins.title.text = `Round ${round} Cumulative Demand Curve`;
                         
                         switch(round) {
                             case 1:
