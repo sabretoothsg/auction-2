@@ -418,11 +418,17 @@
             cursor: pointer;
             font-weight: 500;
             border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
         }
         
         .bid-tab.active {
             border-bottom-color: var(--primary);
             color: var(--primary);
+        }
+        
+        .bid-tab:hover:not(.active) {
+            background-color: #f8f9fa;
+            border-bottom-color: #e9ecef;
         }
         
         .tab-content {
@@ -431,6 +437,136 @@
         
         .tab-content.active {
             display: block;
+        }
+        
+        /* Form styling */
+        .bid-form {
+            margin-top: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+        
+        .form-group input[type="number"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            background-color: #fff;
+        }
+        
+        .form-group input[type="number"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(246, 209, 49, 0.2);
+            outline: none;
+        }
+        
+        .price-range {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .price-range input {
+            flex: 1;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 0.9rem;
+            background-color: var(--primary);
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .submit-btn:hover {
+            background-color: #e5c32c;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        /* Estimate box styling */
+        .estimate-box {
+            background-color: #f8f9fa;
+            padding: 1.25rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e9ecef;
+        }
+        
+        .estimate-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+        
+        .estimate-row:last-of-type {
+            margin-bottom: 0;
+        }
+        
+        .estimate-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            padding-top: 0.75rem;
+            margin-top: 0.5rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 1.05rem;
+        }
+        
+        /* Early bid discount alert */
+        .early-bid-alert {
+            background-color: rgba(246, 209, 49, 0.15);
+            border-left: 3px solid var(--primary);
+            padding: 1rem;
+            margin-bottom: 1.25rem;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .early-bid-alert .alert-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .early-bid-alert .alert-description {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .early-bid-alert .alert-timer {
+            font-weight: 600;
+        }
+        
+        .early-bid-alert .alert-savings {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-primary);
         }
         
         /* Responsive adjustments */
@@ -597,12 +733,12 @@
                     <!-- Simple Bid Content -->
                     <div class="tab-content active" id="simple-bid-content">
                         <!-- Early Bid Discount Alert -->
-                        <div class="early-bid-discount" style="background-color: rgba(246, 209, 49, 0.2); border-left: 3px solid var(--primary); padding: 0.75rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                        <div class="early-bid-alert">
                             <div>
-                                <div style="font-weight: 600; margin-bottom: 0.25rem;">Early Bid Discount: 5%</div>
-                                <div style="font-size: 0.8rem;">Place your bid within <span id="simple-discount-timer" style="font-weight: 600;">03:45:12</span> to receive the discount</div>
+                                <div class="alert-title">Early Bid Discount: 5%</div>
+                                <div class="alert-description">Place your bid within <span id="simple-discount-timer" class="alert-timer">03:45:12</span> to receive the discount</div>
                             </div>
-                            <div style="font-weight: 700; font-size: 1.1rem;">Save up to $125</div>
+                            <div class="alert-savings">Save up to $125</div>
                         </div>
                         
                         <div class="bid-form">
@@ -616,16 +752,16 @@
                             </div>
                             
                             <!-- Estimated Tokens Box -->
-                            <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <div class="estimate-box">
+                                <div class="estimate-row">
                                     <span>Estimated Tokens</span>
                                     <span id="simple-estimated-tokens">0</span>
                                 </div>
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <div class="estimate-row">
                                     <span>Early Bid Discount</span>
                                     <span id="simple-discount">$0.00</span>
                                 </div>
-                                <div style="display: flex; justify-content: space-between; font-weight: 600; padding-top: 0.5rem; border-top: 1px solid var(--border-color);">
+                                <div class="estimate-total">
                                     <span>Total Bid</span>
                                     <span id="simple-total">$0.00</span>
                                 </div>
@@ -638,12 +774,12 @@
                     <!-- Advanced Bid Content -->
                     <div class="tab-content" id="advanced-bid-content">
                         <!-- Early Bid Discount Alert -->
-                        <div class="early-bid-discount" style="background-color: rgba(246, 209, 49, 0.2); border-left: 3px solid var(--primary); padding: 0.75rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                        <div class="early-bid-alert">
                             <div>
-                                <div style="font-weight: 600; margin-bottom: 0.25rem;">Early Bid Discount: 5%</div>
-                                <div style="font-size: 0.8rem;">Place your bid within <span id="advanced-discount-timer" style="font-weight: 600;">03:45:12</span> to receive the discount</div>
+                                <div class="alert-title">Early Bid Discount: 5%</div>
+                                <div class="alert-description">Place your bid within <span id="advanced-discount-timer" class="alert-timer">03:45:12</span> to receive the discount</div>
                             </div>
-                            <div style="font-weight: 700; font-size: 1.1rem;">Save up to $125</div>
+                            <div class="alert-savings">Save up to $125</div>
                         </div>
                         
                         <div class="bid-form">
@@ -660,20 +796,20 @@
                             </div>
                             
                             <!-- Estimated Tokens Box -->
-                            <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <div class="estimate-box">
+                                <div class="estimate-row">
                                     <span>Total Bid Amount</span>
                                     <span id="adv-total-amount">$0.00</span>
                                 </div>
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <div class="estimate-row">
                                     <span>Early Bid Discount</span>
                                     <span id="adv-discount">$0.00</span>
                                 </div>
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <div class="estimate-row">
                                     <span>Success Probability</span>
                                     <span id="adv-probability">N/A</span>
                                 </div>
-                                <div style="display: flex; justify-content: space-between; font-weight: 600; padding-top: 0.5rem; border-top: 1px solid var(--border-color);">
+                                <div class="estimate-total">
                                     <span>Final Amount</span>
                                     <span id="adv-final-amount">$0.00</span>
                                 </div>
@@ -694,6 +830,35 @@
                                 <label>Minimum Price per Token ($)</label>
                                 <input type="number" id="sell-min-price" value="1.40">
                             </div>
+                            
+                            <!-- Preview Box for Sell Tokens -->
+                            <div class="estimate-box">
+                                <div class="estimate-row">
+                                    <span>Tokens to Sell</span>
+                                    <span id="sell-tokens-preview">0</span>
+                                </div>
+                                <div class="estimate-row">
+                                    <span>Minimum Sale Price</span>
+                                    <span id="sell-price-preview">$1.40</span>
+                                </div>
+                                <div class="estimate-row">
+                                    <span>Your Average Cost</span>
+                                    <span id="sell-avg-cost">$1.41</span>
+                                </div>
+                                <div class="estimate-row">
+                                    <span>Profit/Loss per Token</span>
+                                    <span id="sell-pnl-per-token">$0.00</span>
+                                </div>
+                                <div class="estimate-total">
+                                    <span>Total Sale Amount</span>
+                                    <span id="sell-total-amount">$0.00</span>
+                                </div>
+                                <div class="estimate-total" style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: none;">
+                                    <span>Total P&L</span>
+                                    <span id="sell-total-pnl">$0.00</span>
+                                </div>
+                            </div>
+                            
                             <button class="submit-btn" id="sell-tokens-submit">Sell Tokens</button>
                         </div>
                     </div>
@@ -1034,17 +1199,31 @@
                 const tokenAmount = document.getElementById('sell-token-amount').value;
                 const minPrice = document.getElementById('sell-min-price').value;
                 
-                transactions.all.unshift({
-                    price: parseFloat(minPrice),
-                    user: 'You',
-                    time: 'Just now',
-                    amount: parseInt(tokenAmount)
-                });
-                transactions['my-bids'].unshift(transactions.all[0]);
-                transactions.recent.unshift(transactions.all[0]);
-                
-                const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
-                updateTransactionList(activeFilter);
+                // Only proceed if values are valid
+                if (parseInt(tokenAmount) > 0 && parseFloat(minPrice) > 0) {
+                    // Add new transaction to history
+                    transactions.all.unshift({
+                        price: parseFloat(minPrice),
+                        user: 'You',
+                        time: 'Just now',
+                        amount: parseInt(tokenAmount)
+                    });
+                    transactions['my-bids'].unshift(transactions.all[0]);
+                    transactions.recent.unshift(transactions.all[0]);
+                    
+                    // Update current view
+                    const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+                    updateTransactionList(activeFilter);
+                    
+                    // Show confirmation message
+                    alert(`Sell order placed for ${tokenAmount} tokens at $${minPrice} per token.`);
+                    
+                    // Reset form
+                    document.getElementById('sell-token-amount').value = '';
+                    updateSellTokensPreview();
+                } else {
+                    alert('Please enter valid token amount and price.');
+                }
             });
 
             // Initialize Chart.js graphs for each round
@@ -1445,6 +1624,66 @@
             // Initialize calculations
             updateSimpleBidCalculations();
             updateAdvancedBidCalculations();
+            
+            // Sell tokens preview calculations
+            const sellTokenAmount = document.getElementById('sell-token-amount');
+            const sellMinPrice = document.getElementById('sell-min-price');
+            const sellTokensPreview = document.getElementById('sell-tokens-preview');
+            const sellPricePreview = document.getElementById('sell-price-preview');
+            const sellAvgCost = document.getElementById('sell-avg-cost');
+            const sellPnlPerToken = document.getElementById('sell-pnl-per-token');
+            const sellTotalAmount = document.getElementById('sell-total-amount');
+            const sellTotalPnl = document.getElementById('sell-total-pnl');
+            
+            function updateSellTokensPreview() {
+                const tokenAmount = parseInt(sellTokenAmount.value) || 0;
+                const minPrice = parseFloat(sellMinPrice.value) || 0;
+                const avgCost = 1.41; // From portfolio data
+                
+                if (tokenAmount > 0 && minPrice > 0) {
+                    // Calculate P&L per token
+                    const pnlPerToken = minPrice - avgCost;
+                    const totalAmount = minPrice * tokenAmount;
+                    const totalPnl = pnlPerToken * tokenAmount;
+                    
+                    // Update preview elements
+                    sellTokensPreview.textContent = tokenAmount.toLocaleString();
+                    sellPricePreview.textContent = `$${minPrice.toFixed(2)}`;
+                    sellAvgCost.textContent = `$${avgCost.toFixed(2)}`;
+                    
+                    // Set P&L color based on profit or loss
+                    if (pnlPerToken >= 0) {
+                        sellPnlPerToken.textContent = `+$${pnlPerToken.toFixed(2)}`;
+                        sellPnlPerToken.style.color = '#28a745'; // Green for profit
+                        sellTotalPnl.textContent = `+$${totalPnl.toFixed(2)}`;
+                        sellTotalPnl.style.color = '#28a745';
+                    } else {
+                        sellPnlPerToken.textContent = `-$${Math.abs(pnlPerToken).toFixed(2)}`;
+                        sellPnlPerToken.style.color = '#dc3545'; // Red for loss
+                        sellTotalPnl.textContent = `-$${Math.abs(totalPnl).toFixed(2)}`;
+                        sellTotalPnl.style.color = '#dc3545';
+                    }
+                    
+                    sellTotalAmount.textContent = `$${totalAmount.toFixed(2)}`;
+                } else {
+                    // Reset preview if inputs are invalid
+                    sellTokensPreview.textContent = '0';
+                    sellPricePreview.textContent = minPrice > 0 ? `$${minPrice.toFixed(2)}` : '$0.00';
+                    sellAvgCost.textContent = `$${avgCost.toFixed(2)}`;
+                    sellPnlPerToken.textContent = '$0.00';
+                    sellPnlPerToken.style.color = 'inherit';
+                    sellTotalAmount.textContent = '$0.00';
+                    sellTotalPnl.textContent = '$0.00';
+                    sellTotalPnl.style.color = 'inherit';
+                }
+            }
+            
+            // Add event listeners for sell tokens inputs
+            sellTokenAmount.addEventListener('input', updateSellTokensPreview);
+            sellMinPrice.addEventListener('input', updateSellTokensPreview);
+            
+            // Initialize sell tokens preview
+            updateSellTokensPreview();
             
             // Compliance disclosure toggle
             const complianceTitle = document.querySelector('.compliance-title');
