@@ -28,8 +28,23 @@
         }
         
         .auction-subtitle {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: var(--text-secondary);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .auction-subtitle span {
+            background-color: #f8f9fa;
+            padding: 6px 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+        
+        .auction-subtitle strong {
+            color: var(--text-primary, #333);
         }
         
         /* Three-panel layout */
@@ -197,145 +212,116 @@
         
         /* Auction Progress Timeline */
         .timeline-container {
-            padding: 1.5rem 0 0.5rem;
+            margin: 1.5rem 0;
         }
         
         .timeline {
-            position: relative;
             display: flex;
-            margin: 1.5rem 0;
+            justify-content: space-between;
+            position: relative;
         }
         
         .timeline::before {
             content: '';
             position: absolute;
-            top: 15px;
+            top: 25px;
             left: 0;
             right: 0;
             height: 2px;
-            background-color: #e9ecef;
-            z-index: 0;
+            background-color: var(--border-color);
+            z-index: 1;
         }
         
         .timeline-step {
             position: relative;
-            flex: 1;
+            z-index: 2;
             text-align: center;
-            z-index: 1;
+            cursor: pointer;
         }
         
         .timeline-point {
-            width: 30px;
-            height: 30px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            background-color: #f8f9fa;
-            border: 2px solid #e9ecef;
-            margin: 0 auto 0.5rem;
+            background-color: white;
+            border: 2px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            font-size: 0.85rem;
+            margin: 0 auto 0.5rem;
         }
         
         .timeline-point.completed {
             background-color: var(--primary);
+            color: white;
             border-color: var(--primary);
-            color: #000;
         }
         
         .timeline-point.active {
-            background-color: #fff;
+            background-color: white;
+            color: var(--primary);
             border-color: var(--primary);
-            color: var(--primary-dark);
-            animation: pulse 2s infinite;
+            border-width: 3px;
         }
         
         .timeline-label {
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-        
-        .timeline-sublabel {
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-            margin-top: 0.2rem;
-        }
-        
-        /* Active Round Details */
-        .price-info {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-        
-        .price-item {
-            background-color: #f8f9fa;
-            padding: 0.75rem;
-            border-radius: 6px;
-            text-align: center;
-        }
-        
-        .price-label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
             margin-bottom: 0.25rem;
         }
         
-        .price-value {
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-        
-        /* Chart container */
-        .chart-container {
-            width: 100%;
-            height: 250px;
-            margin: 1rem 0;
-        }
-        
-        /* Bid volume heatmap */
-        .heatmap-container {
-            margin-top: 1.5rem;
-        }
-        
-        .heatmap-legend {
-            display: flex;
-            justify-content: space-between;
-            margin: 0.5rem 0;
-        }
-        
-        .heatmap-label {
-            font-size: 0.75rem;
+        .timeline-sublabel {
+            font-size: 0.8rem;
             color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
         }
         
-        .heatmap-color {
-            width: 12px;
-            height: 12px;
-            border-radius: 2px;
+        /* Add styles for tokens sold and trigger status */
+        .timeline-tokens-sold {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+        
+        .timeline-trigger {
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        
+        .timeline-trigger.triggered {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .timeline-trigger.not-triggered {
+            background-color: #dc3545;
+            color: white;
         }
         
         /* Countdown clock */
         .countdown-container {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
+            margin: 1rem 0;
             padding: 1rem;
             background-color: #f8f9fa;
             border-radius: 8px;
-            margin: 1rem 0;
         }
         
         .countdown-timer {
             font-size: 2rem;
             font-weight: 700;
-            color: var(--primary-dark);
-            letter-spacing: 2px;
+            color: var(--primary);
+        }
+        
+        .countdown-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
         }
         
         /* Transaction History */
@@ -474,19 +460,6 @@
             height: 18px;
             display: inline-block;
         }
-        
-        /* Animation for active timeline point */
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0.4);
-            }
-            70% {
-                box-shadow: 0 0 0 10px rgba(var(--primary-rgb), 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0);
-            }
-        }
     </style>
 </head>
 <body>
@@ -496,8 +469,15 @@
     <main class="auction-container">
         <div class="auction-header">
             <h1 class="auction-title">EXCQ Protected Note Auction - 150% Yield Boost | 50% Protection</h1>
-            <p class="auction-subtitle">Make time-sensitive bidding decisions with our streamlined auction interface</p>
-        </div>
+
+            <p class="auction-subtitle">
+                <span><strong>Maturity:</strong> Dec 15, 2023</span>
+                <span><strong>Auction:</strong> Round 3 of 6</span>
+                <span><strong>Current Price:</strong> $1.75</span>
+                <span><strong>Reserve:</strong> $1.50</span>
+                <span><strong>Protection:</strong> 50% ($1.50 floor)</span>
+                <span><strong>Time Remaining:</strong> <span id="subtitle-countdown">05:23:47</span></span>
+            </p>
         
         <!-- Three-panel layout structure -->
         <div class="auction-panels">
@@ -559,31 +539,43 @@
                                 <div class="timeline-point completed">1</div>
                                 <div class="timeline-label">Round 1</div>
                                 <div class="timeline-sublabel">$1.33</div>
+                                <div class="timeline-tokens-sold">100,000 tokens</div>
+                                <div class="timeline-trigger triggered">Triggered</div>
                             </div>
                             <div class="timeline-step" data-round="2">
                                 <div class="timeline-point completed">2</div>
                                 <div class="timeline-label">Round 2</div>
                                 <div class="timeline-sublabel">$1.85</div>
+                                <div class="timeline-tokens-sold">90,000 tokens</div>
+                                <div class="timeline-trigger not-triggered">Not Triggered</div>
                             </div>
                             <div class="timeline-step" data-round="3">
                                 <div class="timeline-point active">3</div>
                                 <div class="timeline-label">Round 3</div>
                                 <div class="timeline-sublabel">Active</div>
+                                <div class="timeline-tokens-sold">45,000 tokens so far</div>
+                                <div class="timeline-trigger not-triggered">Not Triggered</div>
                             </div>
                             <div class="timeline-step" data-round="4">
                                 <div class="timeline-point">4</div>
                                 <div class="timeline-label">Round 4</div>
                                 <div class="timeline-sublabel">Upcoming</div>
+                                <div class="timeline-tokens-sold">0 tokens</div>
+                                <div class="timeline-trigger">Pending</div>
                             </div>
                             <div class="timeline-step" data-round="5">
                                 <div class="timeline-point">5</div>
                                 <div class="timeline-label">Round 5</div>
                                 <div class="timeline-sublabel">Upcoming</div>
+                                <div class="timeline-tokens-sold">0 tokens</div>
+                                <div class="timeline-trigger">Pending</div>
                             </div>
                             <div class="timeline-step" data-round="6">
                                 <div class="timeline-point">6</div>
                                 <div class="timeline-label">Round 6</div>
                                 <div class="timeline-sublabel">Upcoming</div>
+                                <div class="timeline-tokens-sold">0 tokens</div>
+                                <div class="timeline-trigger">Pending</div>
                             </div>
                         </div>
                     </div>
@@ -841,6 +833,163 @@
                     // Update round details graph here
                     console.log(`Showing details for round ${round}`);
                 });
+            });
+
+            // Add countdown timer functionality for Round 3
+            function updateRoundCountdown() {
+                const countdownElement = document.getElementById('round-countdown');
+                if (!countdownElement) return;
+                
+                const countdownText = countdownElement.textContent;
+                const [hours, minutes, seconds] = countdownText.split(':').map(Number);
+                
+                let totalSeconds = hours * 3600 + minutes * 60 + seconds;
+                
+                if (totalSeconds <= 0) {
+                    countdownElement.textContent = "Round Complete";
+                    
+                    // Update the timeline to show round 3 as completed
+                    const round3Step = document.querySelector('.timeline-step[data-round="3"]');
+                    if (round3Step) {
+                        const round3Point = round3Step.querySelector('.timeline-point');
+                        round3Point.classList.remove('active');
+                        round3Point.classList.add('completed');
+                        
+                        const round3Sublabel = round3Step.querySelector('.timeline-sublabel');
+                        round3Sublabel.textContent = "$1.65"; // Final price for round 3
+                        
+                        // Activate round 4
+                        const round4Step = document.querySelector('.timeline-step[data-round="4"]');
+                        if (round4Step) {
+                            const round4Point = round4Step.querySelector('.timeline-point');
+                            round4Point.classList.add('active');
+                            
+                            const round4Sublabel = round4Step.querySelector('.timeline-sublabel');
+                            round4Sublabel.textContent = "Active";
+                        }
+                    }
+                    
+                    return;
+                }
+                
+                totalSeconds--;
+                
+                const newHours = Math.floor(totalSeconds / 3600);
+                const newMinutes = Math.floor((totalSeconds % 3600) / 60);
+                const newSeconds = totalSeconds % 60;
+                
+                const formattedTime = `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}:${newSeconds.toString().padStart(2, '0')}`;
+                
+                countdownElement.textContent = formattedTime;
+                
+                // Also update the subtitle countdown
+                const subtitleCountdown = document.getElementById('subtitle-countdown');
+                if (subtitleCountdown) {
+                    subtitleCountdown.textContent = formattedTime;
+                }
+                
+                setTimeout(updateRoundCountdown, 1000);
+            }
+
+            // Start countdown timer when page loads
+            document.addEventListener('DOMContentLoaded', function() {
+                updateRoundCountdown();
+                
+                // Add auction data with trigger mechanism and tokens sold information
+                const auctionRoundData = [
+                    { 
+                        round: 1, 
+                        price: 1.33, 
+                        status: 'completed', 
+                        tokensSold: 100000, 
+                        triggerActivated: true 
+                    },
+                    { 
+                        round: 2, 
+                        price: 1.85, 
+                        status: 'completed', 
+                        tokensSold: 90000, 
+                        triggerActivated: false 
+                    },
+                    { 
+                        round: 3, 
+                        price: 0, // Will be determined at end of round
+                        status: 'active', 
+                        tokensSold: 45000, 
+                        triggerActivated: false 
+                    },
+                    { 
+                        round: 4, 
+                        price: 0,
+                        status: 'upcoming', 
+                        tokensSold: 0, 
+                        triggerActivated: false 
+                    },
+                    { 
+                        round: 5, 
+                        price: 0,
+                        status: 'upcoming', 
+                        tokensSold: 0, 
+                        triggerActivated: false 
+                    },
+                    { 
+                        round: 6, 
+                        price: 0,
+                        status: 'upcoming', 
+                        tokensSold: 0, 
+                        triggerActivated: false 
+                    }
+                ];
+                
+                // Function to update the timeline with real-time data
+                function updateAuctionTimeline() {
+                    auctionRoundData.forEach(roundData => {
+                        const roundStep = document.querySelector(`.timeline-step[data-round="${roundData.round}"]`);
+                        if (roundStep) {
+                            const tokensSoldElement = roundStep.querySelector('.timeline-tokens-sold');
+                            if (tokensSoldElement) {
+                                tokensSoldElement.textContent = `${roundData.tokensSold.toLocaleString()} tokens`;
+                            }
+                            
+                            // Update trigger status
+                            const triggerElement = roundStep.querySelector('.timeline-trigger');
+                            if (triggerElement) {
+                                if (roundData.status === 'upcoming') {
+                                    triggerElement.textContent = 'Pending';
+                                    triggerElement.className = 'timeline-trigger';
+                                } else {
+                                    if (roundData.triggerActivated) {
+                                        triggerElement.textContent = 'Triggered';
+                                        triggerElement.className = 'timeline-trigger triggered';
+                                    } else {
+                                        triggerElement.textContent = 'Not Triggered';
+                                        triggerElement.className = 'timeline-trigger not-triggered';
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+                
+                // Initial update
+                updateAuctionTimeline();
+                
+                // Simulate real-time updates for Round 3 (for demo purposes)
+                setInterval(() => {
+                    // Increment tokens sold in round 3 by a random amount
+                    const round3Data = auctionRoundData.find(data => data.round === 3);
+                    if (round3Data && round3Data.status === 'active') {
+                        const randomIncrement = Math.floor(Math.random() * 500) + 100;
+                        round3Data.tokensSold += randomIncrement;
+                        
+                        // Randomly trigger the mechanism with a small probability
+                        if (Math.random() < 0.01 && !round3Data.triggerActivated) {
+                            round3Data.triggerActivated = true;
+                        }
+                        
+                        updateAuctionTimeline();
+                    }
+                }, 5000); // Update every 5 seconds
             });
 
             // Bid submission handlers

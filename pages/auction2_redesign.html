@@ -712,6 +712,14 @@
                                     <span>Price Impact</span>
                                     <span id="sell-price-impact">Low</span>
                                 </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Average Purchase Price</span>
+                                    <span id="purchase-price">$1.20</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-weight: 600; padding-top: 0.5rem; border-top: 1px solid var(--border-color);">
+                                    <span>Potential P&L</span>
+                                    <span id="sell-pnl">$0.00 (0%)</span>
+                                </div>
                             </div>
                         </div>
                         
@@ -1236,10 +1244,13 @@
             const sellMaxBtn = document.getElementById('sell-max-btn');
             const sellProceeds = document.getElementById('sell-proceeds');
             const sellPriceImpact = document.getElementById('sell-price-impact');
+            const purchasePrice = document.getElementById('purchase-price');
+            const sellPnL = document.getElementById('sell-pnl');
             
             function updateSellCalculations() {
                 const amount = parseInt(sellAmount.value) || 0;
                 const currentPrice = 1.45; // Current token price
+                const avgPurchasePrice = 1.20; // Average purchase price of tokens
                 
                 if (amount > 0) {
                     const proceeds = amount * currentPrice;
@@ -1252,11 +1263,23 @@
                         priceImpact = "Medium";
                     }
                     
+                    // Calculate P&L
+                    const costBasis = amount * avgPurchasePrice;
+                    const pnlValue = proceeds - costBasis;
+                    const pnlPercent = (pnlValue / costBasis) * 100;
+                    const pnlColor = pnlValue >= 0 ? "#28a745" : "#dc3545";
+                    
                     sellProceeds.textContent = `$${proceeds.toFixed(2)}`;
                     sellPriceImpact.textContent = priceImpact;
+                    purchasePrice.textContent = `$${avgPurchasePrice.toFixed(2)}`;
+                    sellPnL.textContent = `$${pnlValue.toFixed(2)} (${pnlPercent.toFixed(2)}%)`;
+                    sellPnL.style.color = pnlColor;
                 } else {
                     sellProceeds.textContent = '$0.00';
                     sellPriceImpact.textContent = 'Low';
+                    purchasePrice.textContent = `$1.20`;
+                    sellPnL.textContent = '$0.00 (0%)';
+                    sellPnL.style.color = 'inherit';
                 }
             }
             
