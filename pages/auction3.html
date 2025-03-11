@@ -148,9 +148,9 @@
             height: 8px;
             background-color: #e9ecef;
             border-radius: 4px;
-            margin: 0.75rem 0;
+            margin: 1.5rem 0 0.75rem;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
         }
         
         .protection-fill {
@@ -160,13 +160,13 @@
             height: 100%;
             background-color: var(--primary);
             border-radius: 4px;
-            width: 50%; /* Set to 50% threshold from requirements */
+            width: 50%;
         }
         
         .protection-threshold {
             position: absolute;
             left: 50%;
-            top: -12px;
+            top: -20px;
             transform: translateX(-50%);
             font-size: 0.75rem;
             font-weight: 600;
@@ -178,6 +178,11 @@
             justify-content: space-between;
             font-size: 0.75rem;
             color: var(--text-secondary);
+        }
+        
+        /* Update the protection-status class to add padding */
+        .protection-status {
+            padding-top: 10px;
         }
         
         /* Quick Actions */
@@ -650,6 +655,10 @@
                         <span>Protection Status</span>
                     </div>
                     <div class="protection-status">
+                        <!-- Add a description text to explain the protection -->
+                        <div class="protection-description" style="margin-bottom: 15px; font-size: 0.9rem; color: var(--text-secondary);">
+                            This note has 50% downside protection, with a floor price of $1.50.
+                        </div>
                         <div class="protection-bar">
                             <div class="protection-fill"></div>
                             <div class="protection-threshold">50% Protection</div>
@@ -892,12 +901,19 @@
                 <div class="panel-card">
                     <div class="compliance-toggle">
                         <div class="compliance-title">
-                            <span>Compliance Disclosures</span>
+                            <span>Auction Rules</span>
                             <span>+</span>
                         </div>
                         <div class="compliance-content" style="display: none;">
-                            <p>This auction is conducted in accordance with regulatory requirements. Participation implies acceptance of terms and conditions. All transactions are recorded on-chain for transparency.</p>
-                            <p>Protected notes carry specific risks and are not suitable for all investors. Please review the full documentation before participating.</p>
+                            <p>This is a multi-round uniform price auction where participants can both buy and sell tokens between rounds. Each round establishes a single clearing price for all successful bids. The auction includes 6 rounds with protection mechanisms to maintain price stability.</p>
+                            <p>Key features:</p>
+                            <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                                <li>Uniform pricing - all successful bids in a round receive the same price</li>
+                                <li>Inter-round trading - ability to sell tokens between rounds</li>
+                                <li>50% price protection - downside protection mechanism</li>
+                                <li>Early bid discounts - 5% discount for early participation</li>
+                            </ul>
+                            <p style="margin-top: 0.75rem;"><a href="/documents/auction-rules.pdf" style="color: var(--primary); text-decoration: underline; font-weight: 500;">View Full Auction Rules Document</a></p>
                         </div>
                     </div>
                 </div>
@@ -1685,7 +1701,7 @@
             // Initialize sell tokens preview
             updateSellTokensPreview();
             
-            // Compliance disclosure toggle
+            // Auction rules toggle
             const complianceTitle = document.querySelector('.compliance-title');
             const complianceContent = document.querySelector('.compliance-content');
             
