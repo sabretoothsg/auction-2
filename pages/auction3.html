@@ -680,88 +680,6 @@
 
             <!-- Center Panel (50% width) -->
             <section class="center-panel">
-                <!-- Auction Progress Timeline -->
-                <div class="panel-card">
-                    <div class="panel-card-title">
-                        <span>Auction Progress Timeline</span>
-                    </div>
-                    <div class="timeline-container">
-                        <div class="timeline">
-                            <div class="timeline-step" data-round="1">
-                                <div class="timeline-point completed">1</div>
-                                <div class="timeline-label">Round 1</div>
-                                <div class="timeline-sublabel">$1.33</div>
-                                <div class="timeline-tokens-sold">100,000 tokens</div>
-                                <div class="timeline-trigger triggered">Triggered</div>
-                            </div>
-                            <div class="timeline-step" data-round="2">
-                                <div class="timeline-point completed">2</div>
-                                <div class="timeline-label">Round 2</div>
-                                <div class="timeline-sublabel">$1.85</div>
-                                <div class="timeline-tokens-sold">90,000 tokens</div>
-                                <div class="timeline-trigger not-triggered">Not Triggered</div>
-                            </div>
-                            <div class="timeline-step" data-round="3">
-                                <div class="timeline-point active">3</div>
-                                <div class="timeline-label">Round 3</div>
-                                <div class="timeline-sublabel">Active</div>
-                                <div class="timeline-tokens-sold">45,000 tokens so far</div>
-                                <div class="timeline-trigger not-triggered">Not Triggered</div>
-                            </div>
-                            <div class="timeline-step" data-round="4">
-                                <div class="timeline-point">4</div>
-                                <div class="timeline-label">Round 4</div>
-                                <div class="timeline-sublabel">Upcoming</div>
-                                <div class="timeline-tokens-sold">0 tokens</div>
-                                <div class="timeline-trigger">Pending</div>
-                            </div>
-                            <div class="timeline-step" data-round="5">
-                                <div class="timeline-point">5</div>
-                                <div class="timeline-label">Round 5</div>
-                                <div class="timeline-sublabel">Upcoming</div>
-                                <div class="timeline-tokens-sold">0 tokens</div>
-                                <div class="timeline-trigger">Pending</div>
-                            </div>
-                            <div class="timeline-step" data-round="6">
-                                <div class="timeline-point">6</div>
-                                <div class="timeline-label">Round 6</div>
-                                <div class="timeline-sublabel">Upcoming</div>
-                                <div class="timeline-tokens-sold">0 tokens</div>
-                                <div class="timeline-trigger">Pending</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Active Round Details -->
-                <div class="panel-card">
-                    <div class="panel-card-title">
-                        <span>Round 3 Details</span>
-                        <span>112,000 tokens available</span>
-                    </div>
-                    
-                    <!-- Price curve chart -->
-                    <div style="height: 300px; margin-bottom: 2rem;">
-                        <canvas id="priceCurveChart"></canvas>
-                    </div>
-                    
-                    <!-- Bid volume heatmap -->
-                    <div>
-                        <div class="panel-card-title">
-                            <span>Current Bidding Activity</span>
-                            <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-secondary);">Distribution of bids across price ranges</span>
-                        </div>
-                        <div style="height: 250px; margin-bottom: 1rem;">
-                            <canvas id="bidHeatmapChart"></canvas>
-                        </div>
-                    </div>
-                    
-                    <!-- Countdown clock -->
-                    <div style="text-align: center; margin-top: 1.5rem;">
-                        <div style="font-size: 2rem; font-weight: 700; color: var(--primary);" id="round-countdown"></div>
-                    </div>
-                </div>
-
                 <!-- Participation Options -->
                 <div class="panel-card">
                     <div class="panel-card-title">
@@ -906,6 +824,88 @@
                             
                             <button class="submit-btn" id="sell-tokens-submit">Sell Tokens</button>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Auction Progress Timeline -->
+                <div class="panel-card">
+                    <div class="panel-card-title">
+                        <span>Auction Progress Timeline</span>
+                    </div>
+                    <div class="timeline-container">
+                        <div class="timeline">
+                            <div class="timeline-step" data-round="1">
+                                <div class="timeline-point completed">1</div>
+                                <div class="timeline-label">Round 1</div>
+                                <div class="timeline-sublabel">$1.33</div>
+                                <div class="timeline-tokens-sold">100,000 tokens</div>
+                                <div class="timeline-trigger triggered">Triggered</div>
+                            </div>
+                            <div class="timeline-step" data-round="2">
+                                <div class="timeline-point completed">2</div>
+                                <div class="timeline-label">Round 2</div>
+                                <div class="timeline-sublabel">$1.85</div>
+                                <div class="timeline-tokens-sold">90,000 tokens</div>
+                                <div class="timeline-trigger not-triggered">Not Triggered</div>
+                            </div>
+                            <div class="timeline-step" data-round="3">
+                                <div class="timeline-point active">3</div>
+                                <div class="timeline-label">Round 3</div>
+                                <div class="timeline-sublabel">Active</div>
+                                <div class="timeline-tokens-sold">45,000 tokens so far</div>
+                                <div class="timeline-trigger not-triggered">Not Triggered</div>
+                            </div>
+                            <div class="timeline-step" data-round="4">
+                                <div class="timeline-point">4</div>
+                                <div class="timeline-label">Round 4</div>
+                                <div class="timeline-sublabel">Upcoming</div>
+                                <div class="timeline-tokens-sold">0 tokens</div>
+                                <div class="timeline-trigger">Pending</div>
+                            </div>
+                            <div class="timeline-step" data-round="5">
+                                <div class="timeline-point">5</div>
+                                <div class="timeline-label">Round 5</div>
+                                <div class="timeline-sublabel">Upcoming</div>
+                                <div class="timeline-tokens-sold">0 tokens</div>
+                                <div class="timeline-trigger">Pending</div>
+                            </div>
+                            <div class="timeline-step" data-round="6">
+                                <div class="timeline-point">6</div>
+                                <div class="timeline-label">Round 6</div>
+                                <div class="timeline-sublabel">Upcoming</div>
+                                <div class="timeline-tokens-sold">0 tokens</div>
+                                <div class="timeline-trigger">Pending</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Round Details -->
+                <div class="panel-card">
+                    <div class="panel-card-title">
+                        <span>Round 3 Details</span>
+                        <span>112,000 tokens available</span>
+                    </div>
+                    
+                    <!-- Price curve chart -->
+                    <div style="height: 300px; margin-bottom: 2rem;">
+                        <canvas id="priceCurveChart"></canvas>
+                    </div>
+                    
+                    <!-- Bid volume heatmap -->
+                    <div>
+                        <div class="panel-card-title">
+                            <span>Current Bidding Activity</span>
+                            <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-secondary);">Distribution of bids across price ranges</span>
+                        </div>
+                        <div style="height: 250px; margin-bottom: 1rem;">
+                            <canvas id="bidHeatmapChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Countdown clock -->
+                    <div style="text-align: center; margin-top: 1.5rem;">
+                        <div style="font-size: 2rem; font-weight: 700; color: var(--primary);" id="round-countdown"></div>
                     </div>
                 </div>
             </section>
