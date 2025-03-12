@@ -145,10 +145,10 @@
         }
         
         .protection-bar, .protection-meter {
-            height: 8px;
+            height: 12px;
             background-color: #e9ecef;
             border-radius: 4px;
-            margin: 1.5rem 0 0.75rem;
+            margin: 2.5rem 0 1.5rem;
             position: relative;
             overflow: visible;
         }
@@ -166,11 +166,27 @@
         .protection-threshold {
             position: absolute;
             left: 50%;
-            top: -20px;
+            top: -25px;
             transform: translateX(-50%);
             font-size: 0.75rem;
             font-weight: 600;
             white-space: nowrap;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 2px 5px;
+            border-radius: 3px;
+            z-index: 5; /* Add z-index to ensure labels appear above other elements */
+        }
+        
+        /* Add specific styles for edge labels to prevent overflow */
+        .protection-threshold.edge-left {
+            left: 5px;
+            transform: none;
+        }
+        
+        .protection-threshold.edge-right {
+            left: auto;
+            right: 5px;
+            transform: none;
         }
         
         .protection-labels {
@@ -178,11 +194,14 @@
             justify-content: space-between;
             font-size: 0.75rem;
             color: var(--text-secondary);
+            margin-top: 10px;
+            padding: 0 5px; /* Add padding to align with the edge labels */
         }
         
         /* Update the protection-status class to add padding */
         .protection-status {
             padding-top: 10px;
+            padding-bottom: 10px;
         }
         
         /* Quick Actions */
@@ -661,12 +680,12 @@
                         </div>
                         <div class="protection-bar">
                             <div class="protection-fill" style="width: 71.4%; background: linear-gradient(to right, #28a745, #f6d131);"></div>
-                            <div class="protection-threshold" style="left: 100%;">Trigger: $1.85</div>
-                            <div class="protection-threshold" style="left: 0%; top: 15px;">Reserve: $1.50</div>
-                            <div class="protection-threshold" style="left: 71.4%; top: -20px; color: #333;">Current: $1.75</div>
-                            <div class="current-price-marker" style="position: absolute; left: 71.4%; top: -5px; width: 4px; height: 18px; background-color: #333; transform: translateX(-50%);"></div>
+                            <div class="protection-threshold edge-right" style="top: 20px;">Trigger: $1.85</div>
+                            <div class="protection-threshold edge-left" style="top: 20px;">Reserve: $1.50</div>
+                            <div class="protection-threshold" style="left: 71.4%; top: -25px; color: #333;">Current: $1.75</div>
+                            <div class="current-price-marker" style="position: absolute; left: 71.4%; top: -6px; width: 4px; height: 24px; background-color: #333; transform: translateX(-50%);"></div>
                         </div>
-                        <div class="protection-labels" style="margin-top: 20px;">
+                        <div class="protection-labels" style="margin-top: 30px;">
                             <span>$1.50</span>
                             <span>$1.85</span>
                         </div>
@@ -1367,18 +1386,30 @@
                         },
                         // Add key point markers for Round 3
                         {
-                            label: 'Round 3 Key Points',
+                            label: 'Key Price Points',
                             data: [
-                                { x: 90000, y: 1.75 },   // Current clearing price at 90,000 tokens
-                                { x: 150000, y: 1.50 }   // Reserve price at 150,000 tokens 
+                                { x: 90000, y: 1.75 },   // Current price at 90,000 tokens
+                                { x: 150000, y: 1.50 },  // Reserve price at 150,000 tokens
+                                { x: 80000, y: 1.85 }    // Trigger price at 80,000 tokens
                             ],
-                            backgroundColor: 'rgb(75, 192, 192)',
+                            backgroundColor: [
+                                'rgba(0, 123, 255, 0.8)',  // Current price (blue)
+                                'rgba(40, 167, 69, 0.8)',  // Reserve price (green)
+                                'rgba(220, 53, 69, 0.8)'   // Trigger price (red)
+                            ],
                             borderColor: '#ffffff',
                             borderWidth: 2,
                             pointRadius: 10,
-                            pointStyle: 'rectRot',
+                            pointStyle: ['circle', 'triangle', 'rect'],
                             showLine: false,
-                            pointHoverRadius: 12
+                            pointHoverRadius: 12,
+                            pointHoverBackgroundColor: [
+                                'rgba(0, 123, 255, 1)',  // Current price (blue)
+                                'rgba(40, 167, 69, 1)',  // Reserve price (green)
+                                'rgba(220, 53, 69, 1)'   // Trigger price (red)
+                            ],
+                            pointHoverBorderColor: '#ffffff',
+                            pointHoverBorderWidth: 3
                         }
                     ]
                 };
@@ -1434,19 +1465,30 @@
                         },
                         // Add key point markers for Round 1
                         {
-                            label: 'Round 1 Key Points',
+                            label: 'Key Price Points',
                             data: [
-                                { x: 110000, y: 1.33 },  // Clearing price at 110,000 tokens
-                                { x: 220000, y: 1.00 }   // Reserve price at 220,000 tokens
+                                { x: 110000, y: 1.33 },  // Current price at 110,000 tokens
+                                { x: 220000, y: 1.00 },  // Reserve price at 220,000 tokens
+                                { x: 90000, y: 1.45 }    // Trigger price at 90,000 tokens
                             ],
-                            backgroundColor: 'rgb(255, 159, 64)',
+                            backgroundColor: [
+                                'rgba(0, 123, 255, 0.8)',  // Current price (blue)
+                                'rgba(40, 167, 69, 0.8)',  // Reserve price (green)
+                                'rgba(220, 53, 69, 0.8)'   // Trigger price (red)
+                            ],
                             borderColor: '#ffffff',
                             borderWidth: 2,
                             pointRadius: 10,
-                            pointStyle: 'star',
+                            pointStyle: ['circle', 'triangle', 'rect'],
                             showLine: false,
-                            hidden: false,
-                            pointHoverRadius: 12
+                            pointHoverRadius: 12,
+                            pointHoverBackgroundColor: [
+                                'rgba(0, 123, 255, 1)',  // Current price (blue)
+                                'rgba(40, 167, 69, 1)',  // Reserve price (green)
+                                'rgba(220, 53, 69, 1)'   // Trigger price (red)
+                            ],
+                            pointHoverBorderColor: '#ffffff',
+                            pointHoverBorderWidth: 3
                         }
                     ]
                 };
@@ -1483,23 +1525,82 @@
                                 padding: 20,
                                 font: {
                                     size: 12
+                                },
+                                filter: function(item) {
+                                    // Hide the "Key Price Points" label from the legend
+                                    return item.text !== 'Key Price Points';
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const datasetIndex = context.datasetIndex;
+                                    const dataIndex = context.dataIndex;
+                                    
+                                    // Special handling for key price points
+                                    if (context.dataset.label === 'Key Price Points') {
+                                        if (dataIndex === 0) {
+                                            return `Current Price: $${context.raw.y}`;
+                                        } else if (dataIndex === 1) {
+                                            return `Reserve Price: $${context.raw.y}`;
+                                        } else if (dataIndex === 2) {
+                                            return `Trigger Price: $${context.raw.y}`;
+                                        }
+                                    }
+                                    
+                                    return `${context.dataset.label}: $${context.raw}`;
                                 }
                             }
                         },
                         annotation: {
                             annotations: {
-                                clearingPriceLine: {
+                                reservePriceLine: {
                                     type: 'line',
-                                    yMin: 1.75,
-                                    yMax: 1.75,
-                                    borderColor: 'rgb(0, 128, 0)',
+                                    yMin: 1.50,
+                                    yMax: 1.50,
+                                    borderColor: 'rgba(40, 167, 69, 0.8)',
                                     borderWidth: 2,
                                     borderDash: [5, 5],
                                     label: {
                                         enabled: true,
+                                        content: 'Reserve Price: $1.50',
+                                        position: 'end',
+                                        backgroundColor: 'rgba(40, 167, 69, 0.8)',
+                                        font: {
+                                            weight: 'bold'
+                                        }
+                                    }
+                                },
+                                currentPriceLine: {
+                                    type: 'line',
+                                    yMin: 1.75,
+                                    yMax: 1.75,
+                                    borderColor: 'rgba(0, 123, 255, 0.8)',
+                                    borderWidth: 2,
+                                    borderDash: [2, 2],
+                                    label: {
+                                        enabled: true,
                                         content: 'Current Price: $1.75',
                                         position: 'end',
-                                        backgroundColor: 'rgb(0, 128, 0)',
+                                        backgroundColor: 'rgba(0, 123, 255, 0.8)',
+                                        font: {
+                                            weight: 'bold'
+                                        }
+                                    }
+                                },
+                                triggerPriceLine: {
+                                    type: 'line',
+                                    yMin: 1.85,
+                                    yMax: 1.85,
+                                    borderColor: 'rgba(220, 53, 69, 0.8)',
+                                    borderWidth: 2,
+                                    borderDash: [5, 5],
+                                    label: {
+                                        enabled: true,
+                                        content: 'Trigger Price: $1.85',
+                                        position: 'end',
+                                        backgroundColor: 'rgba(220, 53, 69, 0.8)',
                                         font: {
                                             weight: 'bold'
                                         }
@@ -1521,7 +1622,7 @@
                         },
                         subtitle: {
                             display: true,
-                            text: 'Token allocation and price distribution across demand tiers',
+                            text: 'Token allocation with reserve, current, and trigger price thresholds',
                             font: {
                                 size: 14,
                                 style: 'italic'
@@ -1842,9 +1943,27 @@
                                 pointBackgroundColor: '#f6d131'
                             },
                             {
-                                label: 'Protection Floor',
+                                label: 'Reserve Price',
                                 data: [1.50, 1.50, 1.50, 1.50, 1.50, 1.50, 1.50],
                                 borderColor: 'rgba(40, 167, 69, 0.8)',
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                fill: false,
+                                pointRadius: 0
+                            },
+                            {
+                                label: 'Current Price',
+                                data: [1.75, 1.75, 1.75, 1.75, 1.75, 1.75, 1.75],
+                                borderColor: 'rgba(0, 123, 255, 0.8)',
+                                borderWidth: 2,
+                                borderDash: [2, 2],
+                                fill: false,
+                                pointRadius: 0
+                            },
+                            {
+                                label: 'Trigger Price',
+                                data: [1.85, 1.85, 1.85, 1.85, 1.85, 1.85, 1.85],
+                                borderColor: 'rgba(220, 53, 69, 0.8)',
                                 borderWidth: 2,
                                 borderDash: [5, 5],
                                 fill: false,
@@ -1888,13 +2007,59 @@
                             },
                             subtitle: {
                                 display: true,
-                                text: 'Price changes over auction duration with 50% protection floor',
+                                text: 'Price changes over auction duration with key price thresholds',
                                 font: {
                                     size: 12,
                                     style: 'italic'
                                 },
                                 padding: {
                                     bottom: 10
+                                }
+                            },
+                            annotation: {
+                                annotations: {
+                                    reservePriceLine: {
+                                        type: 'line',
+                                        xMin: 0,
+                                        xMax: 0,
+                                        borderColor: 'rgba(40, 167, 69, 0.8)',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            enabled: true,
+                                            content: 'Reserve: $1.50',
+                                            position: 'start',
+                                            backgroundColor: 'rgba(40, 167, 69, 0.8)'
+                                        }
+                                    },
+                                    currentPriceLine: {
+                                        type: 'line',
+                                        xMin: 4,
+                                        xMax: 4,
+                                        borderColor: 'rgba(0, 123, 255, 0.8)',
+                                        borderWidth: 2,
+                                        borderDash: [2, 2],
+                                        label: {
+                                            enabled: true,
+                                            content: 'Current: $1.75',
+                                            position: 'start',
+                                            backgroundColor: 'rgba(0, 123, 255, 0.8)'
+                                        }
+                                    },
+                                    triggerPriceLine: {
+                                        type: 'line',
+                                        xMin: 6,
+                                        xMax: 6,
+                                        borderColor: 'rgba(220, 53, 69, 0.8)',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            enabled: true,
+                                            content: 'Trigger: $1.85',
+                                            position: 'start',
+                                            backgroundColor: 'rgba(220, 53, 69, 0.8)'
+                                        }
+                                    }
                                 }
                             }
                         },
@@ -1994,6 +2159,55 @@
                                 padding: {
                                     top: 10,
                                     bottom: 10
+                                }
+                            },
+                            annotation: {
+                                annotations: {
+                                    reservePriceLine: {
+                                        type: 'line',
+                                        yMin: 1.50,
+                                        yMax: 1.50,
+                                        borderColor: 'rgba(40, 167, 69, 0.8)',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            enabled: true,
+                                            content: 'Reserve Price: $1.50',
+                                            position: 'end',
+                                            backgroundColor: 'rgba(40, 167, 69, 0.8)',
+                                            font: {
+                                                weight: 'bold'
+                                            }
+                                        }
+                                    },
+                                    currentPriceLine: {
+                                        type: 'line',
+                                        yMin: 1.75,
+                                        yMax: 1.75,
+                                        borderColor: 'rgba(0, 123, 255, 0.8)',
+                                        borderWidth: 2,
+                                        borderDash: [2, 2],
+                                        label: {
+                                            enabled: true,
+                                            content: 'Current Price: $1.75',
+                                            position: 'end',
+                                            backgroundColor: 'rgba(0, 123, 255, 0.8)'
+                                        }
+                                    },
+                                    triggerPriceLine: {
+                                        type: 'line',
+                                        yMin: 1.85,
+                                        yMax: 1.85,
+                                        borderColor: 'rgba(220, 53, 69, 0.8)',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            enabled: true,
+                                            content: 'Trigger Price: $1.85',
+                                            position: 'end',
+                                            backgroundColor: 'rgba(220, 53, 69, 0.8)'
+                                        }
+                                    }
                                 }
                             }
                         },
