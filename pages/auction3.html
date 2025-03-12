@@ -7,8 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
     <style>
         /* Main layout structure */
         .auction-container {
@@ -726,6 +726,51 @@
                     </div>
                 </div>
 
+                <!-- Active Round Details -->
+                <div class="panel-card">
+                    <div class="panel-card-title">
+                        <span>Round 3 Details</span>
+                        <span>112,000 tokens available</span>
+                    </div>
+                    
+                    <!-- Price information -->
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="background-color: #f8f9fa; padding: 0.75rem; border-radius: 6px;">
+                            <div style="font-size: 0.75rem; color: var(--text-secondary);">Current Price</div>
+                            <div style="font-weight: 600; font-size: 1.1rem;">$1.75</div>
+                        </div>
+                        <div style="background-color: #f8f9fa; padding: 0.75rem; border-radius: 6px;">
+                            <div style="font-size: 0.75rem; color: var(--text-secondary);">Reserve Price</div>
+                            <div style="font-weight: 600; font-size: 1.1rem;">$1.50</div>
+                        </div>
+                        <div style="background-color: #f8f9fa; padding: 0.75rem; border-radius: 6px;">
+                            <div style="font-size: 0.75rem; color: var(--text-secondary);">Max Price</div>
+                            <div style="font-weight: 600; font-size: 1.1rem;">$2.00</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Price curve chart -->
+                    <div style="height: 300px; margin-bottom: 2rem;">
+                        <canvas id="priceCurveChart"></canvas>
+                    </div>
+                    
+                    <!-- Bid volume heatmap -->
+                    <div>
+                        <div class="panel-card-title">
+                            <span>Current Bidding Activity</span>
+                            <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-secondary);">Distribution of bids across price ranges</span>
+                        </div>
+                        <div style="height: 250px; margin-bottom: 1rem;">
+                            <canvas id="bidHeatmapChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Countdown clock -->
+                    <div style="text-align: center; margin-top: 1.5rem;">
+                        <div style="font-size: 2rem; font-weight: 700; color: var(--primary);" id="round-countdown"></div>
+                    </div>
+                </div>
+
                 <!-- Participation Options -->
                 <div class="panel-card">
                     <div class="panel-card-title">
@@ -929,6 +974,18 @@
     <script src="/components/Footer.js"></script>
     <script src="/countdown.js"></script>
     <script>
+        // Register Chart.js plugins
+        console.log('Registering Chart.js plugins');
+        
+        // Make sure Chart.js is loaded
+        window.addEventListener('load', function() {
+            if (typeof Chart === 'undefined') {
+                console.error('Chart.js is not loaded!');
+            } else {
+                console.log('Chart.js is loaded successfully');
+            }
+        });
+        
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize transaction history
             const transactions = {
@@ -1121,6 +1178,10 @@
                         triggerActivated: false 
                     }
                 ];
+                
+                // Create price curve chart for Round 3
+                console.log('Initializing price curve chart');
+                // Chart initialization moved to separate script
                 
                 // Function to update the timeline with real-time data
                 function updateAuctionTimeline() {
@@ -1750,6 +1811,217 @@
                 complianceContent.style.display = isVisible ? 'none' : 'block';
                 complianceTitle.querySelector('span:last-child').textContent = isVisible ? '+' : '-';
             });
+        });
+    </script>
+    
+    <!-- Chart initialization script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize price curve chart
+            const priceCurveCanvas = document.getElementById('priceCurveChart');
+            if (priceCurveCanvas) {
+                const ctx = priceCurveCanvas.getContext('2d');
+                
+                // Get current date and calculate auction times
+                const now = new Date();
+                const auctionStart = new Date(now);
+                auctionStart.setHours(now.getHours() - 6); // Assuming we're halfway through a 12-hour auction
+                
+                // Generate time labels for the x-axis (actual times)
+                const timeLabels = [];
+                for (let i = 0; i <= 12; i += 2) {
+                    const labelTime = new Date(auctionStart);
+                    labelTime.setHours(auctionStart.getHours() + i);
+                    timeLabels.push(labelTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}));
+                }
+                
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: timeLabels,
+                        datasets: [
+                            {
+                                label: 'Auction Price Curve',
+                                data: [1.50, 1.58, 1.65, 1.75, 1.85, 1.92, 2.00], // Reversed to slope from low to high
+                                borderColor: '#f6d131',
+                                backgroundColor: 'rgba(246, 209, 49, 0.1)',
+                                fill: true,
+                                tension: 0.4,
+                                pointRadius: 4,
+                                pointBackgroundColor: '#f6d131'
+                            },
+                            {
+                                label: 'Protection Floor',
+                                data: [1.50, 1.50, 1.50, 1.50, 1.50, 1.50, 1.50],
+                                borderColor: 'rgba(40, 167, 69, 0.8)',
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                fill: false,
+                                pointRadius: 0
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    usePointStyle: true,
+                                    padding: 20,
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `Price: $${context.raw}`;
+                                    }
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Round 3 Auction Price Dynamics',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                },
+                                padding: {
+                                    top: 10,
+                                    bottom: 10
+                                }
+                            },
+                            subtitle: {
+                                display: true,
+                                text: 'Price changes over auction duration with 50% protection floor',
+                                font: {
+                                    size: 12,
+                                    style: 'italic'
+                                },
+                                padding: {
+                                    bottom: 10
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                min: 1.45,
+                                max: 2.05,
+                                title: {
+                                    display: true,
+                                    text: 'Token Price ($)',
+                                    font: {
+                                        weight: 'bold'
+                                    }
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return '$' + value.toFixed(2);
+                                    }
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Auction Time',
+                                    font: {
+                                        weight: 'bold'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Initialize bid volume heatmap
+            const bidHeatmapCanvas = document.getElementById('bidHeatmapChart');
+            if (bidHeatmapCanvas) {
+                const ctx = bidHeatmapCanvas.getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['$1.50-1.55', '$1.56-1.60', '$1.61-1.65', '$1.66-1.70', '$1.71-1.75', '$1.76-1.80', '$1.81-1.85', '$1.86-1.90', '$1.91-2.00'],
+                        datasets: [
+                            {
+                                label: 'Low Volume (< 15k tokens)',
+                                data: [8000, 15000, 0, 0, 0, 0, 0, 12000, 6000],
+                                backgroundColor: 'rgba(246, 209, 49, 0.2)',
+                                borderColor: 'rgba(246, 209, 49, 1)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Medium Volume (15k-30k tokens)',
+                                data: [0, 0, 22000, 0, 0, 0, 20000, 0, 0],
+                                backgroundColor: 'rgba(246, 209, 49, 0.5)',
+                                borderColor: 'rgba(246, 209, 49, 1)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'High Volume (> 30k tokens)',
+                                data: [0, 0, 0, 38000, 45000, 32000, 0, 0, 0],
+                                backgroundColor: 'rgba(246, 209, 49, 0.8)',
+                                borderColor: 'rgba(246, 209, 49, 1)',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    usePointStyle: true,
+                                    padding: 20,
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `Volume: ${context.raw.toLocaleString()} tokens`;
+                                    }
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Bid Distribution by Price Range',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                padding: {
+                                    top: 10,
+                                    bottom: 10
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                stacked: true
+                            },
+                            y: {
+                                stacked: true,
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Volume (tokens)'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
         });
     </script>
 </body>
