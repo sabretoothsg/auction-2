@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Protection Level - Exchequer Finance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/enhanced-styles.css">
+    <style>
+        :root {
+            --primary: #f6d131;
+            --primary-light: rgba(246, 209, 49, 0.15);
+            --primary-dark: #e5c32c;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --border-color: #e2e8f0;
+            --bg-light: #f8f9fa;
+            --bg-lighter: #f1f5f9;
+            --success: #38a169;
+            --danger: #e53e3e;
+            --warning: #dd6b20;
+            --info: #3182ce;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            --card-shadow-hover: 0 10px 15px rgba(0,0,0,0.05), 0 4px 6px rgba(0,0,0,0.05);
+            --transition: all 0.2s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+        
+        .filter-container {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .filter-button {
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .filter-button.active {
+            color: var(--primary);
+        }
+        
+        .filter-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary);
+        }
+        
+        .token-list {
+            max-height: 600px;
+            overflow-y: auto;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+        
+        .token-item {
+            display: flex;
+            align-items: center;
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s ease;
+        }
+        
+        .token-item:last-child {
+            border-bottom: none;
+        }
+        
+        .token-item:hover {
+            background-color: var(--bg-lighter);
+        }
+        
+        .token-checkbox {
+            margin-right: 1rem;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .token-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .token-info {
+            flex: 1;
+        }
+        
+        .token-name {
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+        
+        .token-balance {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .token-history {
+            color: var(--danger);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-top: 0.25rem;
+        }
+        
+        .token-value {
+            font-weight: 600;
+            margin-right: 1.5rem;
+            text-align: right;
+        }
+        
+        .volatility-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 1.5rem;
+            min-width: 80px;
+        }
+        
+        .volatility-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .volatility-score {
+            display: flex;
+            align-items: center;
+        }
+        
+        .volatility-bar {
+            width: 60px;
+            height: 8px;
+            background-color: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-right: 0.5rem;
+        }
+        
+        .volatility-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+        
+        .volatility-fill.low {
+            width: 30%;
+            background-color: var(--success);
+        }
+        
+        .volatility-fill.medium {
+            width: 60%;
+            background-color: #f59e0b;
+        }
+        
+        .volatility-fill.high {
+            width: 90%;
+            background-color: var(--danger);
+        }
+        
+        .request-count {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        
+        .request-count strong {
+            color: var(--text-primary);
+        }
+        
+        .cta {
+            display: flex;
+            justify-content: center;
+            margin: 2.5rem 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1.25rem;
+            padding: 1.25rem 2.5rem;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(246, 209, 49, 0.3);
+        }
+        
+        .selection-summary {
+            background-color: var(--bg-lighter);
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .selected-count {
+            font-weight: 600;
+        }
+        
+        .selected-value {
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .token-item {
+                flex-wrap: wrap;
+            }
+            
+            .token-value, .volatility-container, .request-count {
+                margin-top: 0.75rem;
+            }
+            
+            .filter-button {
+                padding: 0.75rem 1rem;
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">Exchequer Finance</div>
+        
+        <h1>Choose Your Protection Level</h1>
+        <p class="subtitle">Choose which liquidity positions you want protected with trustless protection that covers 100% of losses up to 75% of token price</p>
+        
+        <div class="filter-container">
+            <button class="filter-button active">All LP Positions</button>
+            <button class="filter-button">Top Holdings</button>
+            <button class="filter-button">Most Requested</button>
+        </div>
+        
+        <div class="selection-summary">
+            <div class="selected-count">0 positions selected</div>
+            <div class="selected-value">$0.00 total value</div>
+        </div>
+        
+        <div class="token-list">
+            <!-- LP Position 1 -->
+            <div class="token-item">
+                <input type="checkbox" class="token-checkbox" id="lp-aave-usdc">
+                <div class="token-icon">AAVE/USDC</div>
+                <div class="token-info">
+                    <div class="token-name">Aave/USDC</div>
+                    <div class="token-balance">$4,532.50 liquidity</div>
+                    <div class="token-history">AAVE dropped 28.4% in the last 30 days. Potential loss: $1,287.23 (fully covered by protection)</div>
+                </div>
+                <div class="token-value">$4,532.50</div>
+                <div class="volatility-container">
+                    <div class="volatility-label">Loss Risk</div>
+                    <div class="volatility-score">
+                        <div class="volatility-bar">
+                            <div class="volatility-fill medium"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="request-count"><strong>1,245</strong> LPs requesting</div>
+            </div>
+            
+            <!-- LP Position 2 -->
+            <div class="token-item">
+                <input type="checkbox" class="token-checkbox" id="lp-comp-eth">
+                <div class="token-icon">COMP/ETH</div>
+                <div class="token-info">
+                    <div class="token-name">Compound/ETH</div>
+                    <div class="token-balance">$2,748.00 liquidity</div>
+                    <div class="token-history">COMP declined 32.7% in the last 45 days. Potential loss: $898.60 (fully covered by protection)</div>
+                </div>
+                <div class="token-value">$2,748.00</div>
+                <div class="volatility-container">
+                    <div class="volatility-label">Loss Risk</div>
+                    <div class="volatility-score">
+                        <div class="volatility-bar">
+                            <div class="volatility-fill high"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="request-count"><strong>2,187</strong> LPs requesting</div>
+            </div>
+            
+            <!-- LP Position 3 -->
+            <div class="token-item">
+                <input type="checkbox" class="token-checkbox" id="lp-snx-usdc">
+                <div class="token-icon">SNX/USDC</div>
+                <div class="token-info">
+                    <div class="token-name">Synthetix/USDC</div>
+                    <div class="token-balance">$1,955.00 liquidity</div>
+                    <div class="token-history">SNX plummeted 41.2% in the last 60 days. Potential loss: $805.46 (fully covered by protection)</div>
+                </div>
+                <div class="token-value">$1,955.00</div>
+                <div class="volatility-container">
+                    <div class="volatility-label">Loss Risk</div>
+                    <div class="volatility-score">
+                        <div class="volatility-bar">
+                            <div class="volatility-fill high"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="request-count"><strong>1,876</strong> LPs requesting</div>
+            </div>
+            
+            <!-- LP Position 4 -->
+            <div class="token-item">
+                <input type="checkbox" class="token-checkbox" id="lp-bal-eth">
+                <div class="token-icon">BAL/ETH</div>
+                <div class="token-info">
+                    <div class="token-name">Balancer/ETH</div>
+                    <div class="token-balance">$5,832.00 liquidity</div>
+                    <div class="token-history">BAL dropped 23.8% in the last 30 days. Potential loss: $1,387.82 (fully covered by protection)</div>
+                </div>
+                <div class="token-value">$5,832.00</div>
+                <div class="volatility-container">
+                    <div class="volatility-label">Loss Risk</div>
+                    <div class="volatility-score">
+                        <div class="volatility-bar">
+                            <div class="volatility-fill low"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="request-count"><strong>3,542</strong> LPs requesting</div>
+            </div>
+            
+            <!-- LP Position 5 -->
+            <div class="token-item">
+                <input type="checkbox" class="token-checkbox" id="lp-crv-usdc">
+                <div class="token-icon">CRV/USDC</div>
+                <div class="token-info">
+                    <div class="token-name">Curve/USDC</div>
+                    <div class="token-balance">$1,125.00 liquidity</div>
+                    <div class="token-history">CRV dropped 19.5% in the last 30 days. Potential loss: $219.38 (fully covered by protection)</div>
+                </div>
+                <div class="token-value">$1,125.00</div>
+                <div class="volatility-container">
+                    <div class="volatility-label">Loss Risk</div>
+                    <div class="volatility-score">
+                        <div class="volatility-bar">
+                            <div class="volatility-fill medium"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="request-count"><strong>987</strong> LPs requesting</div>
+            </div>
+            
+            <!-- LP Position 6 -->
+            <div class="token-item">
+                <input type="checkbox" class="token-checkbox" id="lp-mkr-eth">
+                <div class="token-icon">MKR/ETH</div>
+                <div class="token-info">
+                    <div class="token-name">Maker/ETH</div>
+                    <div class="token-balance">$1,023.60 liquidity</div>
+                    <div class="token-history">MKR declined 15.2% in the last 45 days. Potential loss: $155.59 (fully covered by protection)</div>
+                </div>
+                <div class="token-value">$1,023.60</div>
+                <div class="volatility-container">
+                    <div class="volatility-label">Loss Risk</div>
+                    <div class="volatility-score">
+                        <div class="volatility-bar">
+                            <div class="volatility-fill medium"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="request-count"><strong>765</strong> LPs requesting</div>
+            </div>
+            
+            <!-- LP Position 7 -->
+            <div class="token-item">
+                <input type="checkbox" class="token-checkbox" id="lp-sushi-eth">
+                <div class="token-icon">SUSHI/ETH</div>
+                <div class="token-info">
+                    <div class="token-name">SushiSwap/ETH</div>
+                    <div class="token-balance">$845.50 liquidity</div>
+                    <div class="token-history">SUSHI dropped 37.8% in the last 60 days. Potential loss: $319.60 (fully covered by protection)</div>
+                </div>
+                <div class="token-value">$845.50</div>
+                <div class="volatility-container">
+                    <div class="volatility-label">Loss Risk</div>
+                    <div class="volatility-score">
+                        <div class="volatility-bar">
+                            <div class="volatility-fill high"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="request-count"><strong>632</strong> LPs requesting</div>
+            </div>
+            
+            <!-- LP Position 8 -->
+            <div class="token-item">
+                <input type="checkbox" class="token-checkbox" id="lp-yfi-usdc">
+                <div class="token-icon">YFI/USDC</div>
+                <div class="token-info">
+                    <div class="token-name">yearn.finance/USDC</div>
+                    <div class="token-balance">$413.60 liquidity</div>
+                    <div class="token-history">YFI declined 22.3% in the last 30 days. Potential loss: $92.23 (fully covered by protection)</div>
+                </div>
+                <div class="token-value">$413.60</div>
+                <div class="volatility-container">
+                    <div class="volatility-label">Loss Risk</div>
+                    <div class="volatility-score">
+                        <div class="volatility-bar">
+                            <div class="volatility-fill medium"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="request-count"><strong>521</strong> LPs requesting</div>
+            </div>
+        </div>
+        
+        <div class="cta">
+            <a href="onboarding4.html" class="btn btn-primary">Request 100% Loss Protection</a>
+        </div>
+        
+        <footer>
+            <p>&copy; 2023 Exchequer Finance. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Simple JavaScript to handle LP position selection
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.token-checkbox');
+            const selectedCount = document.querySelector('.selected-count');
+            const selectedValue = document.querySelector('.selected-value');
+            const filterButtons = document.querySelectorAll('.filter-button');
+            
+            let count = 0;
+            let totalValue = 0;
+            
+            // Handle checkbox changes
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const tokenItem = this.closest('.token-item');
+                    const valueText = tokenItem.querySelector('.token-value').textContent;
+                    const value = parseFloat(valueText.replace('$', '').replace(',', ''));
+                    
+                    if (this.checked) {
+                        count++;
+                        totalValue += value;
+                        tokenItem.style.backgroundColor = 'rgba(246, 209, 49, 0.05)';
+                    } else {
+                        count--;
+                        totalValue -= value;
+                        tokenItem.style.backgroundColor = '';
+                    }
+                    
+                    selectedCount.textContent = count + (count === 1 ? ' position selected' : ' positions selected');
+                    selectedValue.textContent = '$' + totalValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' total value';
+                });
+            });
+            
+            // Handle filter buttons
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // In a real app, this would filter the LP position list
+                    // For this demo, we're just changing the active state
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

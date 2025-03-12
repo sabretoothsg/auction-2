@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Protection Potential - Exchequer Finance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/enhanced-styles.css">
+    <style>
+        :root {
+            --primary: #f6d131;
+            --primary-light: rgba(246, 209, 49, 0.15);
+            --primary-dark: #e5c32c;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --border-color: #e2e8f0;
+            --bg-light: #f8f9fa;
+            --bg-lighter: #f1f5f9;
+            --success: #38a169;
+            --danger: #e53e3e;
+            --warning: #dd6b20;
+            --info: #3182ce;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            --card-shadow-hover: 0 10px 15px rgba(0,0,0,0.05), 0 4px 6px rgba(0,0,0,0.05);
+            --transition: all 0.2s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-primary);
+            background-color: #f7fafc;
+            line-height: 1.5;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+        
+        .token-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .token-card {
+            background-color: var(--bg-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .token-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .token-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+        
+        .token-info {
+            flex: 1;
+        }
+        
+        .token-name {
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+        
+        .token-balance {
+            color: var(--text-secondary);
+        }
+        
+        .token-value {
+            font-weight: 600;
+            font-size: 1.125rem;
+            text-align: right;
+        }
+        
+        .token-chart-container {
+            position: relative;
+            height: 120px;
+            margin: 1rem 0;
+        }
+        
+        .token-chart {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .savings-info {
+            display: flex;
+            align-items: center;
+            background-color: rgba(16, 185, 129, 0.1);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
+        
+        .savings-icon {
+            color: var(--success);
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+        
+        .savings-text {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .info-box {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin: 2rem 0;
+        }
+        
+        .info-box-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .cta {
+            display: flex;
+            justify-content: center;
+            margin: 2.5rem 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1.25rem;
+            padding: 1.25rem 2.5rem;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--card-shadow-hover);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .token-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .token-icon {
+                margin-bottom: 0.5rem;
+            }
+            
+            .token-value {
+                text-align: left;
+                margin-top: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">Exchequer Finance</div>
+        
+        <h1>Your Protection Potential</h1>
+        <p class="subtitle">We've analyzed your portfolio and found these LP positions that could benefit from protection that covers 100% of losses up to 75% of token price</p>
+        
+        <div class="token-list">
+            <!-- LP Position 1 -->
+            <div class="token-card">
+                <div class="token-header">
+                    <div class="token-icon">AAVE/USDC</div>
+                    <div class="token-info">
+                        <div class="token-name">Aave/USDC</div>
+                        <div class="token-balance">$4,532.50 liquidity</div>
+                    </div>
+                    <div class="token-value">$4,532.50</div>
+                </div>
+                
+                <div class="token-chart-container">
+                    <svg class="token-chart" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Grid lines -->
+                        <line x1="0" y1="100" x2="400" y2="100" stroke="#e5e7eb" stroke-width="1"/>
+                        <line x1="0" y1="75" x2="400" y2="75" stroke="#e5e7eb" stroke-width="1"/>
+                        <line x1="0" y1="50" x2="400" y2="50" stroke="#e5e7eb" stroke-width="1"/>
+                        <line x1="0" y1="25" x2="400" y2="25" stroke="#e5e7eb" stroke-width="1"/>
+                        
+                        <!-- LP position value line -->
+                        <path d="M0,60 L50,55 L100,40 L150,45 L200,30 L250,60 L300,80 L350,70 L400,50" 
+                              stroke="#3b82f6" stroke-width="2" fill="none"/>
+                        
+                        <!-- Market drop area -->
+                        <path d="M200,30 L250,60 L250,100 L200,100 Z" fill="rgba(239, 68, 68, 0.1)"/>
+                        
+                        <!-- Protected floor area -->
+                        <path d="M200,30 L250,40 L250,60 L200,30 Z" fill="rgba(16, 185, 129, 0.2)"/>
+                        <line x1="200" y1="30" x2="250" y2="40" stroke="#10b981" stroke-width="2" stroke-dasharray="3,3"/>
+                        
+                        <!-- Labels -->
+                        <text x="225" y="90" text-anchor="middle" font-size="10" fill="#ef4444">Drop</text>
+                        <text x="225" y="45" text-anchor="middle" font-size="10" fill="#10b981" font-weight="bold">Protected</text>
+                    </svg>
+                </div>
+                
+                <div class="savings-info">
+                    <div class="savings-icon">💰</div>
+                    <span class="savings-text">Over the past 30 days, AAVE dropped by 28.4% causing a $1,287.23 loss. With our protection, you would have saved 100% of this loss ($1,287.23) since the drop was less than 75% of the token price.</span>
+                </div>
+            </div>
+            
+            <!-- LP Position 2 -->
+            <div class="token-card">
+                <div class="token-header">
+                    <div class="token-icon">COMP/ETH</div>
+                    <div class="token-info">
+                        <div class="token-name">Compound/ETH</div>
+                        <div class="token-balance">$2,748.00 liquidity</div>
+                    </div>
+                    <div class="token-value">$2,748.00</div>
+                </div>
+                
+                <div class="token-chart-container">
+                    <svg class="token-chart" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Grid lines -->
+                        <line x1="0" y1="100" x2="400" y2="100" stroke="#e5e7eb" stroke-width="1"/>
+                        <line x1="0" y1="75" x2="400" y2="75" stroke="#e5e7eb" stroke-width="1"/>
+                        <line x1="0" y1="50" x2="400" y2="50" stroke="#e5e7eb" stroke-width="1"/>
+                        <line x1="0" y1="25" x2="400" y2="25" stroke="#e5e7eb" stroke-width="1"/>
+                        
+                        <!-- LP position value line -->
+                        <path d="M0,70 L50,60 L100,50 L150,30 L200,20 L250,50 L300,40 L350,45 L400,35" 
+                              stroke="#3b82f6" stroke-width="2" fill="none"/>
+                        
+                        <!-- Market drop area -->
+                        <path d="M200,20 L250,50 L250,100 L200,100 Z" fill="rgba(239, 68, 68, 0.1)"/>
+                        
+                        <!-- Protected floor area -->
+                        <path d="M200,20 L250,35 L250,50 L200,20 Z" fill="rgba(16, 185, 129, 0.2)"/>
+                        <line x1="200" y1="20" x2="250" y2="35" stroke="#10b981" stroke-width="2" stroke-dasharray="3,3"/>
+                        
+                        <!-- Labels -->
+                        <text x="225" y="90" text-anchor="middle" font-size="10" fill="#ef4444">Drop</text>
+                        <text x="225" y="40" text-anchor="middle" font-size="10" fill="#10b981" font-weight="bold">Protected</text>
+                    </svg>
+                </div>
+                
+                <div class="savings-info">
+                    <div class="savings-icon">💰</div>
+                    <span class="savings-text">Over the past 45 days, COMP declined by 32.7% causing a $898.60 loss. With our protection, you would have saved 100% of this loss ($898.60) since the drop was less than 75% of the token price.</span>
+                </div>
+            </div>
+            
+            <!-- LP Position 3 -->
+            <div class="token-card">
+                <div class="token-header">
+                    <div class="token-icon">SNX/USDC</div>
+                    <div class="token-info">
+                        <div class="token-name">Synthetix/USDC</div>
+                        <div class="token-balance">$1,955.00 liquidity</div>
+                    </div>
+                    <div class="token-value">$1,955.00</div>
+                </div>
+                
+                <div class="token-chart-container">
+                    <svg class="token-chart" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Grid lines -->
+                        <line x1="0" y1="100" x2="400" y2="100" stroke="#e5e7eb" stroke-width="1"/>
+                        <line x1="0" y1="75" x2="400" y2="75" stroke="#e5e7eb" stroke-width="1"/>
+                        <line x1="0" y1="50" x2="400" y2="50" stroke="#e5e7eb" stroke-width="1"/>
+                        <line x1="0" y1="25" x2="400" y2="25" stroke="#e5e7eb" stroke-width="1"/>
+                        
+                        <!-- LP position value line -->
+                        <path d="M0,50 L50,45 L100,55 L150,40 L200,25 L250,65 L300,55 L350,60 L400,50" 
+                              stroke="#3b82f6" stroke-width="2" fill="none"/>
+                        
+                        <!-- Market drop area -->
+                        <path d="M200,25 L250,65 L250,100 L200,100 Z" fill="rgba(239, 68, 68, 0.1)"/>
+                        
+                        <!-- Protected floor area -->
+                        <path d="M200,25 L250,35 L250,65 L200,25 Z" fill="rgba(16, 185, 129, 0.2)"/>
+                        <line x1="200" y1="25" x2="250" y2="35" stroke="#10b981" stroke-width="2" stroke-dasharray="3,3"/>
+                        
+                        <!-- Labels -->
+                        <text x="225" y="90" text-anchor="middle" font-size="10" fill="#ef4444">Drop</text>
+                        <text x="225" y="45" text-anchor="middle" font-size="10" fill="#10b981" font-weight="bold">Protected</text>
+                    </svg>
+                </div>
+                
+                <div class="savings-info">
+                    <div class="savings-icon">💰</div>
+                    <span class="savings-text">Over the past 60 days, SNX plummeted by 41.2% causing a $805.46 loss. With our protection, you would have saved 100% of this loss ($805.46) since the drop was less than 75% of the token price.</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-box">
+            <div class="info-box-title">How Our Protection Works</div>
+            <p>Our protection mechanism provides 100% coverage for losses up to 75% of token price in a completely trustless and permissionless way. This means if your token drops by any amount up to 75%, you're fully protected against that loss. No counterparties are needed, making it a secure and decentralized solution for managing liquidity risks.</p>
+        </div>
+        
+        <div class="cta">
+            <a href="onboarding3.html" class="btn btn-primary">Request Protection for These LP Positions</a>
+        </div>
+        
+        <footer>
+            <p>&copy; 2023 LPProtect. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html> 

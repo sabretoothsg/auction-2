@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protection Dashboard - Exchequer Finance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/enhanced-styles.css">
+    <style>
+        :root {
+            --primary: #f6d131;
+            --primary-light: rgba(246, 209, 49, 0.15);
+            --primary-dark: #e5c32c;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --border-color: #e2e8f0;
+            --bg-light: #f8f9fa;
+            --bg-lighter: #f1f5f9;
+            --success: #38a169;
+            --danger: #e53e3e;
+            --warning: #dd6b20;
+            --info: #3182ce;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            --card-shadow-hover: 0 10px 15px rgba(0,0,0,0.05), 0 4px 6px rgba(0,0,0,0.05);
+            --transition: all 0.2s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+        }
+        
+        h2 {
+            color: var(--text-primary);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        header {
+            background-color: var(--bg-lighter);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .protection-status {
+            background-color: var(--bg-lighter);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .protection-status span {
+            color: var(--success);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            font-weight: 700;
+            cursor: pointer;
+        }
+        
+        .dashboard-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+        
+        .tab {
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .tab.active {
+            color: var(--primary);
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+            color: var(--text-primary);
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+        
+        .main-content {
+            color: var(--text-primary);
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--bg-lighter);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+        
+        .section-title h2 {
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        
+        .view-all {
+            font-size: 0.875rem;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .request-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .request-card {
+            background-color: var(--bg-lighter);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+        
+        .request-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--card-shadow-hover);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .token-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .token-info {
+            flex: 1;
+        }
+        
+        .token-name {
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+        
+        .token-value {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .status-badge.pending {
+            background-color: rgba(221, 107, 32, 0.1);
+            color: var(--warning);
+        }
+        
+        .status-badge.active {
+            background-color: rgba(56, 161, 105, 0.1);
+            color: var(--success);
+        }
+        
+        .status-badge.reviewing {
+            background-color: rgba(246, 209, 49, 0.1);
+            color: var(--primary);
+        }
+        
+        .progress-container {
+            margin: 1rem 0;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            background-color: var(--primary);
+        }
+        
+        .savings-info {
+            margin-bottom: 1rem;
+        }
+        
+        .savings-label {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .savings-value {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .protection-value {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .community-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .community-info span {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .leaderboard {
+            background-color: var(--bg-lighter);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+        
+        .rank {
+            font-weight: 700;
+            width: 24px;
+            text-align: center;
+            margin-right: 0.75rem;
+        }
+        
+        .rank-1 {
+            color: gold;
+        }
+        
+        .rank-2 {
+            color: silver;
+        }
+        
+        .rank-3 {
+            color: #cd7f32; /* bronze */
+        }
+        
+        .token-mini-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 0.75rem;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+        
+        .leaderboard-info {
+            flex: 1;
+        }
+        
+        .leaderboard-name {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .leaderboard-value {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        .leaderboard-count {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .news-feed {
+            background-color: var(--bg-lighter);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .news-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        
+        .news-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .news-content {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        .action-items {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: var(--primary);
+            color: var(--text-primary);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(var(--primary), 0.4);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .action-items:hover {
+            transform: scale(1.05);
+        }
+        
+        .notification-counter {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .request-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="container header-content">
+                <div class="logo">Exchequer Finance</div>
+                <div class="user-section">
+                    <div class="protection-status">
+                        <span>3</span> LP Positions with Trustless Protection
+                    </div>
+                    <div class="user-avatar">JD</div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="container">
+            <div class="dashboard-tabs">
+                <div class="tab active" data-tab="requests">My Requests</div>
+                <div class="tab" data-tab="activity">Activity</div>
+                <div class="tab" data-tab="notifications">Notifications</div>
+            </div>
+            
+            <div class="tab-content active" id="requests-tab">
+                <div class="dashboard-grid">
+                    <div class="main-content">
+                        <div class="section-title">
+                            <h2>Your Protection Requests</h2>
+                            <span class="view-all">View All</span>
+                        </div>
+                        
+                        <div class="request-cards">
+                            <!-- Request Card 1 -->
+                            <div class="request-card">
+                                <div class="card-header">
+                                    <div class="token-icon">AAVE/USDC</div>
+                                    <div class="token-info">
+                                        <div class="token-name">Aave/USDC</div>
+                                        <div class="token-value">$4,532.50 liquidity</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="status-badge active">Protection Active</div>
+                                
+                                <div class="progress-container">
+                                    <div class="progress-label">
+                                        <span>Protection Coverage</span>
+                                        <span>100% of losses up to 75% drop</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 75%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="savings-info">
+                                    <div class="savings-label">Last 30 Days Performance</div>
+                                    <div class="savings-value">AAVE dropped 28.4% ($1,287.23 loss)</div>
+                                    <div class="protection-value">$1,287.23 saved (100% of loss covered)</div>
+                                </div>
+                                
+                                <div class="community-info">
+                                    <div>Community Requests: <span>1,245</span></div>
+                                    <div>Loss Risk: <span>Medium</span></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Request Card 2 -->
+                            <div class="request-card">
+                                <div class="card-header">
+                                    <div class="token-icon">BAL/ETH</div>
+                                    <div class="token-info">
+                                        <div class="token-name">Balancer/ETH</div>
+                                        <div class="token-value">$5,832.00 liquidity</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="status-badge reviewing">Under Review</div>
+                                
+                                <div class="progress-container">
+                                    <div class="progress-label">
+                                        <span>Protection Coverage</span>
+                                        <span>100% of losses up to 42% drop</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 42%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="savings-info">
+                                    <div class="savings-label">Last 30 Days Performance</div>
+                                    <div class="savings-value">BAL dropped 23.8% ($1,387.82 loss)</div>
+                                    <div class="protection-value">$1,387.82 saved (100% of loss covered)</div>
+                                </div>
+                                
+                                <div class="community-info">
+                                    <div>Community Requests: <span>3,542</span></div>
+                                    <div>Loss Risk: <span>Low</span></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Request Card 3 -->
+                            <div class="request-card">
+                                <div class="card-header">
+                                    <div class="token-icon">COMP/ETH</div>
+                                    <div class="token-info">
+                                        <div class="token-name">Compound/ETH</div>
+                                        <div class="token-value">$2,748.00 liquidity</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="status-badge pending">Pending</div>
+                                
+                                <div class="progress-container">
+                                    <div class="progress-label">
+                                        <span>Protection Coverage</span>
+                                        <span>100% of losses up to 15% drop</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 15%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="savings-info">
+                                    <div class="savings-label">Last 45 Days Performance</div>
+                                    <div class="savings-value">COMP declined 32.7% ($898.60 loss)</div>
+                                    <div class="protection-value">$412.20 saved (losses covered up to 15% drop)</div>
+                                </div>
+                                
+                                <div class="community-info">
+                                    <div>Community Requests: <span>2,187</span></div>
+                                    <div>Loss Risk: <span>High</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="sidebar">
+                        <div class="leaderboard">
+                            <div class="section-title">
+                                <h2>Top Requested Tokens</h2>
+                                <span class="view-all">View All</span>
+                            </div>
+                            
+                            <div class="leaderboard-item">
+                                <div class="rank rank-1">1</div>
+                                <div class="token-mini-icon">BAL/ETH</div>
+                                <div class="leaderboard-info">
+                                    <div class="leaderboard-name">Balancer/ETH</div>
+                                    <div class="leaderboard-value">$152M total liquidity</div>
+                                </div>
+                                <div class="leaderboard-count">3,542</div>
+                            </div>
+                            
+                            <div class="leaderboard-item">
+                                <div class="rank rank-2">2</div>
+                                <div class="token-mini-icon">COMP/ETH</div>
+                                <div class="leaderboard-info">
+                                    <div class="leaderboard-name">Compound/ETH</div>
+                                    <div class="leaderboard-value">$87M total liquidity</div>
+                                </div>
+                                <div class="leaderboard-count">2,187</div>
+                            </div>
+                            
+                            <div class="leaderboard-item">
+                                <div class="rank rank-3">3</div>
+                                <div class="token-mini-icon">SNX/USDC</div>
+                                <div class="leaderboard-info">
+                                    <div class="leaderboard-name">Synthetix/USDC</div>
+                                    <div class="leaderboard-value">$64M total liquidity</div>
+                                </div>
+                                <div class="leaderboard-count">1,876</div>
+                            </div>
+                            
+                            <div class="leaderboard-item">
+                                <div class="rank">4</div>
+                                <div class="token-mini-icon">AAVE/USDC</div>
+                                <div class="leaderboard-info">
+                                    <div class="leaderboard-name">Aave/USDC</div>
+                                    <div class="leaderboard-value">$98M total liquidity</div>
+                                </div>
+                                <div class="leaderboard-count">1,245</div>
+                            </div>
+                            
+                            <div class="leaderboard-item">
+                                <div class="rank">5</div>
+                                <div class="token-mini-icon">CRV/USDC</div>
+                                <div class="leaderboard-info">
+                                    <div class="leaderboard-name">Curve/USDC</div>
+                                    <div class="leaderboard-value">$42M total liquidity</div>
+                                </div>
+                                <div class="leaderboard-count">987</div>
+                            </div>
+                        </div>
+                        
+                        <div class="news-feed">
+                            <div class="section-title">
+                                <h2>Recent Protection Announcements</h2>
+                                <span class="view-all">View All</span>
+                            </div>
+                            
+                            <div class="news-item">
+                                <div class="news-title">AAVE/USDC Protection Pool Expanded by 25%</div>
+                                <div class="news-meta">
+                                    <div class="news-date">2 hours ago</div>
+                                    <div class="news-category">Pool Update</div>
+                                </div>
+                            </div>
+                            
+                            <div class="news-item">
+                                <div class="news-title">New Protection Algorithm Deployed for High Volatility Pairs</div>
+                                <div class="news-content">Our new trustless protection mechanism provides 100% coverage for losses up to 75% of token price without requiring any counterparties.</div>
+                                <div class="news-meta">
+                                    <div class="news-date">Yesterday</div>
+                                    <div class="news-category">Protocol Update</div>
+                                </div>
+                            </div>
+                            
+                            <div class="news-item">
+                                <div class="news-title">COMP/ETH Protection Now Available for All LPs</div>
+                                <div class="news-content">Trustless protection that covers 100% of losses up to 75% of token price is now available for all COMP/ETH liquidity providers in a permissionless way.</div>
+                                <div class="news-meta">
+                                    <div class="news-date">3 days ago</div>
+                                    <div class="news-category">New Protection</div>
+                                </div>
+                            </div>
+                            
+                            <div class="news-item">
+                                <div class="news-title">Community Vote: Next Token Pair for Protection</div>
+                                <div class="news-meta">
+                                    <div class="news-date">1 week ago</div>
+                                    <div class="news-category">Governance</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="activity-tab">
+                <h2>Activity tab content will go here</h2>
+                <p>This tab would show a history of user activities and transactions.</p>
+            </div>
+            
+            <div class="tab-content" id="notifications-tab">
+                <h2>Notifications tab content will go here</h2>
+                <p>This tab would display user notifications and alerts.</p>
+            </div>
+        </div>
+        
+        <div class="action-items">
+            <i class="fas fa-bell"></i>
+            <div class="notification-counter">3</div>
+        </div>
+        
+        <footer class="app-footer">
+            <div class="footer-content">
+                <p>&copy; 2023 Exchequer Finance. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    document.getElementById(tabId + '-tab').classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
