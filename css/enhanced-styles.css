@@ -1,0 +1,786 @@
+/* Enhanced Auction Page Styles */
+
+/* Define color variables for consistent theming */
+:root {
+    --primary: #f6d131;
+    --primary-light: rgba(246, 209, 49, 0.15);
+    --primary-dark: #e5c32c;
+    --text-primary: #2d3748;
+    --text-secondary: #718096;
+    --border-color: #e2e8f0;
+    --bg-light: #f8f9fa;
+    --bg-lighter: #f1f5f9;
+    --success: #38a169;
+    --danger: #e53e3e;
+    --warning: #dd6b20;
+    --info: #3182ce;
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+    --card-shadow-hover: 0 10px 15px rgba(0,0,0,0.05), 0 4px 6px rgba(0,0,0,0.05);
+    --transition: all 0.2s ease;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text-primary);
+    background-color: #f7fafc;
+    line-height: 1.5;
+}
+
+/* Main layout structure */
+.auction-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.auction-header {
+    margin-bottom: 2rem;
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+}
+
+.auction-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.auction-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.auction-subtitle span {
+    background-color: var(--bg-lighter);
+    padding: 8px 14px;
+    border-radius: 8px;
+    white-space: nowrap;
+    transition: var(--transition);
+}
+
+.auction-subtitle span:hover {
+    background-color: var(--bg-light);
+    transform: translateY(-1px);
+}
+
+.auction-subtitle strong {
+    color: var(--text-primary);
+}
+
+/* Three-panel layout */
+.auction-panels {
+    display: flex;
+    gap: 1.5rem;
+    min-height: 700px;
+}
+
+/* Left Panel (30% width) */
+.left-panel {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Center Panel (50% width) */
+.center-panel {
+    flex: 5;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Right Panel (20% width) */
+.right-panel {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Panel card styling */
+.panel-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+    padding: 1.5rem;
+    transition: var(--transition);
+}
+
+.panel-card:hover {
+    box-shadow: var(--card-shadow-hover);
+}
+
+.panel-card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-primary);
+}
+
+/* User Portfolio */
+.portfolio-card {
+    margin-bottom: 0;
+}
+
+.portfolio-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.portfolio-summary-item {
+    width: calc(50% - 0.5rem);
+    padding: 1rem;
+    background-color: var(--bg-lighter);
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.portfolio-summary-item:hover {
+    background-color: var(--bg-light);
+    transform: translateY(-2px);
+}
+
+.portfolio-summary-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.portfolio-summary-value {
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.portfolio-pnl {
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.portfolio-pnl.positive {
+    color: var(--success);
+}
+
+.portfolio-pnl.negative {
+    color: var(--danger);
+}
+
+/* Protection threshold visualization */
+.protection-container {
+    margin-top: 1.5rem;
+}
+
+.protection-bar, .protection-meter {
+    height: 14px;
+    background-color: #e9ecef;
+    border-radius: 7px;
+    margin: 2.5rem 0 1.5rem;
+    position: relative;
+    overflow: visible;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.protection-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: linear-gradient(to right, var(--success), var(--primary));
+    border-radius: 7px;
+    width: 50%;
+    transition: width 0.5s ease;
+}
+
+.protection-threshold {
+    position: absolute;
+    left: 50%;
+    top: -25px;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    background-color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    z-index: 5;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Add specific styles for edge labels to prevent overflow */
+.protection-threshold.edge-left {
+    left: 5px;
+    transform: none;
+}
+
+.protection-threshold.edge-right {
+    left: auto;
+    right: 5px;
+    transform: none;
+}
+
+.protection-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 10px;
+    padding: 0 5px;
+}
+
+/* Update the protection-status class to add padding */
+.protection-status {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.protection-description {
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Current price marker enhancement */
+.current-price-marker {
+    box-shadow: 0 0 0 4px rgba(0,0,0,0.1);
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.quick-action-btn {
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    background-color: var(--bg-lighter);
+    border: 1px solid var(--border-color);
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.quick-action-btn:hover {
+    background-color: var(--bg-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.quick-action-btn .icon {
+    margin: 0;
+}
+
+/* Auction Progress Timeline */
+.timeline-container {
+    margin: 2rem 0;
+}
+
+.timeline {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 25px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: var(--border-color);
+    z-index: 1;
+}
+
+.timeline-step {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.timeline-step:hover {
+    transform: translateY(-2px);
+}
+
+.timeline-point {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin: 0 auto 0.75rem;
+    transition: var(--transition);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.timeline-point.completed {
+    background-color: var(--primary);
+    color: #000;
+    border-color: var(--primary-dark);
+    box-shadow: 0 4px 6px rgba(246, 209, 49, 0.3);
+}
+
+.timeline-point.active {
+    background-color: white;
+    color: var(--primary-dark);
+    border-color: var(--primary);
+    border-width: 3px;
+    box-shadow: 0 0 0 4px rgba(246, 209, 49, 0.2);
+}
+
+.timeline-label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+}
+
+.timeline-sublabel {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* Add styles for tokens sold and trigger status */
+.timeline-tokens-sold {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+.timeline-trigger {
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+    padding: 3px 8px;
+    border-radius: 12px;
+    display: inline-block;
+    font-weight: 500;
+}
+
+.timeline-trigger.triggered {
+    background-color: var(--success);
+    color: white;
+}
+
+.timeline-trigger.not-triggered {
+    background-color: var(--danger);
+    color: white;
+}
+
+/* Countdown clock */
+.countdown-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background-color: var(--bg-lighter);
+    border-radius: 10px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.countdown-timer {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.countdown-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 0.75rem;
+}
+
+/* Transaction History */
+.transaction-list {
+    overflow-y: auto;
+    max-height: 400px;
+    padding-right: 5px;
+}
+
+.transaction-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.transaction-list::-webkit-scrollbar-track {
+    background: var(--bg-lighter);
+    border-radius: 3px;
+}
+
+.transaction-list::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 3px;
+}
+
+.transaction-item {
+    padding: 0.9rem 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition);
+    border-radius: 6px;
+}
+
+.transaction-item:hover {
+    background-color: var(--bg-lighter);
+}
+
+.transaction-item:last-child {
+    border-bottom: none;
+}
+
+.transaction-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.transaction-price {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.transaction-meta {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.transaction-amount {
+    font-weight: 500;
+    color: var(--primary-dark);
+}
+
+/* Transaction filter styles */
+.transaction-filter {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 0.5rem 0.9rem;
+    border-radius: 6px;
+    background-color: var(--bg-lighter);
+    border: 1px solid var(--border-color);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.filter-btn:hover {
+    background-color: var(--bg-light);
+    transform: translateY(-1px);
+}
+
+.filter-btn.active {
+    background-color: var(--primary);
+    border-color: var(--primary-dark);
+    color: #000;
+    box-shadow: 0 2px 4px rgba(246, 209, 49, 0.2);
+}
+
+/* Compliance Disclosures */
+.compliance-toggle {
+    margin-top: 1rem;
+}
+
+.compliance-title {
+    cursor: pointer;
+    padding: 0.75rem 0;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.compliance-title:hover {
+    color: var(--primary-dark);
+}
+
+.compliance-content {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-color);
+    line-height: 1.6;
+}
+
+/* Bid form styles */
+.bid-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1.5rem;
+}
+
+.bid-tab {
+    padding: 0.9rem 1.2rem;
+    cursor: pointer;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    transition: var(--transition);
+    color: var(--text-secondary);
+}
+
+.bid-tab.active {
+    border-bottom-color: var(--primary);
+    color: var(--primary-dark);
+    font-weight: 600;
+}
+
+.bid-tab:hover:not(.active) {
+    background-color: var(--bg-lighter);
+    border-bottom-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Form styling */
+.bid-form {
+    margin-top: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.form-group input[type="number"] {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: var(--transition);
+    background-color: #fff;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.form-group input[type="number"]:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(246, 209, 49, 0.2);
+    outline: none;
+}
+
+.price-range {
+    display: flex;
+    gap: 1rem;
+}
+
+.price-range input {
+    flex: 1;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--primary);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 0.75rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.submit-btn:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Estimate box styling */
+.estimate-box {
+    background-color: var(--bg-lighter);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.estimate-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.9rem;
+    font-size: 0.95rem;
+}
+
+.estimate-row:last-of-type {
+    margin-bottom: 0;
+}
+
+.estimate-total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    padding-top: 0.9rem;
+    margin-top: 0.75rem;
+    border-top: 1px solid var(--border-color);
+    font-size: 1.1rem;
+}
+
+/* Early bid discount alert */
+.early-bid-alert {
+    background-color: var(--primary-light);
+    border-left: 3px solid var(--primary);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(246, 209, 49, 0.1);
+}
+
+.early-bid-alert .alert-title {
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: var(--text-primary);
+}
+
+.early-bid-alert .alert-description {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.early-bid-alert .alert-timer {
+    font-weight: 600;
+    color: var(--primary-dark);
+}
+
+.early-bid-alert .alert-savings {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--primary-dark);
+    background-color: rgba(246, 209, 49, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+}
+
+/* Chart enhancements */
+canvas {
+    border-radius: 8px;
+}
+
+/* Enhance scrollbar for all scrollable elements */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) var(--bg-lighter);
+}
+
+*::-webkit-scrollbar {
+    width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+    background: var(--bg-lighter);
+    border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 3px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .auction-panels {
+        flex-direction: column;
+    }
+    
+    .left-panel, .center-panel, .right-panel {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .price-info {
+        grid-template-columns: 1fr;
+    }
+    
+    .portfolio-summary-item {
+        width: 100%;
+    }
+    
+    .auction-subtitle span {
+        font-size: 0.85rem;
+        padding: 6px 10px;
+    }
+    
+    .timeline-point {
+        width: 40px;
+        height: 40px;
+        font-size: 0.9rem;
+    }
+    
+    .timeline-label {
+        font-size: 0.85rem;
+    }
+    
+    .timeline-sublabel, .timeline-tokens-sold {
+        font-size: 0.75rem;
+    }
+    
+    .timeline-trigger {
+        font-size: 0.7rem;
+        padding: 2px 6px;
+    }
+} 

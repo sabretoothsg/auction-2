@@ -6,6 +6,7 @@
     <title>EXCQ Protected Note Auction - 150% Yield Boost | 50% Protection</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/enhanced-styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.1.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
@@ -2027,9 +2028,12 @@
                                         borderDash: [5, 5],
                                         label: {
                                             enabled: true,
-                                            content: 'Reserve: $1.50',
-                                            position: 'start',
-                                            backgroundColor: 'rgba(40, 167, 69, 0.8)'
+                                            content: 'Reserve Price: $1.50',
+                                            position: 'top',
+                                            backgroundColor: 'rgba(40, 167, 69, 0.8)',
+                                            font: {
+                                                weight: 'bold'
+                                            }
                                         }
                                     },
                                     currentPriceLine: {
@@ -2041,8 +2045,8 @@
                                         borderDash: [2, 2],
                                         label: {
                                             enabled: true,
-                                            content: 'Current: $1.75',
-                                            position: 'start',
+                                            content: 'Current Price: $1.75',
+                                            position: 'top',
                                             backgroundColor: 'rgba(0, 123, 255, 0.8)'
                                         }
                                     },
@@ -2055,8 +2059,8 @@
                                         borderDash: [5, 5],
                                         label: {
                                             enabled: true,
-                                            content: 'Trigger: $1.85',
-                                            position: 'start',
+                                            content: 'Trigger Price: $1.85',
+                                            position: 'top',
                                             backgroundColor: 'rgba(220, 53, 69, 0.8)'
                                         }
                                     }
@@ -2165,15 +2169,15 @@
                                 annotations: {
                                     reservePriceLine: {
                                         type: 'line',
-                                        yMin: 1.50,
-                                        yMax: 1.50,
+                                        xMin: 0,
+                                        xMax: 0,
                                         borderColor: 'rgba(40, 167, 69, 0.8)',
                                         borderWidth: 2,
                                         borderDash: [5, 5],
                                         label: {
                                             enabled: true,
                                             content: 'Reserve Price: $1.50',
-                                            position: 'end',
+                                            position: 'top',
                                             backgroundColor: 'rgba(40, 167, 69, 0.8)',
                                             font: {
                                                 weight: 'bold'
@@ -2182,29 +2186,29 @@
                                     },
                                     currentPriceLine: {
                                         type: 'line',
-                                        yMin: 1.75,
-                                        yMax: 1.75,
+                                        xMin: 4,
+                                        xMax: 4,
                                         borderColor: 'rgba(0, 123, 255, 0.8)',
                                         borderWidth: 2,
                                         borderDash: [2, 2],
                                         label: {
                                             enabled: true,
                                             content: 'Current Price: $1.75',
-                                            position: 'end',
+                                            position: 'top',
                                             backgroundColor: 'rgba(0, 123, 255, 0.8)'
                                         }
                                     },
                                     triggerPriceLine: {
                                         type: 'line',
-                                        yMin: 1.85,
-                                        yMax: 1.85,
+                                        xMin: 6,
+                                        xMax: 6,
                                         borderColor: 'rgba(220, 53, 69, 0.8)',
                                         borderWidth: 2,
                                         borderDash: [5, 5],
                                         label: {
                                             enabled: true,
                                             content: 'Trigger Price: $1.85',
-                                            position: 'end',
+                                            position: 'top',
                                             backgroundColor: 'rgba(220, 53, 69, 0.8)'
                                         }
                                     }
