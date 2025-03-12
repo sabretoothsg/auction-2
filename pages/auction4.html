@@ -880,6 +880,117 @@
         .visual-tab-content.active {
             display: block;
         }
+        
+        /* Current Bids Widget Styling */
+        .current-bids-container {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .current-bids-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0.75rem;
+            background-color: #f8f9fa;
+            border-radius: 6px 6px 0 0;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .bid-price-header {
+            flex: 1;
+        }
+        
+        .bid-amount-header {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .bid-user-header {
+            flex: 1;
+            text-align: right;
+        }
+        
+        .current-bids-list {
+            max-height: 350px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+        }
+        
+        .bid-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease;
+        }
+        
+        .bid-item:last-child {
+            border-bottom: none;
+        }
+        
+        .bid-item:hover {
+            background-color: rgba(246, 209, 49, 0.05);
+        }
+        
+        .bid-price {
+            flex: 1;
+            font-weight: 600;
+        }
+        
+        .bid-amount {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .bid-user {
+            flex: 1;
+            text-align: right;
+            color: var(--text-secondary);
+        }
+        
+        .bid-above .bid-price {
+            color: #28a745;
+        }
+        
+        .bid-below .bid-price {
+            color: #dc3545;
+        }
+        
+        .clearing-price-indicator {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            background-color: rgba(246, 209, 49, 0.1);
+        }
+        
+        .clearing-line {
+            flex: 1;
+            height: 1px;
+            background-color: var(--primary);
+        }
+        
+        .clearing-label {
+            margin: 0 0.75rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+        
+        .clearing-price-info {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
     </style>
 </head>
 <body>
@@ -1007,7 +1118,138 @@
 
                 <!-- Center Panel (30% width) -->
                 <section class="center-panel">
-                    <!-- Panel is intentionally left blank as requested -->
+                    <!-- Current Bids Widget -->
+                    <div class="panel-card">
+                        <div class="panel-card-title">
+                            <span>Current Bids</span>
+                            <span>Clearing Price: $1.52</span>
+                        </div>
+                        
+                        <!-- Tab Navigation for Current Bids -->
+                        <div class="bid-tabs visual-tabs">
+                            <div class="bid-tab active" data-visual-tab="all-bids">All Bids</div>
+                            <div class="bid-tab" data-visual-tab="above-clearing">Above Clearing</div>
+                            <div class="bid-tab" data-visual-tab="below-clearing">Below Clearing</div>
+                        </div>
+                        
+                        <!-- All Bids Tab Content -->
+                        <div class="visual-tab-content active" id="all-bids-content">
+                            <div class="current-bids-container">
+                                <div class="current-bids-header">
+                                    <div class="bid-price-header">Bid Price</div>
+                                    <div class="bid-amount-header">Amount</div>
+                                    <div class="bid-user-header">Bidder</div>
+                                </div>
+                                <div class="current-bids-list">
+                                    <!-- Bids above clearing price -->
+                                    <div class="bid-item bid-above">
+                                        <div class="bid-price">$1.65</div>
+                                        <div class="bid-amount">2,000 tokens</div>
+                                        <div class="bid-user">User0x44...8b</div>
+                                    </div>
+                                    <div class="bid-item bid-above">
+                                        <div class="bid-price">$1.58</div>
+                                        <div class="bid-amount">1,200 tokens</div>
+                                        <div class="bid-user">User0x81...4e</div>
+                                    </div>
+                                    <div class="bid-item bid-above">
+                                        <div class="bid-price">$1.55</div>
+                                        <div class="bid-amount">1,000 tokens</div>
+                                        <div class="bid-user">You</div>
+                                    </div>
+                                    
+                                    <!-- Clearing price indicator -->
+                                    <div class="clearing-price-indicator">
+                                        <div class="clearing-line"></div>
+                                        <div class="clearing-label">Clearing Price: $1.52</div>
+                                        <div class="clearing-line"></div>
+                                    </div>
+                                    
+                                    <!-- Bids below clearing price -->
+                                    <div class="bid-item bid-below">
+                                        <div class="bid-price">$1.49</div>
+                                        <div class="bid-amount">850 tokens</div>
+                                        <div class="bid-user">User0x72...3a</div>
+                                    </div>
+                                    <div class="bid-item bid-below">
+                                        <div class="bid-price">$1.47</div>
+                                        <div class="bid-amount">750 tokens</div>
+                                        <div class="bid-user">User0x93...5f</div>
+                                    </div>
+                                    <div class="bid-item bid-below">
+                                        <div class="bid-price">$1.44</div>
+                                        <div class="bid-amount">3,200 tokens</div>
+                                        <div class="bid-user">User0x67...2c</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearing-price-info">
+                                <p>All successful bidders pay the clearing price of $1.52 per token, regardless of their bid price.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Above Clearing Tab Content -->
+                        <div class="visual-tab-content" id="above-clearing-content">
+                            <div class="current-bids-container">
+                                <div class="current-bids-header">
+                                    <div class="bid-price-header">Bid Price</div>
+                                    <div class="bid-amount-header">Amount</div>
+                                    <div class="bid-user-header">Bidder</div>
+                                </div>
+                                <div class="current-bids-list">
+                                    <div class="bid-item bid-above">
+                                        <div class="bid-price">$1.65</div>
+                                        <div class="bid-amount">2,000 tokens</div>
+                                        <div class="bid-user">User0x44...8b</div>
+                                    </div>
+                                    <div class="bid-item bid-above">
+                                        <div class="bid-price">$1.58</div>
+                                        <div class="bid-amount">1,200 tokens</div>
+                                        <div class="bid-user">User0x81...4e</div>
+                                    </div>
+                                    <div class="bid-item bid-above">
+                                        <div class="bid-price">$1.55</div>
+                                        <div class="bid-amount">1,000 tokens</div>
+                                        <div class="bid-user">You</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearing-price-info">
+                                <p>These bids are above the clearing price ($1.52) and will be filled. All bidders pay the clearing price.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Below Clearing Tab Content -->
+                        <div class="visual-tab-content" id="below-clearing-content">
+                            <div class="current-bids-container">
+                                <div class="current-bids-header">
+                                    <div class="bid-price-header">Bid Price</div>
+                                    <div class="bid-amount-header">Amount</div>
+                                    <div class="bid-user-header">Bidder</div>
+                                </div>
+                                <div class="current-bids-list">
+                                    <div class="bid-item bid-below">
+                                        <div class="bid-price">$1.49</div>
+                                        <div class="bid-amount">850 tokens</div>
+                                        <div class="bid-user">User0x72...3a</div>
+                                    </div>
+                                    <div class="bid-item bid-below">
+                                        <div class="bid-price">$1.47</div>
+                                        <div class="bid-amount">750 tokens</div>
+                                        <div class="bid-user">User0x93...5f</div>
+                                    </div>
+                                    <div class="bid-item bid-below">
+                                        <div class="bid-price">$1.44</div>
+                                        <div class="bid-amount">3,200 tokens</div>
+                                        <div class="bid-user">User0x67...2c</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearing-price-info">
+                                <p>These bids are below the clearing price ($1.52) and will not be filled in this round.</p>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- Right Panel (20% width) -->
@@ -1577,6 +1819,104 @@
                 ]
             };
 
+            // Current bids data
+            const currentBids = [
+                { price: 1.65, user: 'User0x44...8b', amount: 2000 },
+                { price: 1.58, user: 'User0x81...4e', amount: 1200 },
+                { price: 1.55, user: 'You', amount: 1000 },
+                { price: 1.49, user: 'User0x72...3a', amount: 850 },
+                { price: 1.47, user: 'User0x93...5f', amount: 750 },
+                { price: 1.44, user: 'User0x67...2c', amount: 3200 }
+            ];
+            
+            const clearingPrice = 1.52;
+            
+            // Function to update current bids widget
+            function updateCurrentBidsWidget(filter) {
+                let filteredBids;
+                
+                if (filter === 'all-bids') {
+                    filteredBids = currentBids;
+                } else if (filter === 'above-clearing') {
+                    filteredBids = currentBids.filter(bid => bid.price >= clearingPrice);
+                } else if (filter === 'below-clearing') {
+                    filteredBids = currentBids.filter(bid => bid.price < clearingPrice);
+                }
+                
+                // Sort bids by price (descending)
+                filteredBids.sort((a, b) => b.price - a.price);
+                
+                const bidsList = document.querySelector(`#${filter}-content .current-bids-list`);
+                if (!bidsList) return;
+                
+                bidsList.innerHTML = '';
+                
+                if (filter === 'all-bids') {
+                    // For all bids, we need to add the clearing price indicator
+                    const aboveBids = filteredBids.filter(bid => bid.price >= clearingPrice);
+                    const belowBids = filteredBids.filter(bid => bid.price < clearingPrice);
+                    
+                    // Add bids above clearing price
+                    aboveBids.forEach(bid => {
+                        const bidElement = document.createElement('div');
+                        bidElement.className = 'bid-item bid-above';
+                        bidElement.innerHTML = `
+                            <div class="bid-price">$${bid.price.toFixed(2)}</div>
+                            <div class="bid-amount">${bid.amount} tokens</div>
+                            <div class="bid-user">${bid.user}</div>
+                        `;
+                        bidsList.appendChild(bidElement);
+                    });
+                    
+                    // Add clearing price indicator
+                    const clearingIndicator = document.createElement('div');
+                    clearingIndicator.className = 'clearing-price-indicator';
+                    clearingIndicator.innerHTML = `
+                        <div class="clearing-line"></div>
+                        <div class="clearing-label">Clearing Price: $${clearingPrice.toFixed(2)}</div>
+                        <div class="clearing-line"></div>
+                    `;
+                    bidsList.appendChild(clearingIndicator);
+                    
+                    // Add bids below clearing price
+                    belowBids.forEach(bid => {
+                        const bidElement = document.createElement('div');
+                        bidElement.className = 'bid-item bid-below';
+                        bidElement.innerHTML = `
+                            <div class="bid-price">$${bid.price.toFixed(2)}</div>
+                            <div class="bid-amount">${bid.amount} tokens</div>
+                            <div class="bid-user">${bid.user}</div>
+                        `;
+                        bidsList.appendChild(bidElement);
+                    });
+                } else {
+                    // For filtered views, just add the bids
+                    filteredBids.forEach(bid => {
+                        const bidElement = document.createElement('div');
+                        bidElement.className = `bid-item ${bid.price >= clearingPrice ? 'bid-above' : 'bid-below'}`;
+                        bidElement.innerHTML = `
+                            <div class="bid-price">$${bid.price.toFixed(2)}</div>
+                            <div class="bid-amount">${bid.amount} tokens</div>
+                            <div class="bid-user">${bid.user}</div>
+                        `;
+                        bidsList.appendChild(bidElement);
+                    });
+                }
+            }
+            
+            // Initialize current bids widget
+            updateCurrentBidsWidget('all-bids');
+            updateCurrentBidsWidget('above-clearing');
+            updateCurrentBidsWidget('below-clearing');
+            
+            // Update clearing price in the widget title
+            const clearingPriceElements = document.querySelectorAll('.panel-card-title span:last-child');
+            clearingPriceElements.forEach(element => {
+                if (element.textContent.includes('Clearing Price')) {
+                    element.textContent = `Clearing Price: $${clearingPrice.toFixed(2)}`;
+                }
+            });
+
             function updateTransactionList(filter) {
                 const transactionList = document.getElementById('transaction-list');
                 if (!transactionList) return;
@@ -1649,16 +1989,33 @@
             if (visualTabs.length > 0) {
                 visualTabs.forEach(tab => {
                     tab.addEventListener('click', () => {
-                        visualTabs.forEach(t => t.classList.remove('active'));
+                        // Find the parent tab container
+                        const tabContainer = tab.closest('.bid-tabs');
+                        
+                        // Only remove active class from tabs in the same container
+                        tabContainer.querySelectorAll('.bid-tab').forEach(t => {
+                            t.classList.remove('active');
+                        });
+                        
                         tab.classList.add('active');
                         
                         const tabId = tab.getAttribute('data-visual-tab');
-                        visualContents.forEach(content => {
+                        
+                        // Find the closest parent that contains the tab contents
+                        const parentCard = tab.closest('.panel-card');
+                        const tabContents = parentCard.querySelectorAll('.visual-tab-content');
+                        
+                        tabContents.forEach(content => {
                             content.classList.remove('active');
                             if (content.id === `${tabId}-content`) {
                                 content.classList.add('active');
                             }
                         });
+                        
+                        // If this is a current bids tab, update the widget
+                        if (['all-bids', 'above-clearing', 'below-clearing'].includes(tabId)) {
+                            updateCurrentBidsWidget(tabId);
+                        }
                     });
                 });
             }
