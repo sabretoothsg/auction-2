@@ -614,9 +614,9 @@
             <p class="auction-subtitle">
                 <span><strong>Maturity:</strong> Dec 15, 2023</span>
                 <span><strong>Auction:</strong> Round 3 of 6</span>
-                <span><strong>Current Price:</strong> $1.75</span>
-                <span><strong>Reserve:</strong> $1.50</span>
-                <span><strong>Protection:</strong> 50% ($1.50 floor)</span>
+                <span><strong>Reserve Bank:</strong> 25,000 tokens</span>
+                <span><strong>Prior Round Tokens:</strong> 18,500 tokens</span>
+                <span><strong>Total Round Volume:</strong> 112,000 tokens</span>
                 <span><strong>Time Remaining:</strong> <span id="subtitle-countdown">05:23:47</span></span>
             </p>
         
@@ -652,20 +652,27 @@
                 <!-- Protection Status -->
                 <div class="panel-card">
                     <div class="panel-card-title">
-                        <span>Protection Status</span>
+                        <span>Price Status</span>
                     </div>
                     <div class="protection-status">
-                        <!-- Add a description text to explain the protection -->
+                        <!-- Add a description text to explain the price status -->
                         <div class="protection-description" style="margin-bottom: 15px; font-size: 0.9rem; color: var(--text-secondary);">
-                            This note has 50% downside protection, with a floor price of $1.50.
+                            Current price is $1.75. Trigger activates at $1.85, reserve price is $1.50.
                         </div>
                         <div class="protection-bar">
-                            <div class="protection-fill"></div>
-                            <div class="protection-threshold">50% Protection</div>
+                            <div class="protection-fill" style="width: 71.4%; background: linear-gradient(to right, #28a745, #f6d131);"></div>
+                            <div class="protection-threshold" style="left: 100%;">Trigger: $1.85</div>
+                            <div class="protection-threshold" style="left: 0%; top: 15px;">Reserve: $1.50</div>
+                            <div class="protection-threshold" style="left: 71.4%; top: -20px; color: #333;">Current: $1.75</div>
+                            <div class="current-price-marker" style="position: absolute; left: 71.4%; top: -5px; width: 4px; height: 18px; background-color: #333; transform: translateX(-50%);"></div>
                         </div>
-                        <div class="protection-labels">
-                            <span>$0.00</span>
-                            <span>$3.00</span>
+                        <div class="protection-labels" style="margin-top: 20px;">
+                            <span>$1.50</span>
+                            <span>$1.85</span>
+                        </div>
+                        <div style="text-align: center; margin-top: 15px; font-size: 0.85rem; color: var(--text-secondary);">
+                            <span style="color: #28a745; font-weight: 600;">$0.25</span> above reserve, 
+                            <span style="color: #dc3545; font-weight: 600;">$0.10</span> below trigger
                         </div>
                     </div>
                 </div>
@@ -731,22 +738,6 @@
                     <div class="panel-card-title">
                         <span>Round 3 Details</span>
                         <span>112,000 tokens available</span>
-                    </div>
-                    
-                    <!-- Price information -->
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
-                        <div style="background-color: #f8f9fa; padding: 0.75rem; border-radius: 6px;">
-                            <div style="font-size: 0.75rem; color: var(--text-secondary);">Current Price</div>
-                            <div style="font-weight: 600; font-size: 1.1rem;">$1.75</div>
-                        </div>
-                        <div style="background-color: #f8f9fa; padding: 0.75rem; border-radius: 6px;">
-                            <div style="font-size: 0.75rem; color: var(--text-secondary);">Reserve Price</div>
-                            <div style="font-weight: 600; font-size: 1.1rem;">$1.50</div>
-                        </div>
-                        <div style="background-color: #f8f9fa; padding: 0.75rem; border-radius: 6px;">
-                            <div style="font-size: 0.75rem; color: var(--text-secondary);">Max Price</div>
-                            <div style="font-weight: 600; font-size: 1.1rem;">$2.00</div>
-                        </div>
                     </div>
                     
                     <!-- Price curve chart -->
