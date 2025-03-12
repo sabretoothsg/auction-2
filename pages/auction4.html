@@ -64,7 +64,7 @@
         
         /* Left Panel (50% width) */
         .left-panel {
-            flex: 5;
+            flex: 6;
             display: flex;
             flex-direction: column;
             gap: 1rem;
@@ -72,7 +72,7 @@
         
         /* Center Panel (30% width) */
         .center-panel {
-            flex: 3;
+            flex: 2;
             display: flex;
             flex-direction: column;
             gap: 1rem;
@@ -1007,54 +1007,7 @@
 
                 <!-- Center Panel (30% width) -->
                 <section class="center-panel">
-                    <!-- Price Status (moved from right panel) -->
-                    <div class="panel-card">
-                        <div class="panel-card-title">
-                            <span>Price Status</span>
-                        </div>
-                        <div class="protection-status">
-                            <!-- Add a description text to explain the price status -->
-                            <div class="protection-description" style="margin-bottom: 15px; font-size: 0.9rem; color: var(--text-secondary);">
-                                Current price is $1.75. Trigger activates at $1.85, reserve price is $1.50.
-                            </div>
-                            <div class="protection-bar">
-                                <div class="protection-fill" style="width: 71.4%; background: linear-gradient(to right, #28a745, #f6d131);"></div>
-                                <div class="protection-threshold edge-right" style="top: 20px;">Trigger: $1.85</div>
-                                <div class="protection-threshold edge-left" style="top: 20px;">Reserve: $1.50</div>
-                                <div class="protection-threshold" style="left: 71.4%; top: -25px; color: #333;">Current: $1.75</div>
-                                <div class="current-price-marker" style="position: absolute; left: 71.4%; top: -6px; width: 4px; height: 24px; background-color: #333; transform: translateX(-50%);"></div>
-                            </div>
-                            <div class="protection-labels" style="margin-top: 30px;">
-                                <span>$1.50</span>
-                                <span>$1.85</span>
-                            </div>
-                            <div style="text-align: center; margin-top: 15px; font-size: 0.85rem; color: var(--text-secondary);">
-                                <span style="color: #28a745; font-weight: 600;">$0.25</span> above reserve, 
-                                <span style="color: #dc3545; font-weight: 600;">$0.10</span> below trigger
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Transaction History (moved from right panel) -->
-                    <div class="panel-card">
-                        <div class="panel-card-title">
-                            <span>Transaction History</span>
-                            <span>312 bids total</span>
-                        </div>
-                        
-                        <!-- Transaction filters -->
-                        <div class="transaction-filter">
-                            <button class="filter-btn active" data-filter="all">All</button>
-                            <button class="filter-btn" data-filter="my-bids">My Bids</button>
-                            <button class="filter-btn" data-filter="recent">Recent</button>
-                            <button class="filter-btn" data-filter="won">Won</button>
-                        </div>
-                        
-                        <!-- Transaction list -->
-                        <div class="transaction-list" id="transaction-list">
-                            <!-- Transactions will be dynamically populated -->
-                        </div>
-                    </div>
+                    <!-- Panel is intentionally left blank as requested -->
                 </section>
 
                 <!-- Right Panel (20% width) -->
@@ -1626,6 +1579,8 @@
 
             function updateTransactionList(filter) {
                 const transactionList = document.getElementById('transaction-list');
+                if (!transactionList) return;
+                
                 transactionList.innerHTML = '';
                 
                 transactions[filter].forEach(tx => {
@@ -1644,62 +1599,69 @@
 
             // Transaction filter buttons
             const filterButtons = document.querySelectorAll('.filter-btn');
-            filterButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    filterButtons.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    updateTransactionList(btn.dataset.filter);
+            
+            if (filterButtons.length > 0) {
+                filterButtons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        filterButtons.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        updateTransactionList(btn.dataset.filter);
+                    });
                 });
-            });
 
-            // Initialize with 'all' transactions
-            updateTransactionList('all');
+                // Initialize with 'all' transactions
+                updateTransactionList('all');
+            }
 
             // Bid tabs functionality
             const bidTabs = document.querySelectorAll('.bid-tab');
             const tabContents = document.querySelectorAll('.tab-content');
 
-            bidTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // Skip if this is a visual tab (handled separately)
-                    if (tab.hasAttribute('data-visual-tab')) return;
-                    
-                    bidTabs.forEach(t => {
-                        // Skip visual tabs when removing active class
-                        if (!t.hasAttribute('data-visual-tab')) {
-                            t.classList.remove('active');
-                        }
-                    });
-                    tab.classList.add('active');
-                    
-                    const tabId = tab.getAttribute('data-tab');
-                    tabContents.forEach(content => {
-                        content.classList.remove('active');
-                        if (content.id === `${tabId}-content`) {
-                            content.classList.add('active');
-                        }
+            if (bidTabs.length > 0) {
+                bidTabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        // Skip if this is a visual tab (handled separately)
+                        if (tab.hasAttribute('data-visual-tab')) return;
+                        
+                        bidTabs.forEach(t => {
+                            // Skip visual tabs when removing active class
+                            if (!t.hasAttribute('data-visual-tab')) {
+                                t.classList.remove('active');
+                            }
+                        });
+                        tab.classList.add('active');
+                        
+                        const tabId = tab.getAttribute('data-tab');
+                        tabContents.forEach(content => {
+                            content.classList.remove('active');
+                            if (content.id === `${tabId}-content`) {
+                                content.classList.add('active');
+                            }
+                        });
                     });
                 });
-            });
+            }
 
             // Visual tabs functionality
             const visualTabs = document.querySelectorAll('.bid-tab[data-visual-tab]');
             const visualContents = document.querySelectorAll('.visual-tab-content');
             
-            visualTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    visualTabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    
-                    const tabId = tab.getAttribute('data-visual-tab');
-                    visualContents.forEach(content => {
-                        content.classList.remove('active');
-                        if (content.id === `${tabId}-content`) {
-                            content.classList.add('active');
-                        }
+            if (visualTabs.length > 0) {
+                visualTabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        visualTabs.forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        
+                        const tabId = tab.getAttribute('data-visual-tab');
+                        visualContents.forEach(content => {
+                            content.classList.remove('active');
+                            if (content.id === `${tabId}-content`) {
+                                content.classList.add('active');
+                            }
+                        });
                     });
                 });
-            });
+            }
 
             // Timeline round selection
             const timelineSteps = document.querySelectorAll('.timeline-step');
@@ -2289,6 +2251,8 @@
             const simpleTotal = document.getElementById('simple-total');
             
             function updateSimpleBidCalculations() {
+                if (!simpleBidAmount || !simpleMaxPrice || !simpleEstimatedTokens || !simpleDiscount || !simpleTotal) return;
+                
                 const bidAmount = parseFloat(simpleBidAmount.value) || 0;
                 const maxPrice = parseFloat(simpleMaxPrice.value) || 0;
                 
@@ -2306,8 +2270,13 @@
                 }
             }
             
-            simpleBidAmount.addEventListener('input', updateSimpleBidCalculations);
-            simpleMaxPrice.addEventListener('input', updateSimpleBidCalculations);
+            if (simpleBidAmount && simpleMaxPrice) {
+                simpleBidAmount.addEventListener('input', updateSimpleBidCalculations);
+                simpleMaxPrice.addEventListener('input', updateSimpleBidCalculations);
+                
+                // Initialize calculations
+                updateSimpleBidCalculations();
+            }
             
             // Advanced bid calculations
             const advancedTokenAmount = document.getElementById('advanced-token-amount');
@@ -2319,6 +2288,8 @@
             const advFinalAmount = document.getElementById('adv-final-amount');
             
             function updateAdvancedBidCalculations() {
+                if (!advancedTokenAmount || !maxPrice || !advTotalAmount || !advDiscount || !advProbability || !advFinalAmount) return;
+                
                 const tokenAmount = parseInt(advancedTokenAmount.value) || 0;
                 const maxPriceValue = parseFloat(maxPrice.value) || 0;
                 
@@ -2351,13 +2322,14 @@
                 }
             }
             
-            advancedTokenAmount.addEventListener('input', updateAdvancedBidCalculations);
-            minPrice.addEventListener('input', updateAdvancedBidCalculations);
-            maxPrice.addEventListener('input', updateAdvancedBidCalculations);
-            
-            // Initialize calculations
-            updateSimpleBidCalculations();
-            updateAdvancedBidCalculations();
+            if (advancedTokenAmount && minPrice && maxPrice) {
+                advancedTokenAmount.addEventListener('input', updateAdvancedBidCalculations);
+                minPrice.addEventListener('input', updateAdvancedBidCalculations);
+                maxPrice.addEventListener('input', updateAdvancedBidCalculations);
+                
+                // Initialize calculations
+                updateAdvancedBidCalculations();
+            }
             
             // Sell tokens preview calculations
             const sellTokenAmount = document.getElementById('sell-token-amount');
@@ -2370,6 +2342,9 @@
             const sellTotalPnl = document.getElementById('sell-total-pnl');
             
             function updateSellTokensPreview() {
+                if (!sellTokenAmount || !sellMinPrice || !sellTokensPreview || !sellPricePreview || 
+                    !sellAvgCost || !sellPnlPerToken || !sellTotalAmount || !sellTotalPnl) return;
+                
                 const tokenAmount = parseInt(sellTokenAmount.value) || 0;
                 const minPrice = parseFloat(sellMinPrice.value) || 0;
                 const avgCost = 1.41; // From portfolio data
@@ -2413,43 +2388,49 @@
             }
             
             // Add event listeners for sell tokens inputs
-            sellTokenAmount.addEventListener('input', updateSellTokensPreview);
-            sellMinPrice.addEventListener('input', updateSellTokensPreview);
-            
-            // Initialize sell tokens preview
-            updateSellTokensPreview();
+            if (sellTokenAmount && sellMinPrice) {
+                sellTokenAmount.addEventListener('input', updateSellTokensPreview);
+                sellMinPrice.addEventListener('input', updateSellTokensPreview);
+                
+                // Initialize sell tokens preview
+                updateSellTokensPreview();
+            }
             
             // Auction rules toggle
             const complianceTitle = document.querySelector('.compliance-title');
             const complianceContent = document.querySelector('.compliance-content');
             
-            complianceTitle.addEventListener('click', function() {
-                const isVisible = complianceContent.style.display !== 'none';
-                complianceContent.style.display = isVisible ? 'none' : 'block';
-                complianceTitle.querySelector('span:last-child').textContent = isVisible ? '+' : '-';
-            });
+            if (complianceTitle && complianceContent) {
+                complianceTitle.addEventListener('click', function() {
+                    const isVisible = complianceContent.style.display !== 'none';
+                    complianceContent.style.display = isVisible ? 'none' : 'block';
+                    complianceTitle.querySelector('span:last-child').textContent = isVisible ? '+' : '-';
+                });
+            }
             
             // Account tabs functionality
             const accountTabs = document.querySelectorAll('.account-tab');
             const accountTabContents = document.querySelectorAll('.account-tab-content');
             
-            accountTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // Remove active class from all tabs and contents
-                    accountTabs.forEach(t => t.classList.remove('active'));
-                    accountTabContents.forEach(content => content.classList.remove('active'));
-                    
-                    // Add active class to clicked tab
-                    tab.classList.add('active');
-                    
-                    // Show corresponding content
-                    const tabId = tab.getAttribute('data-tab');
-                    const activeContent = document.getElementById(`${tabId}-content`);
-                    if (activeContent) {
-                        activeContent.classList.add('active');
-                    }
+            if (accountTabs.length > 0) {
+                accountTabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        // Remove active class from all tabs and contents
+                        accountTabs.forEach(t => t.classList.remove('active'));
+                        accountTabContents.forEach(content => content.classList.remove('active'));
+                        
+                        // Add active class to clicked tab
+                        tab.classList.add('active');
+                        
+                        // Show corresponding content
+                        const tabId = tab.getAttribute('data-tab');
+                        const activeContent = document.getElementById(`${tabId}-content`);
+                        if (activeContent) {
+                            activeContent.classList.add('active');
+                        }
+                    });
                 });
-            });
+            }
         });
     </script>
     
