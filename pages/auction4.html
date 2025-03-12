@@ -858,6 +858,28 @@
             height: 18px;
             display: inline-block;
         }
+        
+        /* Tab content */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Visual tabs styling */
+        .visual-tabs {
+            margin-bottom: 0.5rem;
+        }
+        
+        .visual-tab-content {
+            display: none;
+        }
+        
+        .visual-tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -936,48 +958,49 @@
                         </div>
                     </div>
 
-                    <!-- Active Round Details -->
+                    <!-- Active Round Details with Tabs -->
                     <div class="panel-card">
                         <div class="panel-card-title">
                             <span>Round 3 Details</span>
                             <span>112,000 tokens available</span>
                         </div>
                         
-                        <!-- Price curve chart -->
-                        <div style="height: 300px; margin-bottom: 2rem;">
-                            <canvas id="priceCurveChart"></canvas>
+                        <!-- Tab Navigation for Visuals -->
+                        <div class="bid-tabs visual-tabs">
+                            <div class="bid-tab active" data-visual-tab="price-curve">Price Curve</div>
+                            <div class="bid-tab" data-visual-tab="bid-distribution">Bid Distribution</div>
+                            <div class="bid-tab" data-visual-tab="cumulative-demand">Cumulative Demand</div>
                         </div>
                         
-                        <!-- Bid volume heatmap -->
-                        <div>
-                            <div class="panel-card-title">
-                                <span>Current Bidding Activity</span>
-                                <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-secondary);">Distribution of bids across price ranges</span>
+                        <!-- Price Curve Tab Content -->
+                        <div class="visual-tab-content active" id="price-curve-content">
+                            <div style="height: 300px; margin-bottom: 1rem; margin-top: 1rem;">
+                                <canvas id="priceCurveChart"></canvas>
                             </div>
-                            <div style="height: 250px; margin-bottom: 1rem;">
+                        </div>
+                        
+                        <!-- Bid Distribution Tab Content -->
+                        <div class="visual-tab-content" id="bid-distribution-content">
+                            <div style="height: 300px; margin-bottom: 1rem; margin-top: 1rem;">
                                 <canvas id="bidHeatmapChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Cumulative Demand Tab Content -->
+                        <div class="visual-tab-content" id="cumulative-demand-content">
+                            <div class="chart-container" style="position: relative; height: 300px; margin-top: 1rem; margin-bottom: 1rem;">
+                                <canvas id="roundChart"></canvas>
+                            </div>
+                            <div class="chart-description" style="margin-top: 15px; font-size: 0.9rem; color: var(--text-secondary);">
+                                This graph shows the cumulative demand curve for the current auction round. 
+                                The colored areas represent different allocation tiers, and the curve indicates 
+                                price sensitivity at various demand levels.
                             </div>
                         </div>
                         
                         <!-- Countdown clock -->
                         <div style="text-align: center; margin-top: 1.5rem;">
                             <div style="font-size: 2rem; font-weight: 700; color: var(--primary);" id="round-countdown"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Cumulative Demand Analysis (moved from center panel) -->
-                    <div class="panel-card">
-                        <div class="panel-card-title">
-                            <span>Cumulative Demand Analysis</span>
-                            <span class="chart-subtitle" style="font-size: 0.8rem; font-weight: normal; color: var(--text-secondary);">Price distribution based on token demand</span>
-                        </div>
-                        <div class="chart-container" style="position: relative; height: 400px; margin-top: 10px;">
-                            <canvas id="roundChart"></canvas>
-                        </div>
-                        <div class="chart-description" style="margin-top: 15px; font-size: 0.9rem; color: var(--text-secondary);">
-                            This graph shows the cumulative demand curve for the current auction round. 
-                            The colored areas represent different allocation tiers, and the curve indicates 
-                            price sensitivity at various demand levels.
                         </div>
                     </div>
                 </section>
@@ -1638,11 +1661,38 @@
 
             bidTabs.forEach(tab => {
                 tab.addEventListener('click', () => {
-                    bidTabs.forEach(t => t.classList.remove('active'));
+                    // Skip if this is a visual tab (handled separately)
+                    if (tab.hasAttribute('data-visual-tab')) return;
+                    
+                    bidTabs.forEach(t => {
+                        // Skip visual tabs when removing active class
+                        if (!t.hasAttribute('data-visual-tab')) {
+                            t.classList.remove('active');
+                        }
+                    });
                     tab.classList.add('active');
                     
                     const tabId = tab.getAttribute('data-tab');
                     tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === `${tabId}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+
+            // Visual tabs functionality
+            const visualTabs = document.querySelectorAll('.bid-tab[data-visual-tab]');
+            const visualContents = document.querySelectorAll('.visual-tab-content');
+            
+            visualTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    visualTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    const tabId = tab.getAttribute('data-visual-tab');
+                    visualContents.forEach(content => {
                         content.classList.remove('active');
                         if (content.id === `${tabId}-content`) {
                             content.classList.add('active');
@@ -1893,107 +1943,23 @@
 
             // Initialize Chart.js graphs for each round
             function initializeRoundGraphs() {
-                // Helper function to generate data for shaded areas
-                function generateAreaData(startValue, endValue, startIndex, endIndex) {
-                    const data = Array(30).fill(null);
-                    
-                    // Fill in the values between startIndex and endIndex
-                    for (let i = startIndex; i <= endIndex; i++) {
-                        if (i === startIndex) {
-                            data[i] = startValue;
-                        } else if (i === endIndex) {
-                            data[i] = endValue;
+                // Helper function to generate area chart data
+                function generateAreaData(startPrice, endPrice, startIndex, endIndex) {
+                    const data = [];
+                    for (let i = 0; i < 30; i++) {
+                        if (i >= startIndex && i <= endIndex) {
+                            const progress = (i - startIndex) / (endIndex - startIndex);
+                            const price = startPrice - (startPrice - endPrice) * progress;
+                            data.push(price);
                         } else {
-                            // Linear interpolation between start and end values
-                            const ratio = (i - startIndex) / (endIndex - startIndex);
-                            data[i] = startValue - (startValue - endValue) * ratio;
+                            data.push(null);
                         }
                     }
-                    
                     return data;
                 }
                 
-                // Round 3 demand graph from auction2.html - exact copy
+                // Round 3 data
                 const round3Data = {
-                    labels: Array.from({length: 30}, (_, i) => i * 10000),
-                    datasets: [
-                        // Normal allocation
-                        {
-                            label: 'Normal',
-                            data: generateAreaData(3.00, 2.00, 0, 6),
-                            backgroundColor: 'rgba(0, 123, 255, 0.5)',
-                            borderWidth: 0,
-                            fill: true,
-                            pointRadius: 0
-                        },
-                        // Prior Round allocation
-                        {
-                            label: 'Prior Round',
-                            data: generateAreaData(2.00, 1.85, 6, 8),
-                            backgroundColor: 'rgba(255, 193, 7, 0.5)',
-                            borderWidth: 0,
-                            fill: true,
-                            pointRadius: 0
-                        },
-                        // Future Round allocation
-                        {
-                            label: 'Future Round',
-                            data: generateAreaData(1.85, 1.75, 8, 10),
-                            backgroundColor: 'rgba(40, 167, 69, 0.5)',
-                            borderWidth: 0,
-                            fill: true,
-                            pointRadius: 0
-                        },
-                        // Not Cleared allocation
-                        {
-                            label: 'Not Cleared',
-                            data: generateAreaData(1.75, 0.75, 10, 30),
-                            backgroundColor: 'rgba(220, 53, 69, 0.5)',
-                            borderWidth: 0,
-                            fill: true,
-                            pointRadius: 0
-                        },
-                        // Demand Curve line
-                        {
-                            label: 'Demand Curve',
-                            data: [3.00, 2.80, 2.60, 2.40, 2.20, 2.00, 1.90, 1.85, 1.80, 1.75, 1.70, 1.65, 1.60, 1.55, 1.50, 1.45, 1.40, 1.35, 1.30, 1.25, 1.20, 1.15, 1.10, 1.05, 1.00, 0.95, 0.90, 0.85, 0.80, 0.75],
-                            borderColor: 'rgb(220, 53, 69)',
-                            borderWidth: 3,
-                            tension: 0.1,
-                            fill: false
-                        },
-                        // Add key point markers for Round 3
-                        {
-                            label: 'Key Price Points',
-                            data: [
-                                { x: 90000, y: 1.75 },   // Current price at 90,000 tokens
-                                { x: 150000, y: 1.50 },  // Reserve price at 150,000 tokens
-                                { x: 80000, y: 1.85 }    // Trigger price at 80,000 tokens
-                            ],
-                            backgroundColor: [
-                                'rgba(0, 123, 255, 0.8)',  // Current price (blue)
-                                'rgba(40, 167, 69, 0.8)',  // Reserve price (green)
-                                'rgba(220, 53, 69, 0.8)'   // Trigger price (red)
-                            ],
-                            borderColor: '#ffffff',
-                            borderWidth: 2,
-                            pointRadius: 10,
-                            pointStyle: ['circle', 'triangle', 'rect'],
-                            showLine: false,
-                            pointHoverRadius: 12,
-                            pointHoverBackgroundColor: [
-                                'rgba(0, 123, 255, 1)',  // Current price (blue)
-                                'rgba(40, 167, 69, 1)',  // Reserve price (green)
-                                'rgba(220, 53, 69, 1)'   // Trigger price (red)
-                            ],
-                            pointHoverBorderColor: '#ffffff',
-                            pointHoverBorderWidth: 3
-                        }
-                    ]
-                };
-
-                // Round 1 graph
-                const round1Data = {
                     labels: Array.from({length: 30}, (_, i) => i * 10000),
                     datasets: [
                         // Normal allocation
@@ -2212,35 +2178,16 @@
                     }
                 };
 
-                // Create chart container dynamically
-                const centerPanel = document.querySelector('.center-panel');
-                const chartCard = document.createElement('div');
-                chartCard.className = 'panel-card';
-                chartCard.innerHTML = `
-                    <div class="panel-card-title">
-                        <span>Cumulative Demand Analysis</span>
-                        <span class="chart-subtitle" style="font-size: 0.8rem; font-weight: normal; color: var(--text-secondary);">Price distribution based on token demand</span>
-                    </div>
-                    <div class="chart-container" style="position: relative; height: 400px; margin-top: 10px;">
-                        <canvas id="roundChart"></canvas>
-                    </div>
-                    <div class="chart-description" style="margin-top: 15px; font-size: 0.9rem; color: var(--text-secondary);">
-                        This graph shows the cumulative demand curve for the current auction round. 
-                        The colored areas represent different allocation tiers, and the curve indicates 
-                        price sensitivity at various demand levels.
-                    </div>
-                `;
-                centerPanel.appendChild(chartCard);
-
                 // Initialize the chart
                 const ctx = document.getElementById('roundChart').getContext('2d');
-                const roundChart = new Chart(ctx, {
+                roundChart = new Chart(ctx, {
                     type: 'line',
                     data: round3Data,
                     options: chartOptions
                 });
                 
                 // Update chart when timeline steps are clicked
+                const timelineSteps = document.querySelectorAll('.timeline-step');
                 timelineSteps.forEach(step => {
                     step.addEventListener('click', () => {
                         const round = parseInt(step.getAttribute('data-round'));
@@ -2509,327 +2456,363 @@
     <!-- Chart initialization script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize charts
+            let priceCurveChart, bidHeatmapChart, roundChart;
+            
+            // Function to initialize all charts
+            function initializeCharts() {
+                initializePriceCurveChart();
+                initializeBidHeatmapChart();
+                initializeRoundGraphs();
+            }
+            
             // Initialize price curve chart
-            const priceCurveCanvas = document.getElementById('priceCurveChart');
-            if (priceCurveCanvas) {
-                const ctx = priceCurveCanvas.getContext('2d');
-                
-                // Get current date and calculate auction times
-                const now = new Date();
-                const auctionStart = new Date(now);
-                auctionStart.setHours(now.getHours() - 6); // Assuming we're halfway through a 12-hour auction
-                
-                // Generate time labels for the x-axis (actual times)
-                const timeLabels = [];
-                for (let i = 0; i <= 12; i += 2) {
-                    const labelTime = new Date(auctionStart);
-                    labelTime.setHours(auctionStart.getHours() + i);
-                    timeLabels.push(labelTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}));
-                }
-                
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: timeLabels,
-                        datasets: [
-                            {
-                                label: 'Auction Price Curve',
-                                data: [1.50, 1.58, 1.65, 1.75, 1.85, 1.92, 2.00], // Reversed to slope from low to high
-                                borderColor: '#f6d131',
-                                backgroundColor: 'rgba(246, 209, 49, 0.1)',
-                                fill: true,
-                                tension: 0.4,
-                                pointRadius: 4,
-                                pointBackgroundColor: '#f6d131'
-                            },
-                            {
-                                label: 'Reserve Price',
-                                data: [1.50, 1.50, 1.50, 1.50, 1.50, 1.50, 1.50],
-                                borderColor: 'rgba(40, 167, 69, 0.8)',
-                                borderWidth: 2,
-                                borderDash: [5, 5],
-                                fill: false,
-                                pointRadius: 0
-                            },
-                            {
-                                label: 'Current Price',
-                                data: [1.75, 1.75, 1.75, 1.75, 1.75, 1.75, 1.75],
-                                borderColor: 'rgba(0, 123, 255, 0.8)',
-                                borderWidth: 2,
-                                borderDash: [2, 2],
-                                fill: false,
-                                pointRadius: 0
-                            },
-                            {
-                                label: 'Trigger Price',
-                                data: [1.85, 1.85, 1.85, 1.85, 1.85, 1.85, 1.85],
-                                borderColor: 'rgba(220, 53, 69, 0.8)',
-                                borderWidth: 2,
-                                borderDash: [5, 5],
-                                fill: false,
-                                pointRadius: 0
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top',
-                                labels: {
-                                    usePointStyle: true,
-                                    padding: 20,
+            function initializePriceCurveChart() {
+                const priceCurveCanvas = document.getElementById('priceCurveChart');
+                if (priceCurveCanvas) {
+                    const ctx = priceCurveCanvas.getContext('2d');
+                    
+                    // Get current date and calculate auction times
+                    const now = new Date();
+                    const auctionStart = new Date(now);
+                    auctionStart.setHours(now.getHours() - 6); // Assuming we're halfway through a 12-hour auction
+                    
+                    // Generate time labels for the x-axis (actual times)
+                    const timeLabels = [];
+                    for (let i = 0; i <= 12; i += 2) {
+                        const labelTime = new Date(auctionStart);
+                        labelTime.setHours(auctionStart.getHours() + i);
+                        timeLabels.push(labelTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}));
+                    }
+                    
+                    priceCurveChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: timeLabels,
+                            datasets: [
+                                {
+                                    label: 'Auction Price Curve',
+                                    data: [1.50, 1.58, 1.65, 1.75, 1.85, 1.92, 2.00], // Reversed to slope from low to high
+                                    borderColor: '#f6d131',
+                                    backgroundColor: 'rgba(246, 209, 49, 0.1)',
+                                    fill: true,
+                                    tension: 0.4,
+                                    pointRadius: 4,
+                                    pointBackgroundColor: '#f6d131'
+                                },
+                                {
+                                    label: 'Reserve Price',
+                                    data: [1.50, 1.50, 1.50, 1.50, 1.50, 1.50, 1.50],
+                                    borderColor: 'rgba(40, 167, 69, 0.8)',
+                                    borderWidth: 2,
+                                    borderDash: [5, 5],
+                                    fill: false,
+                                    pointRadius: 0
+                                },
+                                {
+                                    label: 'Current Price',
+                                    data: [1.75, 1.75, 1.75, 1.75, 1.75, 1.75, 1.75],
+                                    borderColor: 'rgba(0, 123, 255, 0.8)',
+                                    borderWidth: 2,
+                                    borderDash: [2, 2],
+                                    fill: false,
+                                    pointRadius: 0
+                                },
+                                {
+                                    label: 'Trigger Price',
+                                    data: [1.85, 1.85, 1.85, 1.85, 1.85, 1.85, 1.85],
+                                    borderColor: 'rgba(220, 53, 69, 0.8)',
+                                    borderWidth: 2,
+                                    borderDash: [5, 5],
+                                    fill: false,
+                                    pointRadius: 0
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top',
+                                    labels: {
+                                        usePointStyle: true,
+                                        padding: 20,
+                                        font: {
+                                            size: 12
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return `Price: $${context.raw}`;
+                                        }
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Round 3 Auction Price Dynamics',
                                     font: {
-                                        size: 12
+                                        size: 16,
+                                        weight: 'bold'
+                                    },
+                                    padding: {
+                                        top: 10,
+                                        bottom: 10
                                     }
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return `Price: $${context.raw}`;
+                                },
+                                subtitle: {
+                                    display: true,
+                                    text: 'Price changes over auction duration with key price thresholds',
+                                    font: {
+                                        size: 12,
+                                        style: 'italic'
+                                    },
+                                    padding: {
+                                        bottom: 10
                                     }
-                                }
-                            },
-                            title: {
-                                display: true,
-                                text: 'Round 3 Auction Price Dynamics',
-                                font: {
-                                    size: 16,
-                                    weight: 'bold'
                                 },
-                                padding: {
-                                    top: 10,
-                                    bottom: 10
-                                }
-                            },
-                            subtitle: {
-                                display: true,
-                                text: 'Price changes over auction duration with key price thresholds',
-                                font: {
-                                    size: 12,
-                                    style: 'italic'
-                                },
-                                padding: {
-                                    bottom: 10
-                                }
-                            },
-                            annotation: {
-                                annotations: {
-                                    reservePriceLine: {
-                                        type: 'line',
-                                        xMin: 0,
-                                        xMax: 0,
-                                        borderColor: 'rgba(40, 167, 69, 0.8)',
-                                        borderWidth: 2,
-                                        borderDash: [5, 5],
-                                        label: {
-                                            enabled: true,
-                                            content: 'Reserve Price: $1.50',
-                                            position: 'top',
-                                            backgroundColor: 'rgba(40, 167, 69, 0.8)',
-                                            font: {
-                                                weight: 'bold'
+                                annotation: {
+                                    annotations: {
+                                        reservePriceLine: {
+                                            type: 'line',
+                                            xMin: 0,
+                                            xMax: 0,
+                                            borderColor: 'rgba(40, 167, 69, 0.8)',
+                                            borderWidth: 2,
+                                            borderDash: [5, 5],
+                                            label: {
+                                                enabled: true,
+                                                content: 'Reserve Price: $1.50',
+                                                position: 'top',
+                                                backgroundColor: 'rgba(40, 167, 69, 0.8)',
+                                                font: {
+                                                    weight: 'bold'
+                                                }
+                                            }
+                                        },
+                                        currentPriceLine: {
+                                            type: 'line',
+                                            xMin: 4,
+                                            xMax: 4,
+                                            borderColor: 'rgba(0, 123, 255, 0.8)',
+                                            borderWidth: 2,
+                                            borderDash: [2, 2],
+                                            label: {
+                                                enabled: true,
+                                                content: 'Current Price: $1.75',
+                                                position: 'top',
+                                                backgroundColor: 'rgba(0, 123, 255, 0.8)'
+                                            }
+                                        },
+                                        triggerPriceLine: {
+                                            type: 'line',
+                                            xMin: 6,
+                                            xMax: 6,
+                                            borderColor: 'rgba(220, 53, 69, 0.8)',
+                                            borderWidth: 2,
+                                            borderDash: [5, 5],
+                                            label: {
+                                                enabled: true,
+                                                content: 'Trigger Price: $1.85',
+                                                position: 'top',
+                                                backgroundColor: 'rgba(220, 53, 69, 0.8)'
                                             }
                                         }
-                                    },
-                                    currentPriceLine: {
-                                        type: 'line',
-                                        xMin: 4,
-                                        xMax: 4,
-                                        borderColor: 'rgba(0, 123, 255, 0.8)',
-                                        borderWidth: 2,
-                                        borderDash: [2, 2],
-                                        label: {
-                                            enabled: true,
-                                            content: 'Current Price: $1.75',
-                                            position: 'top',
-                                            backgroundColor: 'rgba(0, 123, 255, 0.8)'
-                                        }
-                                    },
-                                    triggerPriceLine: {
-                                        type: 'line',
-                                        xMin: 6,
-                                        xMax: 6,
-                                        borderColor: 'rgba(220, 53, 69, 0.8)',
-                                        borderWidth: 2,
-                                        borderDash: [5, 5],
-                                        label: {
-                                            enabled: true,
-                                            content: 'Trigger Price: $1.85',
-                                            position: 'top',
-                                            backgroundColor: 'rgba(220, 53, 69, 0.8)'
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: false,
-                                min: 1.45,
-                                max: 2.05,
-                                title: {
-                                    display: true,
-                                    text: 'Token Price ($)',
-                                    font: {
-                                        weight: 'bold'
-                                    }
-                                },
-                                ticks: {
-                                    callback: function(value) {
-                                        return '$' + value.toFixed(2);
                                     }
                                 }
                             },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Auction Time',
-                                    font: {
-                                        weight: 'bold'
+                            scales: {
+                                y: {
+                                    beginAtZero: false,
+                                    min: 1.45,
+                                    max: 2.05,
+                                    title: {
+                                        display: true,
+                                        text: 'Token Price ($)',
+                                        font: {
+                                            weight: 'bold'
+                                        }
+                                    },
+                                    ticks: {
+                                        callback: function(value) {
+                                            return '$' + value.toFixed(2);
+                                        }
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Auction Time',
+                                        font: {
+                                            weight: 'bold'
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                });
+                    });
+                }
             }
             
             // Initialize bid volume heatmap
-            const bidHeatmapCanvas = document.getElementById('bidHeatmapChart');
-            if (bidHeatmapCanvas) {
-                const ctx = bidHeatmapCanvas.getContext('2d');
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['$1.50-1.55', '$1.56-1.60', '$1.61-1.65', '$1.66-1.70', '$1.71-1.75', '$1.76-1.80', '$1.81-1.85', '$1.86-1.90', '$1.91-2.00'],
-                        datasets: [
-                            {
-                                label: 'Low Volume (< 15k tokens)',
-                                data: [8000, 15000, 0, 0, 0, 0, 0, 12000, 6000],
-                                backgroundColor: 'rgba(246, 209, 49, 0.2)',
-                                borderColor: 'rgba(246, 209, 49, 1)',
-                                borderWidth: 1
-                            },
-                            {
-                                label: 'Medium Volume (15k-30k tokens)',
-                                data: [0, 0, 22000, 0, 0, 0, 20000, 0, 0],
-                                backgroundColor: 'rgba(246, 209, 49, 0.5)',
-                                borderColor: 'rgba(246, 209, 49, 1)',
-                                borderWidth: 1
-                            },
-                            {
-                                label: 'High Volume (> 30k tokens)',
-                                data: [0, 0, 0, 38000, 45000, 32000, 0, 0, 0],
-                                backgroundColor: 'rgba(246, 209, 49, 0.8)',
-                                borderColor: 'rgba(246, 209, 49, 1)',
-                                borderWidth: 1
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top',
-                                labels: {
-                                    usePointStyle: true,
-                                    padding: 20,
-                                    font: {
-                                        size: 12
-                                    }
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return `Volume: ${context.raw.toLocaleString()} tokens`;
-                                    }
-                                }
-                            },
-                            title: {
-                                display: true,
-                                text: 'Bid Distribution by Price Range',
-                                font: {
-                                    size: 14,
-                                    weight: 'bold'
+            function initializeBidHeatmapChart() {
+                const bidHeatmapCanvas = document.getElementById('bidHeatmapChart');
+                if (bidHeatmapCanvas) {
+                    const ctx = bidHeatmapCanvas.getContext('2d');
+                    bidHeatmapChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['$1.50-1.55', '$1.56-1.60', '$1.61-1.65', '$1.66-1.70', '$1.71-1.75', '$1.76-1.80', '$1.81-1.85', '$1.86-1.90', '$1.91-2.00'],
+                            datasets: [
+                                {
+                                    label: 'Low Volume (< 15k tokens)',
+                                    data: [8000, 15000, 0, 0, 0, 0, 0, 12000, 6000],
+                                    backgroundColor: 'rgba(246, 209, 49, 0.2)',
+                                    borderColor: 'rgba(246, 209, 49, 1)',
+                                    borderWidth: 1
                                 },
-                                padding: {
-                                    top: 10,
-                                    bottom: 10
+                                {
+                                    label: 'Medium Volume (15k-30k tokens)',
+                                    data: [0, 0, 22000, 0, 0, 0, 20000, 0, 0],
+                                    backgroundColor: 'rgba(246, 209, 49, 0.5)',
+                                    borderColor: 'rgba(246, 209, 49, 1)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: 'High Volume (> 30k tokens)',
+                                    data: [0, 0, 0, 38000, 45000, 32000, 0, 0, 0],
+                                    backgroundColor: 'rgba(246, 209, 49, 0.8)',
+                                    borderColor: 'rgba(246, 209, 49, 1)',
+                                    borderWidth: 1
                                 }
-                            },
-                            annotation: {
-                                annotations: {
-                                    reservePriceLine: {
-                                        type: 'line',
-                                        xMin: 0,
-                                        xMax: 0,
-                                        borderColor: 'rgba(40, 167, 69, 0.8)',
-                                        borderWidth: 2,
-                                        borderDash: [5, 5],
-                                        label: {
-                                            enabled: true,
-                                            content: 'Reserve Price: $1.50',
-                                            position: 'top',
-                                            backgroundColor: 'rgba(40, 167, 69, 0.8)',
-                                            font: {
-                                                weight: 'bold'
-                                            }
-                                        }
-                                    },
-                                    currentPriceLine: {
-                                        type: 'line',
-                                        xMin: 4,
-                                        xMax: 4,
-                                        borderColor: 'rgba(0, 123, 255, 0.8)',
-                                        borderWidth: 2,
-                                        borderDash: [2, 2],
-                                        label: {
-                                            enabled: true,
-                                            content: 'Current Price: $1.75',
-                                            position: 'top',
-                                            backgroundColor: 'rgba(0, 123, 255, 0.8)'
-                                        }
-                                    },
-                                    triggerPriceLine: {
-                                        type: 'line',
-                                        xMin: 6,
-                                        xMax: 6,
-                                        borderColor: 'rgba(220, 53, 69, 0.8)',
-                                        borderWidth: 2,
-                                        borderDash: [5, 5],
-                                        label: {
-                                            enabled: true,
-                                            content: 'Trigger Price: $1.85',
-                                            position: 'top',
-                                            backgroundColor: 'rgba(220, 53, 69, 0.8)'
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top',
+                                    labels: {
+                                        usePointStyle: true,
+                                        padding: 20,
+                                        font: {
+                                            size: 12
                                         }
                                     }
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                stacked: true
-                            },
-                            y: {
-                                stacked: true,
-                                beginAtZero: true,
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return `Volume: ${context.raw.toLocaleString()} tokens`;
+                                        }
+                                    }
+                                },
                                 title: {
                                     display: true,
-                                    text: 'Volume (tokens)'
+                                    text: 'Bid Distribution by Price Range',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    },
+                                    padding: {
+                                        top: 10,
+                                        bottom: 10
+                                    }
+                                },
+                                annotation: {
+                                    annotations: {
+                                        reservePriceLine: {
+                                            type: 'line',
+                                            xMin: 0,
+                                            xMax: 0,
+                                            borderColor: 'rgba(40, 167, 69, 0.8)',
+                                            borderWidth: 2,
+                                            borderDash: [5, 5],
+                                            label: {
+                                                enabled: true,
+                                                content: 'Reserve Price: $1.50',
+                                                position: 'top',
+                                                backgroundColor: 'rgba(40, 167, 69, 0.8)',
+                                                font: {
+                                                    weight: 'bold'
+                                                }
+                                            }
+                                        },
+                                        currentPriceLine: {
+                                            type: 'line',
+                                            xMin: 4,
+                                            xMax: 4,
+                                            borderColor: 'rgba(0, 123, 255, 0.8)',
+                                            borderWidth: 2,
+                                            borderDash: [2, 2],
+                                            label: {
+                                                enabled: true,
+                                                content: 'Current Price: $1.75',
+                                                position: 'top',
+                                                backgroundColor: 'rgba(0, 123, 255, 0.8)'
+                                            }
+                                        },
+                                        triggerPriceLine: {
+                                            type: 'line',
+                                            xMin: 6,
+                                            xMax: 6,
+                                            borderColor: 'rgba(220, 53, 69, 0.8)',
+                                            borderWidth: 2,
+                                            borderDash: [5, 5],
+                                            label: {
+                                                enabled: true,
+                                                content: 'Trigger Price: $1.85',
+                                                position: 'top',
+                                                backgroundColor: 'rgba(220, 53, 69, 0.8)'
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    stacked: true
+                                },
+                                y: {
+                                    stacked: true,
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Volume (tokens)'
+                                    }
                                 }
                             }
                         }
-                    }
-                });
+                    });
+                }
             }
+            
+            // Initialize all charts when page loads
+            initializeCharts();
+            
+            // Add event listeners to visual tabs to update charts when tabs are clicked
+            const visualTabs = document.querySelectorAll('.bid-tab[data-visual-tab]');
+            visualTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Force chart resize after tab switch to ensure proper rendering
+                    setTimeout(() => {
+                        if (priceCurveChart && tab.getAttribute('data-visual-tab') === 'price-curve') {
+                            priceCurveChart.resize();
+                        }
+                        if (bidHeatmapChart && tab.getAttribute('data-visual-tab') === 'bid-distribution') {
+                            bidHeatmapChart.resize();
+                        }
+                        if (roundChart && tab.getAttribute('data-visual-tab') === 'cumulative-demand') {
+                            roundChart.resize();
+                        }
+                    }, 50);
+                });
+            });
         });
     </script>
 </body>
